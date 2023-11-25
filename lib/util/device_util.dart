@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:safe_device/safe_device.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import '../widget/common.dart';
 import 'commons.dart';
@@ -214,13 +213,13 @@ class DeviceUtil {
       }
     }
     if (rootAccess) {
-      await Get.bottomSheet(
-          [
-            'Kamu Tidak bisa Menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
-            'Aplikasi tidak dapat beroperasi di piranti Rooted'.text.sm.make(),
-            MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
-          ].column().p12().card.make(),
-          enableDrag: false);
+      // await Get.bottomSheet(
+      //     [
+      //       'Kamu Tidak bisa Menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
+      //       'Aplikasi tidak dapat beroperasi di piranti Rooted'.text.sm.make(),
+      //       MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
+      //     ].column().p12().card.make(),
+      //     enableDrag: false);
       return kDebugMode || false;
     }
 
@@ -229,13 +228,13 @@ class DeviceUtil {
     // }
 
     if (rootAccess) {
-      await Get.bottomSheet(
-          [
-            'Kamu Tidak dapat Menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
-            'Aplikasi tidak dapat beroperasi di perangkat Rooted'.text.sm.make(),
-            MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
-          ].column().p12().card.make(),
-          enableDrag: false);
+      // await Get.bottomSheet(
+      //     [
+      //       'Kamu Tidak dapat Menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
+      //       'Aplikasi tidak dapat beroperasi di perangkat Rooted'.text.sm.make(),
+      //       MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
+      //     ].column().p12().card.make(),
+      //     enableDrag: false);
       return kDebugMode || false;
     }
 
@@ -245,13 +244,13 @@ class DeviceUtil {
     // }
 
     if (rootAccess) {
-      await Get.bottomSheet(
-          [
-            'Kamu dilarang menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
-            'Aplikasi tidak dapat beroperasi di perangkat Rooted'.text.sm.make(),
-            MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
-          ].column().p12().card.make(),
-          enableDrag: false);
+      // await Get.bottomSheet(
+      //     [
+      //       'Kamu dilarang menggunakan Aplikasi ini'.text.bold.make().marginOnly(top: 8, bottom: 12),
+      //       'Aplikasi tidak dapat beroperasi di perangkat Rooted'.text.sm.make(),
+      //       MyButton('Tutup Aplikasi', onTap: () => exit(0)).marginOnly(top: 40)
+      //     ].column().p12().card.make(),
+      //     enableDrag: false);
       return kDebugMode || false;
     }
 

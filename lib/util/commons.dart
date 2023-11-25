@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import 'time_util.dart';
 
@@ -33,7 +32,7 @@ void showToast(String message, {bool error = false, bool success = false, String
     message = message.normalizeException();
   }
   Get.snackbar(title, message,
-      messageText: message.text.sm.white.make(),
+      messageText: Text(message),
       snackPosition: SnackPosition.TOP,
       backgroundColor: error
           ? Colors.red.shade800.withOpacity(0.8)
@@ -72,7 +71,7 @@ Future<bool> exitApp() => confirm('Keluar dari Aplikasi ?');
 
 void showMaterialBanner(String message) {
   ScaffoldMessenger.of(Get.context!).showMaterialBanner(MaterialBanner(
-      content: message.text.make(),
+      content: Text(message),
       // contentTextStyle: const TextStyle(color: Colors.black, fontSize: 30),
       backgroundColor: Colors.yellow,
       leadingPadding: const EdgeInsets.only(right: 30),

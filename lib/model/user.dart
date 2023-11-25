@@ -8,7 +8,7 @@ import 'office.dart';
 
 part 'user.g.dart';
 
-@HiveType(typeId: HiveUtil.typeIdUserModel)
+@HiveType(typeId: HiveUtil.typeIdUserData)
 class UserModel extends HiveObject {
   static const syncTableName = 'user_model';
 

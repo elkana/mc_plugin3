@@ -1,5 +1,8 @@
 import 'dart:async';
+
 import 'package:get/get.dart';
+import 'package:mc_plugin3/provider/response/response_mst_personal.dart';
+
 import '../controller/auth_controller.dart';
 import '../controller/pref_controller.dart';
 import '../model/server_model.dart';
@@ -7,16 +10,14 @@ import '../model/user.dart';
 import '../util/commons.dart';
 import '../util/gps_util.dart';
 import 'mediaapi.dart';
-import 'response/response_apk.dart';
+import 'response/response_assignment.dart';
 
 class Api extends MediaApi {
   static Api instance = Get.find();
-  var uriLogin = '/matel/auth/v2/login'; // 1.0.5
-  // var uriLogin = '/matel/auth/v1/login'; // 1.0.0
+  var uriLogin = '/mc-api/auth/v1/login';
 
   Future<UserModel?> login(Server server, String userId, String userPwd) async {
-    // await [1].random.delay();
-    var gps = await GpsUtil.getCurrentLocationInForeground();
+    var gps = await GpsUtil.currentLocationInForeground;
     var sysInfo = '';
     //await DeviceUtil.getSysInfo('|');
     var d = await post('$uriLogin?devicesn=EMULATOR02022023', server: server, data: <String, dynamic>{
@@ -40,7 +41,7 @@ class Api extends MediaApi {
 
   Future<String?> signUpUsingNIK(Server server, String nik) async {
     await 1.delay();
-    var gps = await GpsUtil.getCurrentLocationInForeground();
+    var gps = await GpsUtil.currentLocationInForeground;
     var d = await post('/matel/auth/v1/signup_nik?devicesn=EMULATOR30X1X2X2', server: server, data: <String, dynamic>{
       'nik': nik,
     }, q: {
@@ -53,7 +54,7 @@ class Api extends MediaApi {
 
   Future<String?> changePwd(Server server, String? userId, String oldPassword, String newPassword) async {
     await [1, 2].random.delay();
-    var gps = await GpsUtil.getCurrentLocationInForeground();
+    var gps = await GpsUtil.currentLocationInForeground;
     var loggedUser = AuthController.instance.loggedUser;
     var d = await post('/matel/auth/v1/change_pwd?devicesn=EMULATOR30X1X2X2', server: server, data: <String, dynamic>{
       'username': userId ?? loggedUser?.userId,
@@ -75,4 +76,15 @@ class Api extends MediaApi {
   //   });
   //   return ResponseApk.fromMap(d);
   // }
+
+  Future<ResponseAssignment> get pageAssignments async {
+    // var d = await get('/mc-api/v1-ldv-details-outbound?page=0&size=30');
+    var d = await get('/mc-api/v1-ldv-details-outbound');
+    return ResponseAssignment.fromMap(d);
+  }
+
+  Future get masters async {
+    var d = await get('/mc-api/v1-mst-personal');
+    return ResponseMstPersonal.fromMap(d);
+  }
 }

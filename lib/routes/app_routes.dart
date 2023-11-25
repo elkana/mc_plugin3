@@ -12,7 +12,8 @@ abstract class Routes {
   static const poa = '/poa';
   static const searchVehicle = '/search_vehicle';
   static const summarySkt = '/summary_skt';
-  static const formRepo = '/form_repo';
+  static const visit = '/visit';
+  static const ldvDetail = '/ldv_dtl';
   static const formSktCollateral = '/form_sktcollateral';
   // static const reposes = '/reposes';
 }

@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 
 // for web, use web_util
 class NetUtil {
-  static Future<bool> isNotConnected() async => !(await isConnected());
+  static Future<bool> get isNotConnected async => !(await isConnected);
 
-  static Future<bool> isConnected() async {
+  static Future<bool> get isConnected async {
     if (kIsWeb) return true;
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());

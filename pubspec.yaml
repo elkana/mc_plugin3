@@ -21,6 +21,7 @@ dependencies:
   get: 4.6.6
   get_storage: 2.1.1
   velocity_x: 4.1.1
+  # niku: 
   local_session_timeout: 2.3.2
   hive: 2.2.3
   hive_flutter: 1.1.0
@@ -36,13 +37,15 @@ dependencies:
   device_info_plus: 9.1.0
   permission_handler: 11.0.1
   simple_animations: 5.0.2
-
+  flutter_background_service: 5.0.4
+  flutter_background_service_android:
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
   hive_generator: 
-  # flutter packages pub run build_runner build
+  # flutter packages pub run build_runner build --delete-conflicting-outputs
   build_runner: 
   
 # For information on the generic Dart part of this file, see the

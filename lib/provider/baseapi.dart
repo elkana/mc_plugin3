@@ -35,21 +35,30 @@ class BaseApi extends GetxController {
   final keyApiKey = 'ApiKey';
   final timeoutSeconds = 60;
 
-  static String constructHostPort(Server? server) {
+  // static String constructHostPort(Server? server) {
+  //   if (server == null) {
+  //     var selServer = await PrefController.instance.lastSelectedServer
+  //     return clientLogic?.selectedServer!.port != null
+  //         ? 'http://${clientLogic?.selectedServer!.host}:${clientLogic?.selectedServer!.port}'
+  //         : 'http://${clientLogic?.selectedServer!.host}';
+  //   }
+  //   return server.port != null ? 'http://${server.host}:${server.port}' : 'http://${server.host}';
+  // }
+
+  static Future<String> getSelectedServer(Server? server) async {
     if (server == null) {
-      return clientLogic?.selectedServer!.port != null
-          ? 'https://${clientLogic?.selectedServer!.host}:${clientLogic?.selectedServer!.port}'
-          : 'https://${clientLogic?.selectedServer!.host}';
+      var selServer = await PrefController.instance.lastSelectedServer;
+      return selServer!.port != null ? 'http://${selServer.host}:${selServer.port}' : 'http://${selServer.host}';
     }
-    return server.port != null ? 'https://${server.host}:${server.port}' : 'https://${server.host}';
+    return server.port != null ? 'http://${server.host}:${server.port}' : 'http://${server.host}';
   }
 
-  static Uri getSelectedUri(String path) {
-    final serverUrl = BaseApi.constructHostPort(clientLogic?.selectedServer);
-    return Uri.parse('$serverUrl$path');
-  }
+  // static Uri getSelectedUri(String path) {
+  //   final serverUrl = BaseApi.constructHostPort(clientLogic?.selectedServer);
+  //   return Uri.parse('$serverUrl$path');
+  // }
 
-  static String get imageUri => '${constructHostPort(clientLogic?.selectedServer)}/matel/media/v1/';
+  // static String get imageUri => '${constructHostPort(clientLogic?.selectedServer)}/matel/media/v1/';
 
   /// use Dio to upload/download pictures
   Future<dio_lib.Dio> initDio(Server? server, [String? token]) async {
@@ -169,7 +178,7 @@ class BaseApi extends GetxController {
     if (e.response?.statusCode != 403) return handler.reject(e);
     var dio = await initDio(server, await PrefController.instance.refreshToken);
     var loggedUser = AuthController.instance.loggedUser;
-    await dio.get('${constructHostPort(server)}/matel/auth/v1/refresh_token', queryParameters: {
+    await dio.get('${await getSelectedServer(server)}/matel/auth/v1/refresh_token', queryParameters: {
       'user': loggedUser!.userId,
     }).then((value) async {
       if (value.statusCode == 200) {
@@ -205,7 +214,7 @@ class BaseApi extends GetxController {
   }
 
   Future get(String uri, {Map<String, dynamic>? q, Server? server}) async {
-    var path = '${constructHostPort(server)}$uri';
+    var path = '${await getSelectedServer(server)}$uri';
     log('Getting to $path');
     var dio = await initDio(server);
     dio.interceptors
@@ -216,7 +225,7 @@ class BaseApi extends GetxController {
   }
 
   Future post(String uri, {data, Map<String, dynamic>? q, Server? server}) async {
-    var path = '${constructHostPort(server)}$uri';
+    var path = '${await getSelectedServer(server)}$uri';
     log('Posting to $path');
     var dio = await initDio(server);
     dio.interceptors

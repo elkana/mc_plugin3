@@ -6,7 +6,6 @@ class ForbidView extends StatelessWidget {
 
   @override
   Widget build(context) => Scaffold(
-        backgroundColor: Colors.indigo,
-        body: 'Sorry, This app exceeds life limit.\n\nPlease get latest version.'.text.white.center.makeCentered(),
-      );
+      backgroundColor: Colors.indigo,
+      body: 'Sorry, This app exceeds life limit.\n\nPlease get latest version.'.text.white.makeCentered());
 }

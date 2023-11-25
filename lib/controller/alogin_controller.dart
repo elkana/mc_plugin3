@@ -18,7 +18,6 @@ abstract class ALoginController extends ABasicController {
   final formKey = GlobalKey<FormState>();
   // change to 0 to check version and download latest apk
   int attemptUpdateApk = 1;
-  var progressMsg = ''.obs;
   // late List<Server> servers;
   // var selectedServer = Server().obs;
   var selectedServer = Rxn<Server>();
@@ -54,8 +53,10 @@ abstract class ALoginController extends ABasicController {
     // setup preferences
     rememberPwd(PrefController.instance.rememberMe ?? false);
     if (rememberPwd.isTrue) {
-      PrefController.instance.rememberUserId.then((value) => ctrlUserId.text = value ?? '');
-      PrefController.instance.rememberPwd.then((value) => ctrlPwd.text = value ?? '');
+      PrefController.instance.rememberUser.then((value) {
+        ctrlUserId.text = value?.userId ?? '';
+        ctrlPwd.text = value?.userPassword ?? '';
+      });
     }
     // pick a server
     PrefController.instance.lastSelectedServer.then((value) => setServer(value ?? clientLogic!.servers[0]));

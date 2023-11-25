@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
+import 'package:mc_plugin3/model/user.dart';
 import '../model/server_model.dart';
 import '../model/setup_mobile.dart';
 import '../util/commons.dart';
@@ -24,10 +25,8 @@ class PrefController extends GetxController {
   final _keyAppVersion = 'app.version';
   // final _keyAuth = 'auth';
   final _keyLastSelectedServer = 'last.selected.server';
-  final _keyRememberUserId = 'remember.user.id';
-  final _keyRememberUserPwd = 'remember.user.pwd';
+  final _keyRememberUser = 'remember.user';
   final _keyRememberMe = 'rememberme';
-  final _keyServers = 'servers';
   final _keyThemeDark = 'theme.dark';
   final _keyLastMessage = 'last.message';
   final _keyLastServerActiveTime = 'last.server.active.time';
@@ -67,9 +66,8 @@ class PrefController extends GetxController {
   //   return List<Server>.from(data.map((x) => Server.fromJson(x)));
   // }
   // Future<void> setServerChoice(Server value) => box.write(_keyLastServer, value.toJson());
-  Future<void> setLastSelectedServer(Server value) async {
-    return await secureStorage.write(key: _keyLastSelectedServer, value: jsonEncode(value.toJson()));
-  }
+  Future<void> setLastSelectedServer(Server value) =>
+      secureStorage.write(key: _keyLastSelectedServer, value: jsonEncode(value.toJson()));
 
   Future<Server?> get lastSelectedServer async {
     final map = await secureStorage.read(key: _keyLastSelectedServer);
@@ -95,16 +93,18 @@ class PrefController extends GetxController {
   bool get hasRememberMe => box.hasData(_keyRememberMe);
   bool? get rememberMe => hasRememberMe ? box.read<bool>(_keyRememberMe) : false;
 
-  Future<String?> get rememberUserId => secureStorage.read(key: _keyRememberUserId);
-  Future<void> setRememberUserId(String? val) async {
-    if (val == null) await secureStorage.delete(key: _keyRememberUserId);
-    return await secureStorage.write(key: _keyRememberUserId, value: val);
+  Future<UserModel?> get rememberUser async {
+    String? json = await secureStorage.read(key: _keyRememberUser);
+    if (json == null) return null;
+    return UserModel.fromJson(json);
   }
 
-  Future<String?> get rememberPwd => secureStorage.read(key: _keyRememberUserPwd);
-  Future<void> setRememberPwd(String? val) async {
-    if (val == null) await secureStorage.delete(key: _keyRememberUserPwd);
-    return await secureStorage.write(key: _keyRememberUserPwd, value: val);
+  Future<void> setRememberUser(UserModel? val) async {
+    if (val == null) {
+      await secureStorage.delete(key: _keyRememberUser);
+      return;
+    }
+    return await secureStorage.write(key: _keyRememberUser, value: val.toJson());
   }
 
   ///please use AuthController.user

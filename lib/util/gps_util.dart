@@ -11,9 +11,7 @@ class LatLng {
     this.latitude,
     this.longitude,
   );
-  Object toJson() {
-    return <double>[latitude, longitude];
-  }
+  Object toJson() => <double>[latitude, longitude];
 }
 
 class GpsUtil {
@@ -23,11 +21,11 @@ class GpsUtil {
   static const gpsMallCiputra = LatLng(-6.168621863673647, 106.78611168544974);
 
 // aman dipanggil. kalau gagal akan return 0.0, 0.0
-  static Future<LatLng> getCurrentLocationInForeground() async {
+  static Future<LatLng> get currentLocationInForeground async {
     const timeoutInSeconds = 5; // udah kutes kalau 3 detik malah suka ga dapat lokasi !
     try {
       var pos = await Geolocator.getCurrentPosition(
-          desiredAccuracy: await NetUtil.isNotConnected()
+          desiredAccuracy: await NetUtil.isNotConnected
               ? LocationAccuracy.bestForNavigation // mulai 1.2.4 spy bisa di offline
               : LocationAccuracy.high,
           timeLimit: const Duration(seconds: timeoutInSeconds)); // 6 too long

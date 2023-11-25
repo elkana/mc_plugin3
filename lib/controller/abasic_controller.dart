@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/util/hive_util.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../exception/exception.dart';
+import '../routes/app_routes.dart';
 import '../util/commons.dart';
 import '../util/device_util.dart';
 import 'auth_controller.dart';
@@ -10,6 +12,7 @@ import 'auth_controller.dart';
 /// dont use this on login / other than authenticated screen
 abstract class ABasicController extends GetxController {
   var loading = false.obs;
+  var progressMsg = ''.obs;
   // counter disediakan utk memungkinkan bisa input meskipun aplikasi error. jgn lupa di reset jika sukses.
   var errorCounter = 0;
   final maxError = 5;
@@ -25,6 +28,7 @@ abstract class ABasicController extends GetxController {
       if (onError != null) onError(e, s);
     } finally {
       loading(false);
+      progressMsg('');
     }
   }
 
@@ -35,8 +39,12 @@ abstract class ABasicController extends GetxController {
       });
 
   Future cleanDatabase(BuildContext context) async {
-    // await DataUtil.cleanAll(true);
+    await HiveUtil.cleanAll(true);
     context.showToast(msg: 'Data Cleanup SUCCESS');
+  }
+
+  void viewDatabase() {
+    Get.toNamed(Routes.developer);
   }
 
   Future<bool> validateAllPermissions() async {

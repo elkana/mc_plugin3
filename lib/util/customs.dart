@@ -7,8 +7,9 @@ import '../model/server_model.dart';
 
 abstract class CustomLogic {
   final List<Server> servers;
-  Server? selectedServer;
-  CustomLogic({required this.servers, this.selectedServer});
+  // Server? selectedServer;
+  CustomLogic({required this.servers});
+  // CustomLogic({required this.servers, this.selectedServer});
 
   // String getGoogleAPIKey();
 
