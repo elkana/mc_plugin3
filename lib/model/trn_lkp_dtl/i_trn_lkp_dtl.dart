@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mc_plugin3/util/commons.dart';
 
 import 'package:mc_plugin3/util/hive_util.dart';
 
@@ -10,9 +11,7 @@ import 'o_trn_lkp_dtl.dart';
 part 'i_trn_lkp_dtl.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvDetailInbound)
-class ITrnLKPDetail extends HiveObject {
-  static const syncTableName = 'inbound_trn_ldv_detail';
-
+class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -39,6 +38,22 @@ class ITrnLKPDetail extends HiveObject {
   DateTime? dueDate;
   @HiveField(12)
   DateTime? promiseDate;
+
+  ITrnLKPDetail({
+    this.id,
+    this.pk,
+    this.lastUpdateBy,
+    this.lastUpdateDate,
+    this.createdBy,
+    this.createdDate,
+    this.custName,
+    this.custNo,
+    this.workStatus,
+    this.lkpFlag,
+    this.collectionFee,
+    this.dueDate,
+    this.promiseDate,
+  }) : super('inbound_trn_ldv_detail');
   // @HiveField(13)
   // int? instNo;
   // @HiveField(14)
@@ -78,28 +93,12 @@ class ITrnLKPDetail extends HiveObject {
   // @HiveField(30)
   // String? trenTglBayar;
 
-  ITrnLKPDetail({
-    this.id,
-    this.pk,
-    this.lastUpdateBy,
-    this.lastUpdateDate,
-    this.createdBy,
-    this.createdDate,
-    this.custName,
-    this.custNo,
-    this.workStatus,
-    this.lkpFlag,
-    this.collectionFee,
-    this.dueDate,
-    this.promiseDate,
-  });
+  // static ValueListenable<Box<ITrnLKPDetail>> listenTable() => Hive.box<ITrnLKPDetail>(syncTableName).listenable();
 
-  static ValueListenable<Box<ITrnLKPDetail>> listenTable() =>
-      Hive.box<ITrnLKPDetail>(ITrnLKPDetail.syncTableName).listenable();
+  // static ValueListenable<Box<ITrnLKPDetail>> listenSomeData(List<dynamic>? keys) =>
+  //     Hive.box<ITrnLKPDetail>(syncTableName).listenable(keys: keys);
 
-  static ValueListenable<Box<ITrnLKPDetail>> listenSomeData(List<dynamic>? keys) =>
-      Hive.box<ITrnLKPDetail>(ITrnLKPDetail.syncTableName).listenable(keys: keys);
-
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -136,8 +135,6 @@ class ITrnLKPDetail extends HiveObject {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory ITrnLKPDetail.fromJson(String source) => ITrnLKPDetail.fromMap(json.decode(source));
 
   @override
@@ -145,56 +142,9 @@ class ITrnLKPDetail extends HiveObject {
     return 'ITrnLKPDetail(id: $id, pk: $pk, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdBy: $createdBy, createdDate: $createdDate, custName: $custName, custNo: $custNo, workStatus: $workStatus, lkpFlag: $lkpFlag, collectionFee: $collectionFee, dueDate: $dueDate, promiseDate: $promiseDate)';
   }
 
-  static Future cleanAll() async {
-    debugPrint('cleanup $syncTableName');
-    final box = Hive.box<ITrnLKPDetail>(syncTableName);
-    await box.clear();
-  }
+  @override
+  bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
-  static List<ITrnLKPDetail> findAll() {
-    final box = Hive.box<ITrnLKPDetail>(syncTableName);
-    return box.values.toList().cast<ITrnLKPDetail>();
-  }
-
-  static ITrnLKPDetail? findByPK(String? ldvNo, String? contractNo) {
-    final list = findAll();
-    if (list.isEmpty) return null;
-    try {
-      return list.where((e) => e.pk?.ldvNo == ldvNo && e.pk?.contractNo == contractNo).first;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  static Future<ITrnLKPDetail> saveOrUpdate(ITrnLKPDetail origin) async {
-    final box = Hive.box<ITrnLKPDetail>(syncTableName);
-    final map = box.toMap();
-
-    int? desiredKey;
-    map.forEach((key, value) {
-      if (value.pk?.ldvNo == origin.pk?.ldvNo && value.pk?.contractNo == origin.pk?.contractNo) {
-        desiredKey = key;
-      }
-    });
-    debugPrint('$syncTableName ${desiredKey == null ? 'INSERT' : 'UPDATE(id=$desiredKey)'} $origin');
-
-    desiredKey ??= await box.add(origin);
-    // need to reuse id for sync purpose
-    origin.id = desiredKey!;
-    await box.put(desiredKey, origin);
-    return origin;
-  }
-
-  static Future<List<ITrnLKPDetail>> saveOrUpdateAll(List<ITrnLKPDetail>? origin) async {
-    if (null == origin) return [];
-    var list = origin
-        // .map((doc) => ProjectModel.fromMap(doc.data() as Map<String, dynamic>))
-        .where((e) => true)
-        .toList();
-    // log('RECEIVE ${list.length} $syncTableName');
-    for (var e in list) {
-      await ITrnLKPDetail.saveOrUpdate(e);
-    }
-    return list;
-  }
+  ITrnLKPDetail? findByPk(String ldvNo, String contractNo) =>
+      findAll().firstWhereOrNull((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }

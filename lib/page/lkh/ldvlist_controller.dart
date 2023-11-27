@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
-import 'package:mc_plugin3/util/commons.dart';
 import 'package:mc_plugin3/util/hive_util.dart';
 
 import '../../controller/abasic_controller.dart';
@@ -25,7 +23,11 @@ class LdvListController extends ABasicController {
 
   Future refreshData() => processThis(() async {
         var resp = await Api.instance.pageAssignments;
-        await OTrnLKPDetail.saveOrUpdateAll(resp.embedded?.data);
+        await OTrnLKPDetail().saveOrUpdateAll(resp.embedded?.data);
+        // need to flush primary keys in separate table
+        resp.embedded?.data?.forEach((element) async {
+          await LdvDetailPk().saveOrUpdate(element.pk!);
+        });
       });
 
   Future onVisit(OTrnLKPDetail data) async {

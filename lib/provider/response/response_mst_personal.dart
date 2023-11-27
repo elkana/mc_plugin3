@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:mc_plugin3/model/master/mst_personal.dart';
-
-import '../../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import '../../model/masters.dart';
 import 'page.dart';
 
 class ResponseMstPersonal {
@@ -27,9 +25,8 @@ class ResponseMstPersonal {
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [ResponseMstPersonal].
-  factory ResponseMstPersonal.fromJson(String data) {
-    return ResponseMstPersonal.fromMap(json.decode(data) as Map<String, dynamic>);
-  }
+  factory ResponseMstPersonal.fromJson(String data) =>
+      ResponseMstPersonal.fromMap(json.decode(data) as Map<String, dynamic>);
 
   /// `dart:convert`
   ///
@@ -38,7 +35,7 @@ class ResponseMstPersonal {
 }
 
 class Embedded {
-  List<MstPersonal>? data;
+  List<MstLdvPersonal>? data;
 
   Embedded({this.data});
 
@@ -47,7 +44,7 @@ class Embedded {
 
   factory Embedded.fromMap(Map<String, dynamic> data) => Embedded(
         data: (data['mst-personal'] as List<dynamic>?)
-            ?.map((e) => MstPersonal.fromMap(e as Map<String, dynamic>))
+            ?.map((e) => MstLdvPersonal.fromMap(e as Map<String, dynamic>))
             .toList(),
       );
 
@@ -58,9 +55,7 @@ class Embedded {
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [Embedded].
-  factory Embedded.fromJson(String data) {
-    return Embedded.fromMap(json.decode(data) as Map<String, dynamic>);
-  }
+  factory Embedded.fromJson(String data) => Embedded.fromMap(json.decode(data) as Map<String, dynamic>);
 
   /// `dart:convert`
   ///

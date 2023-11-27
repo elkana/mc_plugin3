@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/pref_controller.dart';
-import 'package:mc_plugin3/model/master/mst_personal.dart';
+import 'package:mc_plugin3/model/masters.dart';
 
 import '../../controller/alogin_controller.dart';
 import '../../controller/auth_controller.dart';
@@ -58,7 +58,7 @@ class LoginController extends ALoginController {
       // await PrefController.instance.downloadSetup();
       progressMsg('Masters...');
       var resp = await Api.instance.masters;
-      await MstPersonal().saveOrUpdateAll(resp.embedded?.data);
+      await MstLdvPersonal().saveOrUpdateAll(resp.embedded?.data);
       // 4. finally, validation is PASSED
       AuthController.instance.user(user);
     }, (e, s) => showError(e, stacktrace: s));

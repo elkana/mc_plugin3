@@ -43,8 +43,8 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
     try {
       pk = Get.arguments[0];
 
-      outbound = OTrnLKPDetail.findByPK(pk.ldvNo, pk.contractNo)!;
-      inbound = ITrnLKPDetail.findByPK(pk.ldvNo, pk.contractNo);
+      outbound = OTrnLKPDetail().findByPk(pk.ldvNo!, pk.contractNo!)!;
+      inbound = ITrnLKPDetail().findByPk(pk.ldvNo!, pk.contractNo!);
       // visitId = Get.parameters['visitId'] ?? PhotoUtil.generateVisitId();
     } catch (e, s) {
       log(e.toString(), stacktrace: s);
@@ -78,7 +78,7 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
     if (error) return false;
     submitting(true);
     try {
-      var saved = await ITrnLKPDetail.saveOrUpdate(await _buildData());
+      var saved = await ITrnLKPDetail().saveOrUpdate(await _buildData());
       //upload all photo
 
       // finally, upload data

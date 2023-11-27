@@ -36,7 +36,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       nik: fields[16] as String?,
       failedAttempt: fields[17] as int?,
       createdDate: fields[18] as String?,
-      office: fields[19] as Office?,
+      office: fields[19] as MstOffice?,
     );
   }
 

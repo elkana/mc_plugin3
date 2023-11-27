@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../model/master/mst_personal.dart';
+import '../model/masters.dart';
 import '../model/mc_trn_lkp_hdr.dart';
+import '../model/mc_trn_rvcollcomment.dart';
 import '../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
 import '../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
 // const darkModeBox = 'darkModeConfig';
@@ -93,7 +96,7 @@ class HiveUtil {
     // Hive.registerAdapter(MstLdvDelqReasonAdapter());
     // Hive.registerAdapter(MstLdvFlagAdapter());
     // Hive.registerAdapter(MstLdvNextActionAdapter());
-    Hive.registerAdapter(MstPersonalAdapter());
+    Hive.registerAdapter(MstLdvPersonalAdapter());
     // Hive.registerAdapter(MstLdvPotensiAdapter());
     // Hive.registerAdapter(MstLdvStatusAdapter());
     // Hive.registerAdapter(MstLDVDocumentAdapter());
@@ -105,7 +108,7 @@ class HiveUtil {
     Hive.registerAdapter(OTrnLKPDetailAdapter());
     Hive.registerAdapter(ITrnLKPDetailAdapter());
     Hive.registerAdapter(LdvDetailPkAdapter());
-    // Hive.registerAdapter(TrnRVCollCommentAdapter());
+    Hive.registerAdapter(TrnRVCollCommentAdapter());
     // Hive.registerAdapter(TrnAddressAdapter());
     // Hive.registerAdapter(TrnRVBAdapter());
     // Hive.registerAdapter(TrnDepositAdapter());
@@ -135,7 +138,7 @@ class HiveUtil {
     // await Hive.openBox<MstLdvDelqReason>(MstLdvDelqReason.syncTableName);
     // await Hive.openBox<MstLdvFlag>(MstLdvFlag.syncTableName);
     // await Hive.openBox<MstLdvNextAction>(MstLdvNextAction.syncTableName);
-    await Hive.openBox<MstPersonal>(MstPersonal().syncTableName);
+    await Hive.openBox<MstLdvPersonal>(MstLdvPersonal().syncTableName);
     // await Hive.openBox<MstLdvPotensi>(MstLdvPotensi.syncTableName);
     // await Hive.openBox<MstLdvStatus>(MstLdvStatus.syncTableName);
     // await Hive.openBox<MstLDVDocument>(MstLDVDocument.syncTableName);
@@ -143,11 +146,11 @@ class HiveUtil {
     // await Hive.openBox<MstPaymentPoint>(MstPaymentPoint.syncTableName);
     // await Hive.openBox<UserData>(UserData.syncTableName);
 
-    await Hive.openBox<TrnLKPHeader>(TrnLKPHeader.syncTableName);
-    await Hive.openBox<OTrnLKPDetail>(OTrnLKPDetail.syncTableName);
-    await Hive.openBox<ITrnLKPDetail>(ITrnLKPDetail.syncTableName);
-    await Hive.openBox<LdvDetailPk>(LdvDetailPk.syncTableName);
-    // await Hive.openBox<TrnRVCollComment>(TrnRVCollComment.syncTableName);
+    await Hive.openBox<TrnLKPHeader>(TrnLKPHeader().syncTableName);
+    await Hive.openBox<OTrnLKPDetail>(OTrnLKPDetail().syncTableName);
+    await Hive.openBox<ITrnLKPDetail>(ITrnLKPDetail().syncTableName);
+    await Hive.openBox<LdvDetailPk>(LdvDetailPk().syncTableName);
+    await Hive.openBox<TrnRVCollComment>(TrnRVCollComment().syncTableName);
     // await Hive.openBox<TrnAddress>(TrnAddress.syncTableName);
     // await Hive.openBox<TrnRVB>(TrnRVB.syncTableName);
     // await Hive.openBox<TrnDeposit>(TrnDeposit.syncTableName);
@@ -193,7 +196,7 @@ class HiveUtil {
       // MstLdvDelqReason.cleanAll(),
       // MstLdvFlag.cleanAll(),
       // MstLdvNextAction.cleanAll(),
-      MstPersonal().cleanAll(),
+      MstLdvPersonal().cleanAll(),
       // MstLdvPotensi.cleanAll(),
       // MstLdvStatus.cleanAll(),
       // MstBank.cleanAll(),
@@ -204,12 +207,12 @@ class HiveUtil {
 
   static Future cleanTransactionsOnly() => Future.wait([
         // SyncTrnTable.cleanAll(),
-        TrnLKPHeader.cleanAll(),
-        LdvDetailPk.cleanAll(),
-        OTrnLKPDetail.cleanAll(),
-        ITrnLKPDetail.cleanAll(),
+        TrnLKPHeader().cleanAll(),
+        LdvDetailPk().cleanAll(),
+        OTrnLKPDetail().cleanAll(),
+        ITrnLKPDetail().cleanAll(),
         // Pk.cleanAll(),
-        // TrnRVCollComment.cleanAll(),
+        TrnRVCollComment().cleanAll(),
         // TrnAddress.cleanAll(),
         // TrnRVB.cleanAll(),
         // TrnDeposit.cleanAll(),
@@ -244,26 +247,51 @@ class HiveUtil {
   //     (MstLdvStatus.isEmpty() && !emptyStatusAllowed);
 }
 
-// TODO trouble initialize syncTableName, too much waste time
+// abstract class MasterTable<T> extends HiveObject {
+//   final String syncTableName;
+//   MasterTable(this.syncTableName);
+
+//   bool comparePrimaryKey(T a, T b);
+//   Map<String, dynamic> toMap();
+
+//   String toJson() => json.encode(toMap());
+
+//   // this will clear data and refill
+//   Future<void> assignAll(List<T>? data) async {
+//     if (data == null) return;
+//     await cleanAll();
+
+//     final box = Hive.box<T>(syncTableName);
+//     for (var d in data) {
+//       box.add(d);
+//     }
+//   }
+
+//   Future cleanAll() async {
+//     debugPrint('cleanup $syncTableName');
+//     final box = Hive.box<T>(syncTableName);
+//     await box.clear();
+//   }
+
+//   List<T> findAll() {
+//     final box = Hive.box<T>(syncTableName);
+//     List<T> list = box.values.toList().cast<T>();
+//     return list;
+//   }
+// }
+
 abstract class LocalTable<T> extends HiveObject {
-  abstract final String syncTableName;
+  final String syncTableName;
 
-  bool onPKCheck(T a, T b);
+  LocalTable(this.syncTableName);
 
-  // @HiveField(0)
-  // int? id;
+  // T? findByPk(bool Function(T) test);
+  bool comparePk(T a, T b);
+  Map<String, dynamic> toMap();
 
-  // LocalTable._(this.syncTableName);
+  String toJson() => json.encode(toMap());
 
-  // Future flush(List<T>? data) async {
-  //   if (data == null) return;
-  //   final box = Hive.box<T>(syncTableName);
-  //   await box.clear();
-  //   for (var d in data) {
-  //     box.add(d);
-  //   }
-  //   debugPrint('flushed ${box.values.toList().length} $syncTableName');
-  // }
+  get listenTable => Hive.box<T>(syncTableName).listenable();
 
   Future cleanAll() async {
     debugPrint('cleanup $syncTableName');
@@ -271,24 +299,40 @@ abstract class LocalTable<T> extends HiveObject {
     await box.clear();
   }
 
+  //  {
+  //   final list = findAll();
+  //   if (list.isEmpty) return null;
+  //   try {
+  //     return list.where((element) => false)
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
   List<T> findAll() {
     final box = Hive.box<T>(syncTableName);
     List<T> list = box.values.toList().cast<T>();
     return list;
   }
 
-  T? findById(int? key) {
-    List<T> list = findAll();
-    if (list.isEmpty) return null;
-    try {
-      return list.where((e) => (e as HiveObject).key == key).first;
-    } catch (e) {
-      return null;
-    }
+  // this will clear data and refill
+  Future<List<T>> assignAll(List<T>? data) async {
+    await cleanAll();
+    return saveOrUpdateAll(data);
   }
 
+  // T? findById(int? key) {
+  //   List<T> list = findAll();
+  //   if (list.isEmpty) return null;
+  //   try {
+  //     return list.where((e) => (e as HiveObject).key == key).first;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
   Future<List<T>> saveOrUpdateAll(List<T>? origin) async {
-    if (null == origin) return [];
+    if (null == origin || origin.isEmpty) return [];
     var list = origin.where((e) => true).toList();
     // log('RECEIVE ${list.length} $syncTableName');
     for (var e in list) {
@@ -297,16 +341,14 @@ abstract class LocalTable<T> extends HiveObject {
     return list;
   }
 
-  Future<T> saveOrUpdate(T origin
-      // bool Function(T, T origin) onPKCheck,
-      /*Function(T, int insertedKey) onInsert*/
-      ) async {
+// WARNING !! column id must provided/available
+  Future<T> saveOrUpdate(T origin) async {
     final box = Hive.box<T>(syncTableName);
     final Map<dynamic, T> map = box.toMap();
 
     int? desiredKey;
     map.forEach((key, value) {
-      if (onPKCheck(value, origin)) {
+      if (comparePk(value, origin)) {
         desiredKey = key;
       }
     });
@@ -317,17 +359,5 @@ abstract class LocalTable<T> extends HiveObject {
     await box.put(desiredKey, origin);
 
     return origin;
-    // if (desiredKey == null) {
-    //   desiredKey = await box.add(origin);
-    //   debugPrint('$syncTableName INSERT(id=$desiredKey) new $origin');
-    //   // need to reuse id for sync purpose
-    //   // origin.id = desiredKey!;
-    //   onInsert(origin, desiredKey!);
-    //   await box.put(desiredKey, origin);
-    //   return origin;
-    // }
-    // await box.put(desiredKey, origin);
-    // debugPrint('$syncTableName UPDATE(id=$desiredKey) $origin');
-    // return origin;
   }
 }

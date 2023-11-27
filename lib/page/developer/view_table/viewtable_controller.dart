@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/model/master/mst_personal.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controller/abasic_controller.dart';
+import '../../../model/masters.dart';
 import '../../../util/commons.dart';
 
 class ViewTableController extends ABasicController {
@@ -22,7 +22,7 @@ class ViewTableController extends ABasicController {
       rows.clear();
       columns.clear();
       log('query $tableName');
-      if (tableName == MstPersonal().syncTableName) {
+      if (tableName == MstLdvPersonal().syncTableName) {
         viewMstPersonal();
       }
       // else if (tableName == TblSKTHeader.syncTableName) {
@@ -51,7 +51,7 @@ class ViewTableController extends ABasicController {
     columns.add(const DataColumn(label: Text('seqNo')));
 
 // build rows
-    for (var i in MstPersonal().findAll()) {
+    for (var i in MstLdvPersonal().findAll()) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),

@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../util/commons.dart';
 import '../util/hive_util.dart';
-import 'office.dart';
+import 'masters.dart';
 
 part 'user.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdUserData)
-class UserModel extends HiveObject {
-  static const syncTableName = 'user_model';
+class UserModel extends LocalTable<UserModel> {
+  // static const syncTableName = 'user_model';
 
   @HiveField(0)
   String? userId;
@@ -51,7 +50,7 @@ class UserModel extends HiveObject {
   @HiveField(18)
   String? createdDate;
   @HiveField(19)
-  Office? office;
+  MstOffice? office;
 
   UserModel({
     this.userId,
@@ -74,8 +73,9 @@ class UserModel extends HiveObject {
     this.failedAttempt,
     this.createdDate,
     this.office,
-  });
+  }) : super('user_model');
 
+  @override
   Map<String, dynamic> toMap() => {
         'userId': userId,
         'userPassword': userPassword,
@@ -119,25 +119,14 @@ class UserModel extends HiveObject {
         nik: map['nik'],
         failedAttempt: map['failedAttempt']?.toInt(),
         createdDate: map['createdDate'],
-        office: map['office'] != null ? Office.fromMap(map['office']) : null,
+        office: map['office'] != null ? MstOffice.fromMap(map['office']) : null,
       );
-
-  String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
   String toString() =>
       'UserModel(userId: $userId, userPassword: $userPassword, fullName: $fullName, branchId: $branchId, branchName: $branchName, userType: $userType, region: $region, emailAddr: $emailAddr, needChangePwd: $needChangePwd, avatarUrl: $avatarUrl, accessToken: $accessToken, refreshToken: $refreshToken, userStatus: $userStatus, rememberMe: $rememberMe, emailVerified: $emailVerified, mobilePhone: $mobilePhone, nik: $nik, failedAttempt: $failedAttempt, createdDate: $createdDate, office: $office)';
-
-  static Future cleanAll() async {
-    final box = Hive.box<UserModel>(syncTableName);
-    log('cleanup ${box.length} $syncTableName');
-    await box.clear();
-  }
-
-  static List<UserModel> findAll() {
-    final box = Hive.box<UserModel>(syncTableName);
-    return box.values.toList().cast<UserModel>();
-  }
+  @override
+  bool comparePk(a, b) => a.userId == b.userId;
 }

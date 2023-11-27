@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/model/master/mst_personal.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../controller/abasic_controller.dart';
+import '../../model/masters.dart';
 import '../../routes/app_routes.dart';
 
 class DeveloperController extends ABasicController {
@@ -27,7 +27,7 @@ class DeveloperController extends ABasicController {
         //   DataCell(Text('Files in Cache')),
         //   DataCell(Text('1000')),
         // ]));
-        rows.add(tableInfo(MstPersonal().syncTableName, MstPersonal().findAll().length));
+        rows.add(tableInfo(MstLdvPersonal().syncTableName, MstLdvPersonal().findAll().length));
         // rows.add(tableInfo(TblPhoto.syncTableName, TblPhoto.findAll().length));
         // rows.add(tableInfo(TblSKTCollateral.syncTableName, TblSKTCollateral.findAll().length));
         // rows.add(tableInfo(TblSKTCollateralRemarks.syncTableName, TblSKTCollateralRemarks.findAll().length));

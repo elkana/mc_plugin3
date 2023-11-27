@@ -31,6 +31,12 @@ class AFormBuilderController extends ABasicController {
 
   Future<bool> submit() async {
     if (!await DeviceUtil.allPermissionsGranted()) return false;
+
+    if (!(formKey.currentState?.saveAndValidate() ?? false)) {
+      log('validation FAILED form  ${formKey.currentState?.value}');
+      return false;
+    }
+    log('(DataChanged=${dataChanged.value}) validation SUCCESS ${formKey.currentState?.value}');
     return true;
   }
 }

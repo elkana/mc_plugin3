@@ -11,8 +11,8 @@ part 'mc_trn_lkp_hdr.g.dart';
 
 // https://javiercbk.github.io/json_to_dart/
 @HiveType(typeId: HiveUtil.typeIdTrnLdvHeader)
-class TrnLKPHeader extends HiveObject {
-  static const syncTableName = 'trn_ldv_hdr';
+class TrnLKPHeader extends LocalTable<TrnLKPHeader> {
+  // static const syncTableName = 'trn_ldv_hdr';
 
   @HiveField(0)
   int? id;
@@ -60,90 +60,91 @@ class TrnLKPHeader extends HiveObject {
     this.createdDate,
     this.createdBy,
     this.closeBatchDate,
-  });
+  }) : super('trn_ldv_hdr');
 
-  static Future cleanAll() async {
-    debugPrint('cleanup $syncTableName');
-    final box = Hive.box<TrnLKPHeader>(syncTableName);
-    await box.clear();
-  }
+  // static Future cleanAll() async {
+  //   debugPrint('cleanup $syncTableName');
+  //   final box = Hive.box<TrnLKPHeader>(syncTableName);
+  //   await box.clear();
+  // }
 
-  static Future flush(List<TrnLKPHeader>? data) async {
-    if (data == null) return;
-    final box = Hive.box<TrnLKPHeader>(syncTableName);
-    await box.clear();
-    for (var d in data) {
-      // box.add(d);
-      await saveOrUpdate(d);
-    }
+  // static Future flush(List<TrnLKPHeader>? data) async {
+  //   if (data == null) return;
+  //   final box = Hive.box<TrnLKPHeader>(syncTableName);
+  //   await box.clear();
+  //   for (var d in data) {
+  //     // box.add(d);
+  //     await saveOrUpdate(d);
+  //   }
 
-    debugPrint('flushed ${box.values.toList().length} $syncTableName');
-  }
+  //   debugPrint('flushed ${box.values.toList().length} $syncTableName');
+  // }
 
-  static List<TrnLKPHeader> findAll() {
-    final box = Hive.box<TrnLKPHeader>(syncTableName);
-    var list = box.values.toList().cast<TrnLKPHeader>();
-    return list;
-  }
+  // static List<TrnLKPHeader> findAll() {
+  //   final box = Hive.box<TrnLKPHeader>(syncTableName);
+  //   var list = box.values.toList().cast<TrnLKPHeader>();
+  //   return list;
+  // }
 
-  static TrnLKPHeader? findLatest() {
-    var list = findAll();
-    if (list.isEmpty) return null;
-    list.sort((a, b) => -a.lkpDate!.compareTo(b.lkpDate!));
-    try {
-      return list.first;
-    } catch (e) {
-      return null;
-    }
-  }
+  // static TrnLKPHeader? findLatest() {
+  //   var list = findAll();
+  //   if (list.isEmpty) return null;
+  //   list.sort((a, b) => -a.lkpDate!.compareTo(b.lkpDate!));
+  //   try {
+  //     return list.first;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
-  static TrnLKPHeader? findByLKPNo(String? ldvNo) {
-    var list = findAll();
-    if (list.isEmpty) return null;
-    try {
-      return list.where((e) => e.lkpNo == ldvNo).first;
-    } catch (e) {
-      return null;
-    }
-  }
+  // static TrnLKPHeader? findByLKPNo(String? ldvNo) {
+  //   var list = findAll();
+  //   if (list.isEmpty) return null;
+  //   try {
+  //     return list.where((e) => e.lkpNo == ldvNo).first;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
-  static Future<TrnLKPHeader> saveOrUpdate(TrnLKPHeader origin) async {
-    final box = Hive.box<TrnLKPHeader>(syncTableName);
-    final map = box.toMap();
+  // static Future<TrnLKPHeader> saveOrUpdate(TrnLKPHeader origin) async {
+  //   final box = Hive.box<TrnLKPHeader>(syncTableName);
+  //   final map = box.toMap();
 
-    int? desiredKey;
-    map.forEach((key, value) {
-      if (value.lkpNo == origin.lkpNo) desiredKey = key;
-    });
+  //   int? desiredKey;
+  //   map.forEach((key, value) {
+  //     if (value.lkpNo == origin.lkpNo) desiredKey = key;
+  //   });
 
-    if (desiredKey == null) {
-      desiredKey = await box.add(origin);
-      debugPrint('$syncTableName insert new $origin with id = $desiredKey');
-      // need to reuse id for sync purpose
-      origin.id = desiredKey!;
-      await box.put(desiredKey, origin);
-      return origin;
-    }
+  //   if (desiredKey == null) {
+  //     desiredKey = await box.add(origin);
+  //     debugPrint('$syncTableName insert new $origin with id = $desiredKey');
+  //     // need to reuse id for sync purpose
+  //     origin.id = desiredKey!;
+  //     await box.put(desiredKey, origin);
+  //     return origin;
+  //   }
 
-    await box.put(desiredKey, origin);
-    debugPrint('$syncTableName UPDATE $origin with key = $desiredKey');
-    return origin;
-  }
+  //   await box.put(desiredKey, origin);
+  //   debugPrint('$syncTableName UPDATE $origin with key = $desiredKey');
+  //   return origin;
+  // }
 
-  static TrnLKPHeader? findById(int? key) {
-    var list = findAll();
-    if (list.isEmpty) return null;
-    try {
-      return list.where((e) => e.key == key).first;
-    } catch (e) {
-      return null;
-    }
-  }
+  // static TrnLKPHeader? findById(int? key) {
+  //   var list = findAll();
+  //   if (list.isEmpty) return null;
+  //   try {
+  //     return list.where((e) => e.key == key).first;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
   @override
   String toString() =>
       'TrnLKPHeader(id: $id, lastSyncMillis: $lastSyncMillis, modified: $modified, lkpNo: $lkpNo, lkpDate: $lkpDate, officeCode: $officeCode, collId: $collId, workFlag: $workFlag, closeBatch: $closeBatch, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdDate: $createdDate, createdBy: $createdBy, closeBatchDate: $closeBatchDate)';
 
+  @override
   Map<String, dynamic> toMap() => {
         'id': id,
         'lastSyncMillis': lastSyncMillis,
@@ -178,7 +179,8 @@ class TrnLKPHeader extends HiveObject {
         closeBatchDate: map['closeBatchDate']?.toInt(),
       );
 
-  String toJson() => json.encode(toMap());
-
   factory TrnLKPHeader.fromJson(String source) => TrnLKPHeader.fromMap(json.decode(source));
+
+  @override
+  bool comparePk(a, b) => a.lkpNo == b.lkpNo;
 }

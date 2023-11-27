@@ -13,7 +13,7 @@ class LdvList extends StatelessWidget {
   Widget build(context) => [
         // we need to listen to 2 tables: outbound & inbound
         ValueListenableBuilder<Box<OTrnLKPDetail>>(
-            valueListenable: OTrnLKPDetail.listenTable(),
+            valueListenable: OTrnLKPDetail().listenTable,
             builder: (context, obox, widget) {
               var obuffer = obox.values
                   // hanya tampilkan yg belum submit
@@ -22,7 +22,7 @@ class LdvList extends StatelessWidget {
               if (obuffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
               return ValueListenableBuilder<Box<ITrnLKPDetail>>(
-                valueListenable: ITrnLKPDetail.listenTable(),
+                valueListenable: ITrnLKPDetail().listenTable,
                 builder: (context, ibox, widget) {
                   // rebuild card
                   return obuffer
@@ -44,7 +44,7 @@ class LdvCardSimple extends StatelessWidget {
 
   @override
   Widget build(context) {
-    var inb = ITrnLKPDetail.findByPK(data.pk?.ldvNo, data.pk?.contractNo);
+    var inb = ITrnLKPDetail().findByPk(data.pk!.ldvNo!, data.pk!.contractNo!);
     // TODO look for inbound data
     return inb == null
         ? '$data'.text.make().onInkTap(() => onTapNext(data))
