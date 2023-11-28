@@ -8,7 +8,7 @@ part of 'i_trn_lkp_dtl.dart';
 
 class ITrnLKPDetailAdapter extends TypeAdapter<ITrnLKPDetail> {
   @override
-  final int typeId = 103;
+  final int typeId = 104;
 
   @override
   ITrnLKPDetail read(BinaryReader reader) {

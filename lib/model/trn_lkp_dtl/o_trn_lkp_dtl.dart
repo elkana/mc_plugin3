@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import '../../util/hive_util.dart';
 
 part 'o_trn_lkp_dtl.g.dart';

@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:mc_plugin3/provider/response/response_mst_classification.dart';
+import 'package:mc_plugin3/provider/response/response_mst_nextaction.dart';
+import 'package:mc_plugin3/provider/response/response_mst_reason.dart';
 import 'package:mc_plugin3/provider/response/response_mst_personal.dart';
 
 import '../controller/auth_controller.dart';
 import '../controller/pref_controller.dart';
+import '../model/masters.dart';
 import '../model/server_model.dart';
 import '../model/user.dart';
 import '../util/commons.dart';
@@ -83,8 +87,15 @@ class Api extends MediaApi {
     return ResponseAssignment.fromMap(d);
   }
 
-  Future get masters async {
-    var d = await get('/mc-api/v1-mst-personal');
-    return ResponseMstPersonal.fromMap(d);
-  }
+  Future get masters => Future.wait([
+        get('/mc-api/v1-mst-personal'),
+        get('/mc-api/v1-mst-delq-reasons'),
+        get('/mc-api/v1-mst-ldv-classification'),
+        get('/mc-api/v1-mst-next-action'),
+      ]).then((value) {
+        MstLdvPersonal().saveOrUpdateAll(ResponseMstPersonal.fromMap(value[0]).embedded?.data);
+        MstLdvDelqReason().saveOrUpdateAll(ResponseMstLdvReason.fromMap(value[1]).embedded?.data);
+        MstLdvClassification().saveOrUpdateAll(ResponseMstClassification.fromMap(value[2]).embedded?.data);
+        MstLdvNextAction().saveOrUpdateAll(ResponseMstNextAction.fromMap(value[3]).embedded?.data);
+      });
 }

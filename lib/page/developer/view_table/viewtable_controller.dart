@@ -24,6 +24,12 @@ class ViewTableController extends ABasicController {
       log('query $tableName');
       if (tableName == MstLdvPersonal().syncTableName) {
         viewMstPersonal();
+      } else if (tableName == MstLdvClassification().syncTableName) {
+        viewMstClassification();
+      } else if (tableName == MstLdvDelqReason().syncTableName) {
+        viewMstDelqReason();
+      } else if (tableName == MstLdvNextAction().syncTableName) {
+        viewMstNextAction();
       }
       // else if (tableName == TblSKTHeader.syncTableName) {
       //   viewTblSKTHeader();
@@ -56,6 +62,60 @@ class ViewTableController extends ABasicController {
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),
         DataCell(_TextValue('${i.description}')),
+        DataCell(_TextValue('${i.seqNo}')),
+      ]));
+    }
+  }
+
+  void viewMstClassification() {
+    // build columns
+    columns.add(const DataColumn(label: Text('id')));
+    columns.add(const DataColumn(label: Text('code')));
+    columns.add(const DataColumn(label: Text('description')));
+    columns.add(const DataColumn(label: Text('seqNo')));
+
+// build rows
+    for (var i in MstLdvClassification().findAll()) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${i.id}')),
+        DataCell(_TextValue('${i.code}')),
+        DataCell(_TextValue('${i.label}')),
+        DataCell(_TextValue('${i.seqNo}')),
+      ]));
+    }
+  }
+
+  void viewMstDelqReason() {
+    // build columns
+    columns.add(const DataColumn(label: Text('id')));
+    columns.add(const DataColumn(label: Text('code')));
+    columns.add(const DataColumn(label: Text('description')));
+    columns.add(const DataColumn(label: Text('seqNo')));
+
+// build rows
+    for (var i in MstLdvDelqReason().findAll()) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${i.id}')),
+        DataCell(_TextValue('${i.code}')),
+        DataCell(_TextValue('${i.description}')),
+        DataCell(_TextValue('${i.seqNo}')),
+      ]));
+    }
+  }
+
+  void viewMstNextAction() {
+    // build columns
+    columns.add(const DataColumn(label: Text('id')));
+    columns.add(const DataColumn(label: Text('code')));
+    columns.add(const DataColumn(label: Text('description')));
+    columns.add(const DataColumn(label: Text('seqNo')));
+
+// build rows
+    for (var i in MstLdvNextAction().findAll()) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${i.id}')),
+        DataCell(_TextValue('${i.code}')),
+        DataCell(_TextValue('${i.label}')),
         DataCell(_TextValue('${i.seqNo}')),
       ]));
     }

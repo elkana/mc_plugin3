@@ -51,10 +51,8 @@ class MstLdvPersonal extends LocalTable<MstLdvPersonal> {
   @override
   bool comparePk(a, b) => a.code == b.code;
 
-  MstLdvPersonal? findByPk(String? value) {
-    if (value == null) return null;
-    return findAll().firstWhereOrNull((p0) => p0.code == value);
-  }
+  MstLdvPersonal? findByPk(String? value) =>
+      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvPotensi)
@@ -168,7 +166,7 @@ class MstLdvDelqReason extends LocalTable<MstLdvDelqReason> {
   @HiveField(4)
   String? description;
   @HiveField(5)
-  bool? visible;
+  String? visible;
   MstLdvDelqReason({
     this.id,
     this.seqNo,
@@ -205,6 +203,9 @@ class MstLdvDelqReason extends LocalTable<MstLdvDelqReason> {
 
   @override
   bool comparePk(a, b) => a.code == b.code;
+
+  MstLdvDelqReason? findByPk(String? value) =>
+      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvClassification)
@@ -218,7 +219,7 @@ class MstLdvClassification extends LocalTable<MstLdvClassification> {
   @HiveField(3)
   String? label;
   @HiveField(4)
-  bool? visible;
+  String? visible;
   MstLdvClassification({
     this.id,
     this.seqNo,
@@ -251,6 +252,9 @@ class MstLdvClassification extends LocalTable<MstLdvClassification> {
 
   @override
   bool comparePk(a, b) => a.code == b.code;
+
+  MstLdvClassification? findByPk(String? value) =>
+      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvNextAction)
@@ -297,6 +301,9 @@ class MstLdvNextAction extends LocalTable<MstLdvNextAction> {
 
   @override
   bool comparePk(a, b) => a.code == b.code;
+
+  MstLdvNextAction? findByPk(String? value) =>
+      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvStatus)
@@ -346,7 +353,7 @@ class MstDocument extends LocalTable<MstDocument> {
   @HiveField(3)
   String? description;
   @HiveField(4)
-  bool? visible;
+  String? visible;
   MstDocument({
     this.id,
     this.code,

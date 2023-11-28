@@ -1,14 +1,13 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
-import 'package:mc_plugin3/util/time_util.dart';
 
 import '../../../controller/aformbuilder_controller.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
+import '../../../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
 import '../../../util/commons.dart';
+import '../../../util/time_util.dart';
 
 class LdvDetilBinding extends Bindings {
   @override
@@ -22,7 +21,6 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
   late LdvDetailPk pk;
   late OTrnLKPDetail outbound;
   ITrnLKPDetail? inbound;
-  var submitting = false.obs;
   // berisi foto yg belum disync aja ?
   // intinya supaya ga perlu write ke table kalau belum final, shg ga perlu cleanup
   // var photoList = <TblPhoto>[].obs;
@@ -56,7 +54,8 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
     }
   }
 
-  Future<ITrnLKPDetail> _buildData() async {
+  @override
+  Future onSubmit() async {
     log('Form-> ${formKey.currentState?.value}');
     var offlineData = ITrnLKPDetail()
       ..pk = pk
@@ -64,45 +63,9 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
       ..workStatus = formKey.currentState!.value['workStatus']
       ..createdBy = AuthController.instance.loggedUserId
       ..createdDate = TimeUtil.nowIso();
-    return offlineData;
-  }
 
-  @override
-  Future<bool> submit() async {
-    if (!await super.submit()) return false;
-    var error = false;
-    if (!(formKey.currentState?.saveAndValidate() ?? false)) {
-      log('validation FAILED form skt detail ${formKey.currentState?.value}');
-      error = true;
-    }
-    if (error) return false;
-    submitting(true);
-    try {
-      var saved = await ITrnLKPDetail().saveOrUpdate(await _buildData());
-      //upload all photo
+    var saved = await ITrnLKPDetail().saveOrUpdate(offlineData);
 
-      // finally, upload data
-      log('upload assignment');
-      // var resp = await Api.instance.updateAssignment(ResponseAssignment()
-      //   ..header = sktHeader
-      //   ..collateralRemarks = newRemarks);
-      // log('Response Submit $resp');
-      dataChanged(false);
-      // finally, update cache
-      // DataUtil.getAssignment(sktHeader.sktNo);
-      await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
-
-      return true;
-    } catch (e, s) {
-      if (e is DioException && e.response?.statusCode == 403) {
-        AuthController.instance.logout();
-        throw Exception('Session Timeout. please relogin');
-      }
-      showError(e, stacktrace: s);
-    } finally {
-      submitting(false);
-    }
-
-    return false;
+    await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
   }
 }

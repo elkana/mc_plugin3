@@ -8,7 +8,7 @@ part of 'o_trn_lkp_dtl.dart';
 
 class OTrnLKPDetailAdapter extends TypeAdapter<OTrnLKPDetail> {
   @override
-  final int typeId = 102;
+  final int typeId = 103;
 
   @override
   OTrnLKPDetail read(BinaryReader reader) {
@@ -63,7 +63,7 @@ class OTrnLKPDetailAdapter extends TypeAdapter<OTrnLKPDetail> {
 
 class LdvDetailPkAdapter extends TypeAdapter<LdvDetailPk> {
   @override
-  final int typeId = 101;
+  final int typeId = 102;
 
   @override
   LdvDetailPk read(BinaryReader reader) {

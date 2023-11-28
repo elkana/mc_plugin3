@@ -75,15 +75,10 @@ void showMaterialBanner(String message) {
       // contentTextStyle: const TextStyle(color: Colors.black, fontSize: 30),
       backgroundColor: Colors.yellow,
       leadingPadding: const EdgeInsets.only(right: 30),
-      leading: const Icon(
-        Icons.info,
-        size: 32,
-      ),
+      leading: const Icon(Icons.info, size: 32),
       actions: [
         TextButton(
-            onPressed: () {
-              ScaffoldMessenger.of(Get.context!).hideCurrentMaterialBanner();
-            },
+            onPressed: () => ScaffoldMessenger.of(Get.context!).hideCurrentMaterialBanner(),
             child: const Text('Dismiss')),
         // TextButton(onPressed: () {}, child: const Text('Continue')),
       ]));

@@ -93,4 +93,9 @@ abstract class ALoginController extends ABasicController {
     // await checkVersion(); //disable since 10 jul 23, may cause new problem
     return true;
   }
+
+  void test(String userId, String pwd) {
+    ctrlPwd.text = pwd;
+    ctrlUserId.text = userId;
+  }
 }

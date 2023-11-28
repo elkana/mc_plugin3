@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../model/masters.dart';
-import '../model/mc_trn_lkp_hdr.dart';
 import '../model/mc_trn_rvcollcomment.dart';
 import '../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
 import '../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
@@ -33,22 +33,23 @@ class HiveUtil {
   static const typeIdMstBank = 15;
   static const typeIdMstPaymentPoint = 16;
 
-  static const typeIdTrnLdvHeader = 100;
-  static const typeIdTrnLdvDetailPK = 101;
-  static const typeIdTrnLdvDetailOutbound = 102;
-  static const typeIdTrnLdvDetailInbound = 103;
-  static const typeIdTrnRVCollComment = 104;
-  static const typeIdTrnAddress = 105;
-  static const typeIdTrnRvb = 106;
-  static const typeIdTrnDeposit = 107;
-  static const typeIdTrnPhoto = 108;
-  static const typeIdTrnRepo = 109;
-  static const typeIdTrnBastbj = 110;
-  static const typeIdTrnContractBucket = 111;
-  static const typeIdTrnChangeAddr = 112;
-  static const typeIdTrnVehicleInfo = 113;
-  static const typeIdTrnHistInstallment = 114;
-  static const typeIdLdvHistory = 115;
+  static const typeIdTrnLdvHeaderOutbound = 100;
+  static const typeIdTrnLdvHeaderInbound = 101;
+  static const typeIdTrnLdvDetailPK = 102;
+  static const typeIdTrnLdvDetailOutbound = 103;
+  static const typeIdTrnLdvDetailInbound = 104;
+  static const typeIdTrnRVCollComment = 105;
+  static const typeIdTrnAddress = 106;
+  static const typeIdTrnRvb = 107;
+  static const typeIdTrnDeposit = 108;
+  static const typeIdTrnPhoto = 109;
+  static const typeIdTrnRepo = 110;
+  static const typeIdTrnBastbj = 111;
+  static const typeIdTrnContractBucket = 112;
+  static const typeIdTrnChangeAddr = 113;
+  static const typeIdTrnVehicleInfo = 114;
+  static const typeIdTrnHistInstallment = 115;
+  static const typeIdLdvHistory = 116;
 
   static const typeIdDocCopyContract = 200;
   static const typeIdDocSP = 201;
@@ -92,10 +93,10 @@ class HiveUtil {
     // Hive.registerAdapter(MstOfficeAdapter());
     // Hive.registerAdapter(MstTaskTypeAdapter());
     // Hive.registerAdapter(MstUserRoleAdapter());
-    // Hive.registerAdapter(MstLdvClassificationAdapter());
-    // Hive.registerAdapter(MstLdvDelqReasonAdapter());
+    Hive.registerAdapter(MstLdvClassificationAdapter());
+    Hive.registerAdapter(MstLdvDelqReasonAdapter());
     // Hive.registerAdapter(MstLdvFlagAdapter());
-    // Hive.registerAdapter(MstLdvNextActionAdapter());
+    Hive.registerAdapter(MstLdvNextActionAdapter());
     Hive.registerAdapter(MstLdvPersonalAdapter());
     // Hive.registerAdapter(MstLdvPotensiAdapter());
     // Hive.registerAdapter(MstLdvStatusAdapter());
@@ -104,7 +105,8 @@ class HiveUtil {
     // Hive.registerAdapter(MstPaymentPointAdapter());
 
     // Hive.registerAdapter(UserDataAdapter());
-    Hive.registerAdapter(TrnLKPHeaderAdapter());
+    Hive.registerAdapter(OTrnLdvHeaderAdapter());
+    Hive.registerAdapter(ITrnLdvHeaderAdapter());
     Hive.registerAdapter(OTrnLKPDetailAdapter());
     Hive.registerAdapter(ITrnLKPDetailAdapter());
     Hive.registerAdapter(LdvDetailPkAdapter());
@@ -134,10 +136,10 @@ class HiveUtil {
     // await Hive.openBox<MstTaskType>(MstTaskType.syncTableName);
     // await Hive.openBox<MstUserRole>(MstUserRole.syncTableName);
     // await Hive.openBox<MstOffice>(MstOffice.syncTableName);
-    // await Hive.openBox<MstLdvClassification>(MstLdvClassification.syncTableName);
-    // await Hive.openBox<MstLdvDelqReason>(MstLdvDelqReason.syncTableName);
+    await Hive.openBox<MstLdvClassification>(MstLdvClassification().syncTableName);
+    await Hive.openBox<MstLdvDelqReason>(MstLdvDelqReason().syncTableName);
     // await Hive.openBox<MstLdvFlag>(MstLdvFlag.syncTableName);
-    // await Hive.openBox<MstLdvNextAction>(MstLdvNextAction.syncTableName);
+    await Hive.openBox<MstLdvNextAction>(MstLdvNextAction().syncTableName);
     await Hive.openBox<MstLdvPersonal>(MstLdvPersonal().syncTableName);
     // await Hive.openBox<MstLdvPotensi>(MstLdvPotensi.syncTableName);
     // await Hive.openBox<MstLdvStatus>(MstLdvStatus.syncTableName);
@@ -146,7 +148,8 @@ class HiveUtil {
     // await Hive.openBox<MstPaymentPoint>(MstPaymentPoint.syncTableName);
     // await Hive.openBox<UserData>(UserData.syncTableName);
 
-    await Hive.openBox<TrnLKPHeader>(TrnLKPHeader().syncTableName);
+    await Hive.openBox<OTrnLdvHeader>(OTrnLdvHeader().syncTableName);
+    await Hive.openBox<ITrnLdvHeader>(ITrnLdvHeader().syncTableName);
     await Hive.openBox<OTrnLKPDetail>(OTrnLKPDetail().syncTableName);
     await Hive.openBox<ITrnLKPDetail>(ITrnLKPDetail().syncTableName);
     await Hive.openBox<LdvDetailPk>(LdvDetailPk().syncTableName);
@@ -189,25 +192,24 @@ class HiveUtil {
     ]);
   }
 
-  static Future cleanMastersOnly() async {
-    await Future.wait([
-      // MstMobileSetup.cleanAll(),
-      // MstLdvClassification.cleanAll(),
-      // MstLdvDelqReason.cleanAll(),
-      // MstLdvFlag.cleanAll(),
-      // MstLdvNextAction.cleanAll(),
-      MstLdvPersonal().cleanAll(),
-      // MstLdvPotensi.cleanAll(),
-      // MstLdvStatus.cleanAll(),
-      // MstBank.cleanAll(),
-      // MstPaymentPoint.cleanAll(),
-      //add more here
-    ]);
-  }
+  static Future cleanMastersOnly() => Future.wait([
+        // MstMobileSetup.cleanAll(),
+        MstLdvClassification().cleanAll(),
+        MstLdvDelqReason().cleanAll(),
+        // MstLdvFlag.cleanAll(),
+        MstLdvNextAction().cleanAll(),
+        MstLdvPersonal().cleanAll(),
+        // MstLdvPotensi.cleanAll(),
+        // MstLdvStatus.cleanAll(),
+        // MstBank.cleanAll(),
+        // MstPaymentPoint.cleanAll(),
+        //add more here
+      ]);
 
   static Future cleanTransactionsOnly() => Future.wait([
         // SyncTrnTable.cleanAll(),
-        TrnLKPHeader().cleanAll(),
+        OTrnLdvHeader().cleanAll(),
+        ITrnLdvHeader().cleanAll(),
         LdvDetailPk().cleanAll(),
         OTrnLKPDetail().cleanAll(),
         ITrnLKPDetail().cleanAll(),

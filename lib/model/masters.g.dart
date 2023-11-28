@@ -160,7 +160,7 @@ class MstLdvDelqReasonAdapter extends TypeAdapter<MstLdvDelqReason> {
       code: fields[2] as String?,
       label: fields[3] as String?,
       description: fields[4] as String?,
-      visible: fields[5] as bool?,
+      visible: fields[5] as String?,
     );
   }
 
@@ -208,7 +208,7 @@ class MstLdvClassificationAdapter extends TypeAdapter<MstLdvClassification> {
       seqNo: fields[1] as int?,
       code: fields[2] as String?,
       label: fields[3] as String?,
-      visible: fields[4] as bool?,
+      visible: fields[4] as String?,
     );
   }
 
@@ -340,7 +340,7 @@ class MstDocumentAdapter extends TypeAdapter<MstDocument> {
       code: fields[1] as String?,
       seqNo: fields[2] as int?,
       description: fields[3] as String?,
-      visible: fields[4] as bool?,
+      visible: fields[4] as String?,
     );
   }
 

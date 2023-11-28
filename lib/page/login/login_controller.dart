@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/pref_controller.dart';
-import 'package:mc_plugin3/model/masters.dart';
 
 import '../../controller/alogin_controller.dart';
 import '../../controller/auth_controller.dart';
@@ -30,42 +29,35 @@ class LoginController extends ALoginController {
     expanded.value = true;
   }
 
-  Future<void> doLogin() async {
-    if (loading.isTrue) return;
-    return loadingThis(() async {
-      // 1. check validation
-      if (!await validatePreLogin()) return;
-      progressMsg('Logging in...');
-      // 2. online authentication
-      var user = await AuthController.instance
-          .login(selectedServer.value!, ctrlUserId.text, ctrlPwd.text, rememberPwd.value)
-          .onError((e, s) {
-        showError(e.toString(), title: 'Login Failed');
-        return null;
-      });
-      if (user == null) {
-        //bypass login, jika masih ada data ldv di lokal
-        final userLocal = await PrefController.instance.rememberUser;
-        if (userLocal != null && userLocal.userPassword == ctrlPwd.text && rememberPwd.isTrue) {
-        } else {
-          // punishment for wrong password
-          await [2, 5].random.delay();
-          return;
-        }
-        user = userLocal;
-      } // 3. download setups
-      progressMsg('Setups...');
-      // await PrefController.instance.downloadSetup();
-      progressMsg('Masters...');
-      var resp = await Api.instance.masters;
-      await MstLdvPersonal().saveOrUpdateAll(resp.embedded?.data);
-      // 4. finally, validation is PASSED
-      AuthController.instance.user(user);
-    }, (e, s) => showError(e, stacktrace: s));
-  }
-
-  void test(String userId, String pwd) {
-    ctrlPwd.text = pwd;
-    ctrlUserId.text = userId;
-  }
+  Future<void> doLogin() async => loading.isTrue
+      ? null
+      : await processThis(() async {
+          // 1. check validation
+          if (!await validatePreLogin()) return;
+          progressMsg('Logging in...');
+          // 2. online authentication
+          var user = await AuthController.instance
+              .login(selectedServer.value!, ctrlUserId.text, ctrlPwd.text, rememberPwd.value)
+              .onError((e, s) {
+            showError(e.toString(), title: 'Login Failed');
+            return null;
+          });
+          if (user == null) {
+            //bypass login, jika masih ada data ldv di lokal
+            final userLocal = await PrefController.instance.rememberUser;
+            if (userLocal != null && userLocal.userPassword == ctrlPwd.text && rememberPwd.isTrue) {
+            } else {
+              // punishment for wrong password
+              await [2, 5].random.delay();
+              return;
+            }
+            user = userLocal;
+          } // 3. download setups
+          // progressMsg('Setups...');
+          // await PrefController.instance.downloadSetup();
+          progressMsg('Masters...');
+          await Api.instance.masters;
+          // 4. finally, validation is PASSED
+          AuthController.instance.user(user);
+        });
 }

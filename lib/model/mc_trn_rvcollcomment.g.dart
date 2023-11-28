@@ -8,7 +8,7 @@ part of 'mc_trn_rvcollcomment.dart';
 
 class TrnRVCollCommentAdapter extends TypeAdapter<TrnRVCollComment> {
   @override
-  final int typeId = 104;
+  final int typeId = 105;
 
   @override
   TrnRVCollComment read(BinaryReader reader) {
