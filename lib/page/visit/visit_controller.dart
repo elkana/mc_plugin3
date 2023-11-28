@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
-import 'package:mc_plugin3/model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/util/commons.dart';
 import 'package:mc_plugin3/util/ldv_util.dart';
 

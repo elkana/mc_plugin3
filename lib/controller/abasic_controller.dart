@@ -43,9 +43,7 @@ abstract class ABasicController extends GetxController {
     context.showToast(msg: 'Data Cleanup SUCCESS');
   }
 
-  void viewDatabase() {
-    Get.toNamed(Routes.developer);
-  }
+  void viewDatabase() => Get.toNamed(Routes.developer);
 
   Future<bool> validateAllPermissions() async {
     if (!await DeviceUtil.allPermissionsGranted()) return false;

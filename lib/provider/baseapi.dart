@@ -27,23 +27,10 @@ extension ErrorMsgExtension on String {
 }
 
 class BaseApi extends GetxController {
-  // static var serverUrl = '${dotenv.env['SERVER']}';
   static var apiKey = '${dotenv.env['TOKEN']}';
-  // static var sslCertificate = '${dotenv.env['CERTIFICATE']}';
-  // static var sslPinning = '${dotenv.env['SSLPINNING']}';
   final keyAuthorization = 'Authorization';
   final keyApiKey = 'ApiKey';
   final timeoutSeconds = 60;
-
-  // static String constructHostPort(Server? server) {
-  //   if (server == null) {
-  //     var selServer = await PrefController.instance.lastSelectedServer
-  //     return clientLogic?.selectedServer!.port != null
-  //         ? 'http://${clientLogic?.selectedServer!.host}:${clientLogic?.selectedServer!.port}'
-  //         : 'http://${clientLogic?.selectedServer!.host}';
-  //   }
-  //   return server.port != null ? 'http://${server.host}:${server.port}' : 'http://${server.host}';
-  // }
 
   static Future<String> getSelectedServer(Server? server) async {
     if (server == null) {
@@ -52,11 +39,6 @@ class BaseApi extends GetxController {
     }
     return server.port != null ? 'http://${server.host}:${server.port}' : 'http://${server.host}';
   }
-
-  // static Uri getSelectedUri(String path) {
-  //   final serverUrl = BaseApi.constructHostPort(clientLogic?.selectedServer);
-  //   return Uri.parse('$serverUrl$path');
-  // }
 
   // static String get imageUri => '${constructHostPort(clientLogic?.selectedServer)}/matel/media/v1/';
 
@@ -123,8 +105,6 @@ class BaseApi extends GetxController {
 
         if (errCode == 307) {
           throw PasswordChangeException('Password Change Required');
-          // } else if (error.response?.statusCode == 429) {
-          //   throw Exception('Server is busy. Try again later.');
         }
 
         if (error.response?.data is String) {
@@ -165,11 +145,7 @@ class BaseApi extends GetxController {
 
   // 2 days built
   // sudah pasti menggunakan selectedServerByUser
-  handleInterceptor4Jwt(
-      // String serverUrl,
-      Server? server,
-      dio_lib.DioException e,
-      dio_lib.ErrorInterceptorHandler handler) async {
+  handleInterceptor4Jwt(Server? server, dio_lib.DioException e, dio_lib.ErrorInterceptorHandler handler) async {
     log('******************* Intercept statusCode = ${e.response?.statusCode} ${e.response == null ? ', Offline ?' : ''}');
     // coba request lagi utk refresh token dgn menggunakan token kedua(refreshToken yg didpt waktu login)
     // refreshToken umurnya lebih lama dan hanya dipakai di kondisi seperti ini

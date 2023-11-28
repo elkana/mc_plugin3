@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mc_plugin3/util/hive_util.dart';
 
 import '../../controller/abasic_controller.dart';
-import '../../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import '../../provider/api.dart';
 import '../../routes/app_routes.dart';
 
@@ -21,16 +21,9 @@ class LdvListController extends ABasicController {
     refreshData();
   }
 
-  Future refreshData() => processThis(() async {
-        var resp = await Api.instance.pageAssignments;
-        await OTrnLKPDetail().saveOrUpdateAll(resp.embedded?.data);
-        // need to flush primary keys in separate table
-        resp.embedded?.data?.forEach((element) async {
-          await LdvDetailPk().saveOrUpdate(element.pk!);
-        });
-      });
+  Future refreshData() => processThis(() => Api.instance.assignments);
 
-  Future onVisit(OTrnLKPDetail data) async {
+  Future onVisit(OTrnLdvDetail data) async {
     // showToast('Visiting $data');
     await Get.toNamed(Routes.poa, arguments: [
       data.pk

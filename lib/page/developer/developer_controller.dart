@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
-import 'package:mc_plugin3/model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../controller/abasic_controller.dart';
 import '../../model/masters.dart';
-import '../../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
+import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
+import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import '../../routes/app_routes.dart';
 
 class DeveloperController extends ABasicController {
@@ -33,8 +33,8 @@ class DeveloperController extends ABasicController {
         rows.add(tableInfo(OTrnLdvHeader().syncTableName, OTrnLdvHeader().findAll().length));
         rows.add(tableInfo(ITrnLdvHeader().syncTableName, ITrnLdvHeader().findAll().length));
 
-        rows.add(tableInfo(OTrnLKPDetail().syncTableName, OTrnLKPDetail().findAll().length));
-        rows.add(tableInfo(ITrnLKPDetail().syncTableName, ITrnLKPDetail().findAll().length));
+        rows.add(tableInfo(OTrnLdvDetail().syncTableName, OTrnLdvDetail().findAll().length));
+        rows.add(tableInfo(ITrnLdvDetail().syncTableName, ITrnLdvDetail().findAll().length));
 
         rows.add(tableInfo(MstLdvClassification().syncTableName, MstLdvClassification().findAll().length));
         rows.add(tableInfo(MstLdvDelqReason().syncTableName, MstLdvDelqReason().findAll().length));

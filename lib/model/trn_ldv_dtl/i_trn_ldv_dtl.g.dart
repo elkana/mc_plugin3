@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'i_trn_lkp_dtl.dart';
+part of 'i_trn_ldv_dtl.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ITrnLKPDetailAdapter extends TypeAdapter<ITrnLKPDetail> {
+class ITrnLdvDetailAdapter extends TypeAdapter<ITrnLdvDetail> {
   @override
   final int typeId = 104;
 
   @override
-  ITrnLKPDetail read(BinaryReader reader) {
+  ITrnLdvDetail read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ITrnLKPDetail(
+    return ITrnLdvDetail(
       id: fields[0] as int?,
       pk: fields[1] as LdvDetailPk?,
       lastUpdateBy: fields[2] as String?,
@@ -34,7 +34,7 @@ class ITrnLKPDetailAdapter extends TypeAdapter<ITrnLKPDetail> {
   }
 
   @override
-  void write(BinaryWriter writer, ITrnLKPDetail obj) {
+  void write(BinaryWriter writer, ITrnLdvDetail obj) {
     writer
       ..writeByte(13)
       ..writeByte(0)
@@ -71,7 +71,5 @@ class ITrnLKPDetailAdapter extends TypeAdapter<ITrnLKPDetail> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ITrnLKPDetailAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is ITrnLdvDetailAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import 'page.dart';
 
 class ResponseAssignment {
@@ -25,9 +25,8 @@ class ResponseAssignment {
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [ResponseAssignment].
-  factory ResponseAssignment.fromJson(String data) {
-    return ResponseAssignment.fromMap(json.decode(data) as Map<String, dynamic>);
-  }
+  factory ResponseAssignment.fromJson(String data) =>
+      ResponseAssignment.fromMap(json.decode(data) as Map<String, dynamic>);
 
   /// `dart:convert`
   ///
@@ -36,7 +35,7 @@ class ResponseAssignment {
 }
 
 class Embedded {
-  List<OTrnLKPDetail>? data;
+  List<OTrnLdvDetail>? data;
 
   Embedded({this.data});
 
@@ -45,7 +44,7 @@ class Embedded {
 
   factory Embedded.fromMap(Map<String, dynamic> data) => Embedded(
         data: (data['ldv-details-outbound'] as List<dynamic>?)
-            ?.map((e) => OTrnLKPDetail.fromMap(e as Map<String, dynamic>))
+            ?.map((e) => OTrnLdvDetail.fromMap(e as Map<String, dynamic>))
             .toList(),
       );
 
@@ -56,9 +55,7 @@ class Embedded {
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [Embedded].
-  factory Embedded.fromJson(String data) {
-    return Embedded.fromMap(json.decode(data) as Map<String, dynamic>);
-  }
+  factory Embedded.fromJson(String data) => Embedded.fromMap(json.decode(data) as Map<String, dynamic>);
 
   /// `dart:convert`
   ///

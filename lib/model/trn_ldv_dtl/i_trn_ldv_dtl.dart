@@ -1,17 +1,16 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mc_plugin3/util/commons.dart';
 
 import 'package:mc_plugin3/util/hive_util.dart';
 
-import 'o_trn_lkp_dtl.dart';
+import 'o_trn_ldv_dtl.dart';
 
-part 'i_trn_lkp_dtl.g.dart';
+part 'i_trn_ldv_dtl.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvDetailInbound)
-class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
+class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -39,7 +38,7 @@ class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
   @HiveField(12)
   DateTime? promiseDate;
 
-  ITrnLKPDetail({
+  ITrnLdvDetail({
     this.id,
     this.pk,
     this.lastUpdateBy,
@@ -93,10 +92,10 @@ class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
   // @HiveField(30)
   // String? trenTglBayar;
 
-  // static ValueListenable<Box<ITrnLKPDetail>> listenTable() => Hive.box<ITrnLKPDetail>(syncTableName).listenable();
+  // static ValueListenable<Box<ITrnLdvDetail>> listenTable() => Hive.box<ITrnLdvDetail>(syncTableName).listenable();
 
-  // static ValueListenable<Box<ITrnLKPDetail>> listenSomeData(List<dynamic>? keys) =>
-  //     Hive.box<ITrnLKPDetail>(syncTableName).listenable(keys: keys);
+  // static ValueListenable<Box<ITrnLdvDetail>> listenSomeData(List<dynamic>? keys) =>
+  //     Hive.box<ITrnLdvDetail>(syncTableName).listenable(keys: keys);
 
   @override
   Map<String, dynamic> toMap() {
@@ -117,8 +116,8 @@ class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
     };
   }
 
-  factory ITrnLKPDetail.fromMap(Map<String, dynamic> map) {
-    return ITrnLKPDetail(
+  factory ITrnLdvDetail.fromMap(Map<String, dynamic> map) {
+    return ITrnLdvDetail(
       id: map['id']?.toInt(),
       pk: map['pk'] != null ? LdvDetailPk.fromMap(map['pk']) : null,
       lastUpdateBy: map['lastUpdateBy'],
@@ -135,16 +134,16 @@ class ITrnLKPDetail extends LocalTable<ITrnLKPDetail> {
     );
   }
 
-  factory ITrnLKPDetail.fromJson(String source) => ITrnLKPDetail.fromMap(json.decode(source));
+  factory ITrnLdvDetail.fromJson(String source) => ITrnLdvDetail.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ITrnLKPDetail(id: $id, pk: $pk, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdBy: $createdBy, createdDate: $createdDate, custName: $custName, custNo: $custNo, workStatus: $workStatus, lkpFlag: $lkpFlag, collectionFee: $collectionFee, dueDate: $dueDate, promiseDate: $promiseDate)';
+    return 'ITrnLdvDetail(id: $id, pk: $pk, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdBy: $createdBy, createdDate: $createdDate, custName: $custName, custNo: $custNo, workStatus: $workStatus, lkpFlag: $lkpFlag, collectionFee: $collectionFee, dueDate: $dueDate, promiseDate: $promiseDate)';
   }
 
   @override
   bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
-  ITrnLKPDetail? findByPk(String ldvNo, String contractNo) =>
+  ITrnLdvDetail? findByPk(String ldvNo, String contractNo) =>
       findAll().firstWhereOrNull((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }

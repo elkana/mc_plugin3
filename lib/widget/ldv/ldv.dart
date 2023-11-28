@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
-import '../../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
+import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 
 class LdvList extends StatelessWidget {
-  final Function(OTrnLKPDetail) onTapItem;
+  final Function(OTrnLdvDetail) onTapItem;
   const LdvList({super.key, required this.onTapItem});
 
   @override
   Widget build(context) => [
         // we need to listen to 2 tables: outbound & inbound
-        ValueListenableBuilder<Box<OTrnLKPDetail>>(
-            valueListenable: OTrnLKPDetail().listenTable,
+        ValueListenableBuilder<Box<OTrnLdvDetail>>(
+            valueListenable: OTrnLdvDetail().listenTable,
             builder: (context, obox, widget) {
               var obuffer = obox.values
                   // hanya tampilkan yg belum submit
@@ -21,8 +21,8 @@ class LdvList extends StatelessWidget {
                   .toList();
               if (obuffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
-              return ValueListenableBuilder<Box<ITrnLKPDetail>>(
-                valueListenable: ITrnLKPDetail().listenTable,
+              return ValueListenableBuilder<Box<ITrnLdvDetail>>(
+                valueListenable: ITrnLdvDetail().listenTable,
                 builder: (context, ibox, widget) {
                   // rebuild card
                   return obuffer
@@ -37,14 +37,14 @@ class LdvList extends StatelessWidget {
 }
 
 class LdvCardSimple extends StatelessWidget {
-  final OTrnLKPDetail data;
+  final OTrnLdvDetail data;
   final int rowId;
-  final Function(OTrnLKPDetail) onTapNext;
+  final Function(OTrnLdvDetail) onTapNext;
   const LdvCardSimple(this.data, {super.key, required this.rowId, required this.onTapNext});
 
   @override
   Widget build(context) {
-    var inb = ITrnLKPDetail().findByPk(data.pk!.ldvNo!, data.pk!.contractNo!);
+    var inb = ITrnLdvDetail().findByPk(data.pk!.ldvNo!, data.pk!.contractNo!);
     // TODO look for inbound data
     return inb == null
         ? '$data'.text.make().onInkTap(() => onTapNext(data))

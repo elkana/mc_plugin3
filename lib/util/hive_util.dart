@@ -8,8 +8,8 @@ import 'package:path_provider/path_provider.dart';
 
 import '../model/masters.dart';
 import '../model/mc_trn_rvcollcomment.dart';
-import '../model/trn_lkp_dtl/i_trn_lkp_dtl.dart';
-import '../model/trn_lkp_dtl/o_trn_lkp_dtl.dart';
+import '../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
+import '../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 // const darkModeBox = 'darkModeConfig';
 
 bool isNullOrZero(int? value) => value == null || value < 1;
@@ -107,8 +107,8 @@ class HiveUtil {
     // Hive.registerAdapter(UserDataAdapter());
     Hive.registerAdapter(OTrnLdvHeaderAdapter());
     Hive.registerAdapter(ITrnLdvHeaderAdapter());
-    Hive.registerAdapter(OTrnLKPDetailAdapter());
-    Hive.registerAdapter(ITrnLKPDetailAdapter());
+    Hive.registerAdapter(OTrnLdvDetailAdapter());
+    Hive.registerAdapter(ITrnLdvDetailAdapter());
     Hive.registerAdapter(LdvDetailPkAdapter());
     Hive.registerAdapter(TrnRVCollCommentAdapter());
     // Hive.registerAdapter(TrnAddressAdapter());
@@ -150,8 +150,8 @@ class HiveUtil {
 
     await Hive.openBox<OTrnLdvHeader>(OTrnLdvHeader().syncTableName);
     await Hive.openBox<ITrnLdvHeader>(ITrnLdvHeader().syncTableName);
-    await Hive.openBox<OTrnLKPDetail>(OTrnLKPDetail().syncTableName);
-    await Hive.openBox<ITrnLKPDetail>(ITrnLKPDetail().syncTableName);
+    await Hive.openBox<OTrnLdvDetail>(OTrnLdvDetail().syncTableName);
+    await Hive.openBox<ITrnLdvDetail>(ITrnLdvDetail().syncTableName);
     await Hive.openBox<LdvDetailPk>(LdvDetailPk().syncTableName);
     await Hive.openBox<TrnRVCollComment>(TrnRVCollComment().syncTableName);
     // await Hive.openBox<TrnAddress>(TrnAddress.syncTableName);
@@ -211,8 +211,8 @@ class HiveUtil {
         OTrnLdvHeader().cleanAll(),
         ITrnLdvHeader().cleanAll(),
         LdvDetailPk().cleanAll(),
-        OTrnLKPDetail().cleanAll(),
-        ITrnLKPDetail().cleanAll(),
+        OTrnLdvDetail().cleanAll(),
+        ITrnLdvDetail().cleanAll(),
         // Pk.cleanAll(),
         TrnRVCollComment().cleanAll(),
         // TrnAddress.cleanAll(),

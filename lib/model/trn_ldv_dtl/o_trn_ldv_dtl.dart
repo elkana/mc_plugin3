@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../util/hive_util.dart';
 
-part 'o_trn_lkp_dtl.g.dart';
+part 'o_trn_ldv_dtl.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvDetailOutbound)
-class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
+class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
   // static const syncTableName = 'outbound_trn_ldv_detail';
 
   @HiveField(0)
@@ -25,7 +25,7 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
   String? custName;
   @HiveField(7)
   String? alamatTagih;
-  OTrnLKPDetail({
+  OTrnLdvDetail({
     this.id,
     this.pk,
     this.lastUpdateBy,
@@ -124,11 +124,11 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
   // @HiveField(5)
   // String? workStatus;
 
-  // static ValueListenable<Box<OTrnLKPDetail>> listenTable() =>
-  //     Hive.box<OTrnLKPDetail>(OTrnLKPDetail.syncTableName).listenable();
+  // static ValueListenable<Box<OTrnLdvDetail>> listenTable() =>
+  //     Hive.box<OTrnLdvDetail>(OTrnLdvDetail.syncTableName).listenable();
 
-  // static ValueListenable<Box<OTrnLKPDetail>> listenSomeData(List<dynamic>? keys) =>
-  //     Hive.box<OTrnLKPDetail>(OTrnLKPDetail.syncTableName).listenable(keys: keys);
+  // static ValueListenable<Box<OTrnLdvDetail>> listenSomeData(List<dynamic>? keys) =>
+  //     Hive.box<OTrnLdvDetail>(OTrnLdvDetail.syncTableName).listenable(keys: keys);
 
   @override
   Map<String, dynamic> toMap() => {
@@ -142,7 +142,7 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
         'alamatTagih': alamatTagih,
       };
 
-  factory OTrnLKPDetail.fromMap(Map<String, dynamic> map) => OTrnLKPDetail(
+  factory OTrnLdvDetail.fromMap(Map<String, dynamic> map) => OTrnLdvDetail(
         id: map['id']?.toInt(),
         pk: map['pk'] != null ? LdvDetailPk.fromMap(map['pk']) : null,
         lastUpdateBy: map['lastUpdateBy'],
@@ -153,19 +153,19 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
         alamatTagih: map['alamatTagih'],
       );
 
-  factory OTrnLKPDetail.fromJson(String source) => OTrnLKPDetail.fromMap(json.decode(source));
+  factory OTrnLdvDetail.fromJson(String source) => OTrnLdvDetail.fromMap(json.decode(source));
 
-  // static List<OTrnLKPDetail> findByLdvNo(String ldvNo) {
+  // static List<OTrnLdvDetail> findByLdvNo(String ldvNo) {
   //   final list = findAll();
   //   return list.where((e) => e.pk?.ldvNo == ldvNo).toList();
   // }
 
-  // static List<OTrnLKPDetail> findByContractNo(String? contractNo) {
+  // static List<OTrnLdvDetail> findByContractNo(String? contractNo) {
   //   final list = findAll();
   //   return list.where((e) => e.pk?.contractNo == contractNo).toList();
   // }
 
-  // static OTrnLKPDetail? findFirstByContractNo(String? contractNo) {
+  // static OTrnLdvDetail? findFirstByContractNo(String? contractNo) {
   //   final list = findAll();
   //   try {
   //     return list.where((e) => e.pk?.contractNo == contractNo).first;
@@ -174,8 +174,8 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
   //   }
   // }
 
-  // static bool update(OTrnLKPDetail exist) {
-  //   final box = Hive.box<OTrnLKPDetail>(syncTableName);
+  // static bool update(OTrnLdvDetail exist) {
+  //   final box = Hive.box<OTrnLdvDetail>(syncTableName);
   //   final map = box.toMap();
 
   //   dynamic desiredKey;
@@ -192,12 +192,12 @@ class OTrnLKPDetail extends LocalTable<OTrnLKPDetail> {
 
   @override
   String toString() =>
-      'OTrnLKPDetail(id: $id, pk: $pk, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdBy: $createdBy, createdDate: $createdDate, custName: $custName, alamatTagih: $alamatTagih)';
+      'OTrnLdvDetail(id: $id, pk: $pk, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdBy: $createdBy, createdDate: $createdDate, custName: $custName, alamatTagih: $alamatTagih)';
 
   @override
   bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
-  OTrnLKPDetail? findByPk(String ldvNo, String contractNo) =>
+  OTrnLdvDetail? findByPk(String ldvNo, String contractNo) =>
       findAll().firstWhere((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }
 
