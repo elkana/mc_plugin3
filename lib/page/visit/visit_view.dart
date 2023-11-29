@@ -46,12 +46,10 @@ class ContractView extends StatelessWidget {
   const ContractView(this.pk, {super.key});
 
   @override
-  Widget build(context) => GetX<VisitController>(builder: (cont) {
-        return [
-          KeyVal('No. Dokumen', '${pk.ldvNo}'),
-          KeyVal('No. Contract', '${pk.contractNo}'),
-        ].column();
-      });
+  Widget build(context) => [
+        KeyVal('No. Dokumen', '${pk.ldvNo}'),
+        KeyVal('No. Contract', '${pk.contractNo}'),
+      ].column();
 }
 
 class KronologiView extends StatelessWidget {
@@ -113,10 +111,13 @@ class PenerimaanView extends StatelessWidget {
   const PenerimaanView({super.key});
 
   @override
-  Widget build(context) => GetX<VisitController>(builder: (cont) {
-        return [
-          'Penerimaan'.text.make(),
-          'Kode Struk'.text.make(),
-        ].column();
-      });
+  Widget build(context) => [
+        FormBuilderTextField(
+            name: 'receivedAmount',
+            valueTransformer: (value) => value == null ? 0 : double.parse(value),
+            maxLines: 1,
+            decoration: InputDecoration(label: 'Penerimaan'.text.make())),
+        FormBuilderTextField(
+            name: 'strukNo', maxLines: 1, decoration: InputDecoration(label: 'Kode Struk'.text.make())),
+      ].column();
 }
