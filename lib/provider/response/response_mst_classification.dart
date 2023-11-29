@@ -43,13 +43,13 @@ class Embedded {
   String toString() => 'Embedded(data: $data)';
 
   factory Embedded.fromMap(Map<String, dynamic> data) => Embedded(
-        data: (data['mst-ldv-classification'] as List<dynamic>?)
+        data: (data['mst-ldv-classifications'] as List<dynamic>?)
             ?.map((e) => MstLdvClassification.fromMap(e as Map<String, dynamic>))
             .toList(),
       );
 
   Map<String, dynamic> toMap() => {
-        'mst-ldv-classification': data?.map((e) => e.toJson()).toList(),
+        'mst-ldv-classifications': data?.map((e) => e.toJson()).toList(),
       };
 
   /// `dart:convert`

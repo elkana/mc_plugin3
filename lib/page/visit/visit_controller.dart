@@ -9,6 +9,7 @@ import 'package:mc_plugin3/util/ldv_util.dart';
 
 import '../../controller/aformbuilder_controller.dart';
 import '../../model/trn_ldv_hdr.dart';
+import '../../routes/app_routes.dart';
 
 class VisitBinding extends Bindings {
   @override
@@ -18,6 +19,22 @@ class VisitBinding extends Bindings {
 class VisitController extends ATabFormController with GetSingleTickerProviderStateMixin {
   LdvDetailPk? contractPk;
   var initialValue = Rxn<TrnRVCollComment>();
+
+  static show(OTrnLdvDetail data) async {
+    // jika ada transaksi di rvcollcomment, skip poa
+    var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
+    if (visited == null) {
+      var poaData = await Get.toNamed(Routes.poa, arguments: [
+        data.pk
+      ], parameters: {
+        // 'id': e.sktNo!,
+        // 'visitId': visitId,
+      });
+      if (poaData == null) return;
+    }
+    Get.toNamed(Routes.visit);
+  }
+
   @override
   void onInit() {
     super.onInit();

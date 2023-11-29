@@ -12,10 +12,9 @@ class ViewTableView extends GetView<ViewTableController> {
   const ViewTableView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(context) => Scaffold(
           body: CustomScrollView(slivers: [
-        const SliverAppBar(
-            expandedHeight: 160, pinned: true, flexibleSpace: FlexibleSpaceBar(title: Text('View Table'))),
+        SliverAppBar(expandedHeight: 160, pinned: true, flexibleSpace: FlexibleSpaceBar(title: Text(controller.title))),
         SliverList(
             delegate: SliverChildListDelegate([
           SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/page/visit/visit_controller.dart';
 import 'package:mc_plugin3/util/hive_util.dart';
 
 import '../../controller/abasic_controller.dart';
@@ -22,20 +23,6 @@ class LdvListController extends ABasicController {
   }
 
   Future refreshData() => processThis(() => Api.instance.assignments);
-
-  Future onVisit(OTrnLdvDetail data) async {
-    // showToast('Visiting $data');
-    await Get.toNamed(Routes.poa, arguments: [
-      data.pk
-      // data.pk!.ldvNo, data.pk!.contractNo,
-      // inbound
-      // TblSKTHeader.findById(e.sktNo),
-      // poa,
-    ], parameters: {
-      // 'id': e.sktNo!,
-      // 'visitId': visitId,
-    });
-  }
 
   Future resetData() async {
     await HiveUtil.cleanAll(true);

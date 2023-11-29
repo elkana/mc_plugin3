@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/auth_controller.dart';
+import 'package:mc_plugin3/page/visit/visit_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../widget/ldv/ldv.dart';
@@ -23,7 +24,7 @@ class LdvListView extends GetView<LdvListController> {
           onRefresh: controller.refreshData,
           child: controller.loading.isTrue
               ? const CircularProgressIndicator()
-              : LdvList(onTapItem: controller.onVisit).scrollVertical(
+              : const LdvList(onTapItem: VisitController.show).scrollVertical(
                   controller: controller.scrollAktif,
                   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())))));
 }

@@ -39,6 +39,7 @@ class DeveloperController extends ABasicController {
         rows.add(tableInfo(MstLdvClassification().syncTableName, MstLdvClassification().findAll().length));
         rows.add(tableInfo(MstLdvDelqReason().syncTableName, MstLdvDelqReason().findAll().length));
         rows.add(tableInfo(MstLdvNextAction().syncTableName, MstLdvNextAction().findAll().length));
+        rows.add(tableInfo(MstLdvPersonal().syncTableName, MstLdvPersonal().findAll().length));
         // rows.add(tableInfo(TblPhoto.syncTableName, TblPhoto.findAll().length));
         // rows.add(tableInfo(TblSKTCollateral.syncTableName, TblSKTCollateral.findAll().length));
         // rows.add(tableInfo(TblSKTCollateralRemarks.syncTableName, TblSKTCollateralRemarks.findAll().length));

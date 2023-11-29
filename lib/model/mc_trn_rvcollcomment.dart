@@ -427,8 +427,8 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
     return 'TrnRVCollComment(id: $id, lastSyncMillis: $lastSyncMillis, modified: $modified, rvCollNo: $rvCollNo, seqNo: $seqNo, contractNo: $contractNo, lkpNo: $lkpNo, collId: $collId, rvbNo: $rvbNo, instNo: $instNo, receivedAmount: $receivedAmount, penalty: $penalty, collFeeAc: $collFeeAc, lkpFlag: $lkpFlag, delqCode: $delqCode, classCode: $classCode, actionPlan: $actionPlan, potensi: $potensi, planPayAmount: $planPayAmount, mobPhone1: $mobPhone1, whoMet: $whoMet, notes: $notes, promiseDate: $promiseDate, officeCode: $officeCode, spjbNo: $spjbNo, strukNo: $strukNo, strukCounter: $strukCounter, rating: $rating, periode: $periode, ambc: $ambc, latitude: $latitude, longitude: $longitude, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdDate: $createdDate, createdBy: $createdBy, lkpDate: $lkpDate, monthInst: $monthInst, deposit: $deposit, cancelledBy: $cancelledBy, cancelledComments: $cancelledComments, cancelledApprove: $cancelledApprove, cancelRequest: $cancelRequest, revisitDate: $revisitDate)';
   }
 
-  TrnRVCollComment? findByContractNo(String contractNo) =>
-      findAll().firstWhereOrNull((p0) => p0.contractNo == contractNo);
+  TrnRVCollComment? findByContractNo(String? contractNo) =>
+      contractNo == null ? null : findAll().firstWhereOrNull((p0) => p0.contractNo == contractNo);
 
   TrnRVCollComment copyWith({
     ValueGetter<int?>? id,

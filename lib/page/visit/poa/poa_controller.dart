@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/abasic_controller.dart';
 
@@ -10,6 +11,6 @@ class PoaBinding extends Bindings {
 
 class PoaController extends ABasicController {
   Future takePhoto() async {
-    var ret = await Get.toNamed(Routes.visit);
+    Navigator.of(Get.context!).pop('ok');
   }
 }
