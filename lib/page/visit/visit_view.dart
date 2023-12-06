@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 // import 'package:
 import '../../model/masters.dart';
@@ -49,6 +50,14 @@ class ContractView extends StatelessWidget {
   Widget build(context) => [
         KeyVal('No. Dokumen', '${pk.ldvNo}'),
         KeyVal('No. Contract', '${pk.contractNo}'),
+        GetBuilder<VisitController>(
+            builder: (cont) =>
+                '${OTrnLdvDetail().findByPk(cont.contractPk!.ldvNo!, cont.contractPk!.contractNo!)}'.text.make())
+        // ValueListenableBuilder<Box<OTrnLdvDetail>>(
+        //     valueListenable: OTrnLdvDetail().listenTable,
+        //     builder: (context, obox, widget) {
+        //       return '${obox.values.first}'.text.make();
+        //     })
       ].column();
 }
 

@@ -45,7 +45,10 @@ class LoginController extends ALoginController {
           if (user == null) {
             //bypass login, jika masih ada data ldv di lokal
             final userLocal = await PrefController.instance.rememberUser;
-            if (userLocal != null && userLocal.userPassword == ctrlPwd.text && rememberPwd.isTrue) {
+            if (userLocal != null &&
+                userLocal.userId == ctrlUserId.text &&
+                userLocal.userPassword == ctrlPwd.text &&
+                rememberPwd.isTrue) {
             } else {
               // punishment for wrong password
               await [2, 5].random.delay();

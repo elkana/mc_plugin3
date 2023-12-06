@@ -22,15 +22,11 @@ class LdvList extends StatelessWidget {
               if (obuffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
               return ValueListenableBuilder<Box<ITrnLdvDetail>>(
-                valueListenable: ITrnLdvDetail().listenTable,
-                builder: (context, ibox, widget) {
-                  // rebuild card
-                  return obuffer
+                  valueListenable: ITrnLdvDetail().listenTable,
+                  builder: (context, ibox, widget) => obuffer
                       .mapIndexed((p, idx) => LdvCardSimple(p, rowId: idx, onTapNext: onTapItem))
                       .toList()
-                      .column();
-                },
-              );
+                      .column());
             }),
         62.heightBox, // hardcode utk space bottomappbar
       ].column();

@@ -11,6 +11,7 @@ import '../provider/response/response_apk.dart';
 import '../util/commons.dart';
 import '../util/customs.dart';
 import '../util/device_util.dart';
+import '../util/hive_util.dart';
 import 'abasic_controller.dart';
 import 'pref_controller.dart';
 
@@ -81,11 +82,20 @@ abstract class ALoginController extends ABasicController {
     if (!await DeviceUtil.checkNonEligibleDevice()) return false;
     // 3. check permission
     progressMsg('Checking Permissions...');
-    // await 1.delay();
     if (!await validateAllPermissions()) {
       progressMsg('Permissions Failed.');
       showError('Maaf, Anda harus menyetujui akses ke perangkat.');
       return false;
+    }
+    // check user change
+    var lastUser = await PrefController.instance.rememberUser;
+    if (lastUser?.userId == ctrlUserId.text) {
+    } else if (lastUser != null && lastUser.userId != ctrlUserId.text) {
+      if (await confirm('Ada perubahan login akun.\nLanjut login sebagai ${ctrlUserId.text}')) {
+        await HiveUtil.cleanAll(true);
+      } else {
+        return false;
+      }
     }
     formKey.currentState!.save();
     // selectedServerByUser = selectedServer.value;

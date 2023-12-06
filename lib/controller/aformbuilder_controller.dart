@@ -37,6 +37,10 @@ abstract class AFormBuilderController extends ABasicController {
 
   Future<bool> submit() async {
     // check permissions again
+    if (AuthController.instance.loggedUser == null) {
+      showError('Please Login.');
+      return false;
+    }
     if (!await validateAllPermissions()) {
       showError('Maaf, Anda harus menyetujui akses ke perangkat.');
       return false;

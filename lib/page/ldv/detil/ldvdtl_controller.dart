@@ -64,7 +64,7 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
       ..createdBy = AuthController.instance.loggedUserId
       ..createdDate = TimeUtil.nowIso();
 
-    var saved = await ITrnLdvDetail().saveOrUpdate(offlineData);
+    var saved = await ITrnLdvDetail().saveOne(offlineData);
 
     await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
   }

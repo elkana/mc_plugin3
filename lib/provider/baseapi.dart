@@ -33,11 +33,10 @@ class BaseApi extends GetxController {
   final timeoutSeconds = 60;
 
   static Future<String> getSelectedServer(Server? server) async {
-    if (server == null) {
-      var selServer = await PrefController.instance.lastSelectedServer;
-      return selServer!.port != null ? 'http://${selServer.host}:${selServer.port}' : 'http://${selServer.host}';
-    }
-    return server.port != null ? 'http://${server.host}:${server.port}' : 'http://${server.host}';
+    server ??= await PrefController.instance.lastSelectedServer;
+    return server!.port != null
+        ? 'http${server.https == true ? 's' : ''}://${server.host}:${server.port}'
+        : 'http${server.https == true ? 's' : ''}://${server.host}';
   }
 
   // static String get imageUri => '${constructHostPort(clientLogic?.selectedServer)}/matel/media/v1/';

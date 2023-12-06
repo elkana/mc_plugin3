@@ -20,15 +20,11 @@ class AuthController extends GetxService {
   void onInit() {
     super.onInit();
     ever<UserModel?>(user, (_) {
-      log('ever-> $_');
-      if (_ == null) {
-        Get.offAllNamed(Routes.login);
-        PrefController.instance.sessionStateStream.add(SessionState.stopListening);
-      } else {
-        // start listening only after user logs in
-        Get.offAllNamed(Routes.home);
-        PrefController.instance.sessionStateStream.add(SessionState.startListening);
-      }
+      log('event-> $_');
+      // start listening only after user logs in
+      Get.offAllNamed(_ == null ? Routes.login : Routes.home);
+      PrefController.instance.sessionStateStream
+          .add(_ == null ? SessionState.stopListening : SessionState.startListening);
     });
   }
 
@@ -52,14 +48,7 @@ class AuthController extends GetxService {
     userModel?.userPassword = pwd;
     // save rememberme
     await PrefController.instance.setRememberMe(rememberMe);
-    if (rememberMe) {
-      // await PrefController.instance.setRememberUserId(userId);
-      // await PrefController.instance.setRememberPwd(pwd);
-      await PrefController.instance.setRememberUser(userModel);
-    }
-
-    // await PrefController.instance.setLoggedUser(userModel); pentest failed
-    // if (kReleaseMode) await 1.delay();
+    await PrefController.instance.setRememberUser(rememberMe ? userModel : null);
     // user.value = userModel;  // ! dont put here, sometimes, child need blocks another validation after login
     return userModel;
   }

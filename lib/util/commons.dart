@@ -32,7 +32,6 @@ void showToast(String message, {bool error = false, bool success = false, String
     message = message.normalizeException();
   }
   Get.snackbar(title, message,
-      messageText: Text(message),
       snackPosition: SnackPosition.TOP,
       backgroundColor: error
           ? Colors.red.shade800.withOpacity(0.8)

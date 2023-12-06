@@ -24,12 +24,7 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     // jika ada transaksi di rvcollcomment, skip poa
     var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
     if (visited == null) {
-      var poaData = await Get.toNamed(Routes.poa, arguments: [
-        data.pk
-      ], parameters: {
-        // 'id': e.sktNo!,
-        // 'visitId': visitId,
-      });
+      var poaData = await Get.toNamed(Routes.poa, arguments: [data]);
       if (poaData == null) return;
     }
     Get.toNamed(Routes.visit);
@@ -38,33 +33,34 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
   @override
   void onInit() {
     super.onInit();
-    // initiate tab
+    // initiate 3 tabs for: detail, kronologi & penerimaan
     tabController = TabController(length: 3, initialIndex: 1, vsync: this);
     if (kDebugMode && contractPk == null) {
       // for development purpose, retrieve first data
       contractPk = LdvDetailPk().findAll()[0];
     }
+    if (contractPk == null) throw Exception('A Valid Contract Required.');
     // load form data
-    if (contractPk != null) {
-      initialValue(TrnRVCollComment().findByContractNo(contractPk!.contractNo!));
-    } else {
-      throw Exception('A Valid Contract Required.');
-    }
+    initialValue(TrnRVCollComment().findByContractNo(contractPk!.contractNo!));
   }
 
   @override
   Future onSubmit() async {
+    // 1. convert from form data back to trnrvcollcomment
     var formData = TrnRVCollComment.fromMap(formKey.currentState!.value)
       ..rvCollNo ??= LdvUtil.generateRVCollNo(
           OTrnLdvHeader().findByPk(contractPk!.ldvNo!)!.ldvDate!.isoToLocalDate(), AuthController.instance.loggedUserId)
       ..lkpNo = contractPk?.ldvNo
       ..contractNo = contractPk?.contractNo;
+    // 2. merge with existing data
     var merge = initialValue.value?.toMap()
       ?..addAll(formData.toMap()); // merge will be null if initialValue is also null no matter what
-    var saved = await TrnRVCollComment().saveOrUpdate(merge != null ? TrnRVCollComment.fromMap(merge) : formData);
+    // 3. commit
+    var saved = await TrnRVCollComment().saveOne(merge != null ? TrnRVCollComment.fromMap(merge) : formData);
 
-    // finally, upload data
+    // 4. finally, upload data
     log('upload assignment $saved');
+    // 5. return back saved data
     await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
   }
 }

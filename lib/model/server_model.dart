@@ -5,8 +5,9 @@ class Server {
   bool? sslPinning;
   String? proxyIp;
   int? proxyPort;
+  bool? https;
 
-  Server({this.name, this.host, this.port, this.sslPinning, this.proxyIp, this.proxyPort});
+  Server({this.https, this.name, this.host, this.port, this.sslPinning, this.proxyIp, this.proxyPort});
 
   Server.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -15,6 +16,7 @@ class Server {
     sslPinning = json['sslPinning'];
     proxyIp = json['proxyIp'];
     proxyPort = json['proxyPort'];
+    https = json['https'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,12 +27,14 @@ class Server {
     data['sslPinning'] = sslPinning;
     data['proxyIp'] = proxyIp;
     data['proxyPort'] = proxyPort;
+    data['https'] = https;
     return data;
   }
 
   @override
-  String toString() =>
-      'Server(name: $name, ip: $host, port: $port, sslPinning: $sslPinning, proxyIp: $proxyIp, proxyPort: $proxyPort)';
+  String toString() {
+    return 'Server(name: $name, host: $host, port: $port, sslPinning: $sslPinning, proxyIp: $proxyIp, proxyPort: $proxyPort, https: $https)';
+  }
 
   // bool isEmpty() => name == null || name!.isEmpty;
 

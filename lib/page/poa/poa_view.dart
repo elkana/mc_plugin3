@@ -11,6 +11,7 @@ class PoaView extends GetView<PoaController> {
   Widget build(context) => Scaffold(
       appBar: AppBar(title: 'Photo On Arrival'.text.make()),
       body: [
+        '${controller.contract}'.text.make(),
         OutlinedButton.icon(
             onPressed: controller.takePhoto, icon: const Icon(Icons.camera), label: 'Ambil Foto'.text.make()),
       ].column());
