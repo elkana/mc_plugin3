@@ -47,3 +47,39 @@ class LdvCardSimple extends StatelessWidget {
         : 'inbound exist for $data\n$inb'.text.make().onInkTap(() => onTapNext(data));
   }
 }
+
+class OTrnLdvDetailList extends StatelessWidget {
+  final Widget Function(OTrnLdvDetail) onRender;
+  const OTrnLdvDetailList({super.key, required this.onRender});
+
+  @override
+  Widget build(context) => ValueListenableBuilder<Box<OTrnLdvDetail>>(
+      valueListenable: OTrnLdvDetail().listenTable,
+      builder: (context, obox, widget) {
+        var buffer = obox.values
+            // hanya tampilkan yg belum submit
+            // .where((e) => e.submitDate == null && e.expiredDate != null)
+            .toList();
+        if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
+
+        return buffer.mapIndexed((p, idx) => onRender(p)).toList().column();
+      });
+}
+
+class ITrnLdvDetailList extends StatelessWidget {
+  final Widget Function(ITrnLdvDetail) onRender;
+  const ITrnLdvDetailList({super.key, required this.onRender});
+
+  @override
+  Widget build(context) => ValueListenableBuilder<Box<ITrnLdvDetail>>(
+      valueListenable: ITrnLdvDetail().listenTable,
+      builder: (context, obox, widget) {
+        var buffer = obox.values
+            // hanya tampilkan yg belum submit
+            // .where((e) => e.submitDate == null && e.expiredDate != null)
+            .toList();
+        if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
+
+        return buffer.mapIndexed((p, idx) => onRender(p)).toList().column();
+      });
+}
