@@ -4,6 +4,7 @@ import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/page/visit/visit_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../util/customs.dart';
 import '../../widget/ldv/ldv.dart';
 import 'ldvlist_controller.dart';
 
@@ -15,6 +16,7 @@ class LdvListView extends GetView<LdvListController> {
       appBar: AppBar(
         title: 'Ldv List'.text.make(),
         actions: [
+          TextButton(onPressed: clientLogic?.sync, child: 'Sync DB'.text.white.make()),
           IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
           IconButton(onPressed: controller.resetData, icon: const Icon(Icons.restore_page)),
           IconButton(onPressed: AuthController.instance.logout, icon: const Icon(Icons.logout)),

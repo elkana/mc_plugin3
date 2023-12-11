@@ -428,7 +428,7 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
   }
 
   TrnRVCollComment? findByContractNo(String? contractNo) =>
-      contractNo == null ? null : findAll().firstWhereOrNull((p0) => p0.contractNo == contractNo);
+      contractNo == null ? null : findAll.firstWhereOrNull((p0) => p0.contractNo == contractNo);
 
   TrnRVCollComment copyWith({
     ValueGetter<int?>? id,

@@ -194,11 +194,11 @@ class HiveUtil {
 
   static Future cleanMastersOnly() => Future.wait([
         // MstMobileSetup.cleanAll(),
-        MstLdvClassification().cleanAll(),
-        MstLdvDelqReason().cleanAll(),
+        MstLdvClassification().cleanAll,
+        MstLdvDelqReason().cleanAll,
         // MstLdvFlag.cleanAll(),
-        MstLdvNextAction().cleanAll(),
-        MstLdvPersonal().cleanAll(),
+        MstLdvNextAction().cleanAll,
+        MstLdvPersonal().cleanAll,
         // MstLdvPotensi.cleanAll(),
         // MstLdvStatus.cleanAll(),
         // MstBank.cleanAll(),
@@ -208,13 +208,13 @@ class HiveUtil {
 
   static Future cleanTransactionsOnly() => Future.wait([
         // SyncTrnTable.cleanAll(),
-        OTrnLdvHeader().cleanAll(),
-        ITrnLdvHeader().cleanAll(),
-        LdvDetailPk().cleanAll(),
-        OTrnLdvDetail().cleanAll(),
-        ITrnLdvDetail().cleanAll(),
+        OTrnLdvHeader().cleanAll,
+        ITrnLdvHeader().cleanAll,
+        LdvDetailPk().cleanAll,
+        OTrnLdvDetail().cleanAll,
+        ITrnLdvDetail().cleanAll,
         // Pk.cleanAll(),
-        TrnRVCollComment().cleanAll(),
+        TrnRVCollComment().cleanAll,
         // TrnAddress.cleanAll(),
         // TrnRVB.cleanAll(),
         // TrnDeposit.cleanAll(),
@@ -236,17 +236,17 @@ class HiveUtil {
         //add more here
       ]);
 
-  // static isMasterEmpty() =>
-  //     MstMobileSetup.isEmpty() ||
-  //     (MstLdvClassification.isEmpty() && !emptyClassificationsAllowed) ||
-  //     (MstLdvDelqReason.isEmpty() && !emptyDelqReasonsAllowed) ||
-  //     (MstLdvFlag.isEmpty() && !emptyFlagsAllowed) ||
-  //     (MstLdvNextAction.isEmpty() && !emptyNextActionsAllowed) ||
-  //     (MstLdvPersonal.isEmpty() && !emptyPersonalsAllowed) ||
-  //     (MstLdvPotensi.isEmpty() && !emptyPotensisAllowed) ||
-  //     (MstBank.isEmpty() && !emptyBanksAllowed) ||
-  //     (MstPaymentPoint.isEmpty() && !emptyPaymentPointsAllowed) ||
-  //     (MstLdvStatus.isEmpty() && !emptyStatusAllowed);
+  static isMasterEmpty() =>
+      // MstMobileSetup.isEmpty() ||
+      (MstLdvClassification().isEmpty && !emptyClassificationsAllowed) ||
+      (MstLdvDelqReason().isEmpty && !emptyDelqReasonsAllowed) ||
+      (MstLdvNextAction().isEmpty && !emptyNextActionsAllowed) ||
+      // (MstLdvFlag().isEmpty && !emptyFlagsAllowed) ||
+      // (MstLdvPotensi().isEmpty && !emptyPotensisAllowed) ||
+      // (MstBank().isEmpty && !emptyBanksAllowed) ||
+      // (MstPaymentPoint().isEmpty && !emptyPaymentPointsAllowed) ||
+      // (MstLdvStatus().isEmpty && !emptyStatusAllowed);
+      (MstLdvPersonal().isEmpty && !emptyPersonalsAllowed);
 }
 
 // abstract class MasterTable<T> extends HiveObject {
@@ -294,8 +294,9 @@ abstract class LocalTable<T> extends HiveObject {
   String toJson() => json.encode(toMap());
 
   get listenTable => Hive.box<T>(syncTableName).listenable();
+  bool get isEmpty => Hive.box<T>(syncTableName).isEmpty;
 
-  Future cleanAll() async {
+  Future get cleanAll async {
     debugPrint('cleanup $syncTableName');
     final box = Hive.box<T>(syncTableName);
     await box.clear();
@@ -311,7 +312,7 @@ abstract class LocalTable<T> extends HiveObject {
   //   }
   // }
 
-  List<T> findAll() {
+  List<T> get findAll {
     final box = Hive.box<T>(syncTableName);
     List<T> list = box.values.toList().cast<T>();
     return list;
@@ -319,7 +320,7 @@ abstract class LocalTable<T> extends HiveObject {
 
   // this will clear data and refill
   Future<List<T>> assignAll(List<T>? data) async {
-    await cleanAll();
+    await cleanAll;
     return saveAll(data);
   }
 

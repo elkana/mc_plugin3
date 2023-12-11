@@ -62,7 +62,7 @@ class OTrnLdvHeader extends LocalTable<OTrnLdvHeader> {
   String toString() =>
       'OTrnLdvHeader(id: $id, ldvNo: $ldvNo, ldvDate: $ldvDate, collId: $collId, collName: $collName, officeCode: $officeCode, officeName: $officeName)';
 
-  OTrnLdvHeader? findByPk(String ldvNo) => findAll().firstWhere((element) => element.ldvNo == ldvNo);
+  OTrnLdvHeader? findByPk(String ldvNo) => findAll.firstWhere((element) => element.ldvNo == ldvNo);
 }
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvHeaderInbound)

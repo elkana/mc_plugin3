@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 // import 'package:
 import '../../model/masters.dart';
@@ -74,7 +73,7 @@ class KronologiView extends StatelessWidget {
                 onChanged: (val) => cont.dataChanged(true),
                 valueTransformer: (val) => val?.code,
                 items: MstLdvPersonal()
-                    .findAll()
+                    .findAll
                     .map((option) => DropdownMenuItem(value: option, child: Text(option.description ?? '')))
                     .toList()),
             FormBuilderDropdown<MstLdvDelqReason>(
@@ -84,7 +83,7 @@ class KronologiView extends StatelessWidget {
                 onChanged: (val) => cont.dataChanged(true),
                 valueTransformer: (val) => val?.code,
                 items: MstLdvDelqReason()
-                    .findAll()
+                    .findAll
                     .map((option) => DropdownMenuItem(value: option, child: Text(option.description ?? '')))
                     .toList()),
             FormBuilderDropdown<MstLdvClassification>(
@@ -94,7 +93,7 @@ class KronologiView extends StatelessWidget {
                 onChanged: (val) => cont.dataChanged(true),
                 valueTransformer: (val) => val?.code,
                 items: MstLdvClassification()
-                    .findAll()
+                    .findAll
                     .map((option) => DropdownMenuItem(value: option, child: Text(option.label ?? '')))
                     .toList()),
             FormBuilderDropdown<MstLdvNextAction>(
@@ -104,7 +103,7 @@ class KronologiView extends StatelessWidget {
                 onChanged: (val) => cont.dataChanged(true),
                 valueTransformer: (val) => val?.code,
                 items: MstLdvNextAction()
-                    .findAll()
+                    .findAll
                     .map((option) => DropdownMenuItem(value: option, child: Text(option.label ?? '')))
                     .toList()),
             FormBuilderTextField(

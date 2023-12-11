@@ -145,5 +145,5 @@ class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
   bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
   ITrnLdvDetail? findByPk(String ldvNo, String contractNo) =>
-      findAll().firstWhereOrNull((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
+      findAll.firstWhereOrNull((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }

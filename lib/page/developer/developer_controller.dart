@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../controller/abasic_controller.dart';
@@ -30,16 +31,17 @@ class DeveloperController extends ABasicController {
         //   DataCell(Text('Files in Cache')),
         //   DataCell(Text('1000')),
         // ]));
-        rows.add(tableInfo(OTrnLdvHeader().syncTableName, OTrnLdvHeader().findAll().length));
-        rows.add(tableInfo(ITrnLdvHeader().syncTableName, ITrnLdvHeader().findAll().length));
+        rows.add(tableInfo(OTrnLdvHeader().syncTableName, OTrnLdvHeader().findAll.length));
+        rows.add(tableInfo(ITrnLdvHeader().syncTableName, ITrnLdvHeader().findAll.length));
 
-        rows.add(tableInfo(OTrnLdvDetail().syncTableName, OTrnLdvDetail().findAll().length));
-        rows.add(tableInfo(ITrnLdvDetail().syncTableName, ITrnLdvDetail().findAll().length));
+        rows.add(tableInfo(OTrnLdvDetail().syncTableName, OTrnLdvDetail().findAll.length));
+        rows.add(tableInfo(ITrnLdvDetail().syncTableName, ITrnLdvDetail().findAll.length));
+        rows.add(tableInfo(TrnRVCollComment().syncTableName, TrnRVCollComment().findAll.length));
 
-        rows.add(tableInfo(MstLdvClassification().syncTableName, MstLdvClassification().findAll().length));
-        rows.add(tableInfo(MstLdvDelqReason().syncTableName, MstLdvDelqReason().findAll().length));
-        rows.add(tableInfo(MstLdvNextAction().syncTableName, MstLdvNextAction().findAll().length));
-        rows.add(tableInfo(MstLdvPersonal().syncTableName, MstLdvPersonal().findAll().length));
+        rows.add(tableInfo(MstLdvClassification().syncTableName, MstLdvClassification().findAll.length));
+        rows.add(tableInfo(MstLdvDelqReason().syncTableName, MstLdvDelqReason().findAll.length));
+        rows.add(tableInfo(MstLdvNextAction().syncTableName, MstLdvNextAction().findAll.length));
+        rows.add(tableInfo(MstLdvPersonal().syncTableName, MstLdvPersonal().findAll.length));
         // rows.add(tableInfo(TblPhoto.syncTableName, TblPhoto.findAll().length));
         // rows.add(tableInfo(TblSKTCollateral.syncTableName, TblSKTCollateral.findAll().length));
         // rows.add(tableInfo(TblSKTCollateralRemarks.syncTableName, TblSKTCollateralRemarks.findAll().length));

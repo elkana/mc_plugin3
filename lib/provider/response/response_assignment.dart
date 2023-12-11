@@ -1,64 +1,52 @@
 import 'dart:convert';
 
-import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
-import 'page.dart';
+import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
+import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
+import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
+
+import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 
 class ResponseAssignment {
-  Embedded? embedded;
-  Page? page;
+  OTrnLdvHeader? oheader;
+  ITrnLdvHeader? iheader;
+  List<ITrnLdvDetail>? idetails;
+  List<OTrnLdvDetail>? odetails;
+  List<TrnRVCollComment>? rvColls;
+  ResponseAssignment({
+    this.oheader,
+    this.iheader,
+    this.idetails,
+    this.odetails,
+    this.rvColls,
+  });
 
-  ResponseAssignment({this.embedded, this.page});
+  Map<String, dynamic> toMap() {
+    return {
+      'oheader': oheader?.toMap(),
+      'iheader': iheader?.toMap(),
+      'idetails': idetails?.map((x) => x.toMap()).toList(),
+      'odetails': odetails?.map((x) => x.toMap()).toList(),
+      'rvColls': rvColls?.map((x) => x.toMap()).toList(),
+    };
+  }
 
-  @override
-  String toString() => 'ResponseAssignment(embedded: $embedded, page: $page)';
+  factory ResponseAssignment.fromMap(Map<String, dynamic> map) {
+    return ResponseAssignment(
+      oheader: map['oheader'] != null ? OTrnLdvHeader.fromMap(map['oheader']) : null,
+      iheader: map['iheader'] != null ? ITrnLdvHeader.fromMap(map['iheader']) : null,
+      idetails: map['idetails'] != null
+          ? List<ITrnLdvDetail>.from(map['idetails']?.map((x) => ITrnLdvDetail.fromMap(x)))
+          : null,
+      odetails: map['odetails'] != null
+          ? List<OTrnLdvDetail>.from(map['odetails']?.map((x) => OTrnLdvDetail.fromMap(x)))
+          : null,
+      rvColls: map['rvColls'] != null
+          ? List<TrnRVCollComment>.from(map['rvColls']?.map((x) => TrnRVCollComment.fromMap(x)))
+          : null,
+    );
+  }
 
-  factory ResponseAssignment.fromMap(Map<String, dynamic> data) => ResponseAssignment(
-        embedded: data['_embedded'] == null ? null : Embedded.fromMap(data['_embedded'] as Map<String, dynamic>),
-        page: data['page'] == null ? null : Page.fromMap(data['page'] as Map<String, dynamic>),
-      );
-
-  Map<String, dynamic> toMap() => {
-        '_embedded': embedded?.toMap(),
-        'page': page?.toMap(),
-      };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [ResponseAssignment].
-  factory ResponseAssignment.fromJson(String data) =>
-      ResponseAssignment.fromMap(json.decode(data) as Map<String, dynamic>);
-
-  /// `dart:convert`
-  ///
-  /// Converts [ResponseAssignment] to a JSON string.
   String toJson() => json.encode(toMap());
-}
 
-class Embedded {
-  List<OTrnLdvDetail>? data;
-
-  Embedded({this.data});
-
-  @override
-  String toString() => 'Embedded(data: $data)';
-
-  factory Embedded.fromMap(Map<String, dynamic> data) => Embedded(
-        data: (data['ldv-details-outbound'] as List<dynamic>?)
-            ?.map((e) => OTrnLdvDetail.fromMap(e as Map<String, dynamic>))
-            .toList(),
-      );
-
-  Map<String, dynamic> toMap() => {
-        'ldv-details-outbound': data?.map((e) => e.toJson()).toList(),
-      };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [Embedded].
-  factory Embedded.fromJson(String data) => Embedded.fromMap(json.decode(data) as Map<String, dynamic>);
-
-  /// `dart:convert`
-  ///
-  /// Converts [Embedded] to a JSON string.
-  String toJson() => json.encode(toMap());
+  factory ResponseAssignment.fromJson(String source) => ResponseAssignment.fromMap(json.decode(source));
 }

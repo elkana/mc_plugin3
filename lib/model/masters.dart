@@ -51,8 +51,7 @@ class MstLdvPersonal extends LocalTable<MstLdvPersonal> {
   @override
   bool comparePk(a, b) => a.code == b.code;
 
-  MstLdvPersonal? findByPk(String? value) =>
-      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
+  MstLdvPersonal? findByPk(String? value) => value == null ? null : findAll.firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvPotensi)
@@ -205,7 +204,7 @@ class MstLdvDelqReason extends LocalTable<MstLdvDelqReason> {
   bool comparePk(a, b) => a.code == b.code;
 
   MstLdvDelqReason? findByPk(String? value) =>
-      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
+      value == null ? null : findAll.firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvClassification)
@@ -254,7 +253,7 @@ class MstLdvClassification extends LocalTable<MstLdvClassification> {
   bool comparePk(a, b) => a.code == b.code;
 
   MstLdvClassification? findByPk(String? value) =>
-      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
+      value == null ? null : findAll.firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvNextAction)
@@ -303,7 +302,7 @@ class MstLdvNextAction extends LocalTable<MstLdvNextAction> {
   bool comparePk(a, b) => a.code == b.code;
 
   MstLdvNextAction? findByPk(String? value) =>
-      value == null ? null : findAll().firstWhereOrNull((p0) => p0.code == value);
+      value == null ? null : findAll.firstWhereOrNull((p0) => p0.code == value);
 }
 
 @HiveType(typeId: HiveUtil.typeIdMstLdvStatus)

@@ -6,6 +6,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controller/abasic_controller.dart';
 import '../../../model/masters.dart';
+import '../../../model/mc_trn_rvcollcomment.dart';
 import '../../../util/commons.dart';
 
 class ViewTableController extends ABasicController {
@@ -38,8 +39,8 @@ class ViewTableController extends ABasicController {
         viewOTrnLdvHeader();
       } else if (tableName == OTrnLdvDetail().syncTableName) {
         viewOTrnLdvDetails();
-        // } else if (tableName == TblSKTCollateralRemarks.syncTableName) {
-        //   viewTblSKTCollateralRemarks();
+      } else if (tableName == TrnRVCollComment().syncTableName) {
+        viewTrnRVCollComment();
         // } else if (tableName == TblVehicleInfo.syncTableName) {
         //   viewTblVehicleInfo();
         // } else if (tableName == TblSearchLog.syncTableName) {
@@ -53,32 +54,52 @@ class ViewTableController extends ABasicController {
   }
 
   void setColumns(List<String> params) => params.forEach((value) => columns.add(DataColumn(label: Text(value))));
-  void viewOTrnLdvHeader() {
-    setColumns(['id', 'code', 'description', 'seqNo']);
+
+  void viewTrnRVCollComment() {
+    setColumns(['id', 'rvCollNo', 'contractNo', 'collId', 'whoMet', 'receivedAmount']);
 // build rows
-    OTrnLdvHeader().findAll().forEach((e) => rows.add(DataRow(cells: [
-          DataCell(_TextValue('${e.id}')),
-          DataCell(_TextValue('${e.ldvNo}')),
-          DataCell(_TextValue('${e.ldvDate}')),
-          DataCell(_TextValue('${e.collId}')),
-        ])));
+    for (var e in TrnRVCollComment().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${e.id}')),
+        DataCell(_TextValue('${e.rvCollNo}')),
+        DataCell(_TextValue('${e.contractNo}')),
+        DataCell(_TextValue('${e.collId}')),
+        DataCell(_TextValue('${e.whoMet}')),
+        DataCell(_TextValue('${e.receivedAmount}')),
+      ]));
+    }
+  }
+
+  void viewOTrnLdvHeader() {
+    setColumns(['id', 'ldvNo', 'ldvDate', 'seqNo']);
+// build rows
+    for (var e in OTrnLdvHeader().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${e.id}')),
+        DataCell(_TextValue('${e.ldvNo}')),
+        DataCell(_TextValue('${e.ldvDate}')),
+        DataCell(_TextValue('${e.collId}')),
+      ]));
+    }
   }
 
   void viewOTrnLdvDetails() {
     setColumns(['id', 'ldvNo', 'contractNo', 'custName']);
 // build rows
-    OTrnLdvDetail().findAll().forEach((e) => rows.add(DataRow(cells: [
-          DataCell(_TextValue('${e.id}')),
-          DataCell(_TextValue('${e.pk?.ldvNo}')),
-          DataCell(_TextValue('${e.pk?.contractNo}')),
-          DataCell(_TextValue('${e.custName}')),
-        ])));
+    for (var e in OTrnLdvDetail().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${e.id}')),
+        DataCell(_TextValue('${e.pk?.ldvNo}')),
+        DataCell(_TextValue('${e.pk?.contractNo}')),
+        DataCell(_TextValue('${e.custName}')),
+      ]));
+    }
   }
 
   void viewMstPersonal() {
     setColumns(['id', 'code', 'description', 'seqNo']);
 // build rows
-    for (var i in MstLdvPersonal().findAll()) {
+    for (var i in MstLdvPersonal().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),
@@ -89,9 +110,9 @@ class ViewTableController extends ABasicController {
   }
 
   void viewMstClassification() {
-    setColumns(['id', 'code', 'description', 'seqNo']);
+    setColumns(['id', 'code', 'label', 'seqNo']);
 // build rows
-    for (var i in MstLdvClassification().findAll()) {
+    for (var i in MstLdvClassification().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),
@@ -104,7 +125,7 @@ class ViewTableController extends ABasicController {
   void viewMstDelqReason() {
     setColumns(['id', 'code', 'description', 'seqNo']);
 // build rows
-    for (var i in MstLdvDelqReason().findAll()) {
+    for (var i in MstLdvDelqReason().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),
@@ -115,9 +136,9 @@ class ViewTableController extends ABasicController {
   }
 
   void viewMstNextAction() {
-    setColumns(['id', 'code', 'description', 'seqNo']);
+    setColumns(['id', 'code', 'label', 'seqNo']);
 // build rows
-    for (var i in MstLdvNextAction().findAll()) {
+    for (var i in MstLdvNextAction().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${i.id}')),
         DataCell(_TextValue('${i.code}')),

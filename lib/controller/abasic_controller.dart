@@ -18,6 +18,7 @@ abstract class ABasicController extends GetxController {
   final maxError = 5;
 
   Future<void> logout() => AuthController.instance.logout();
+  void viewDatabase() => Get.toNamed(Routes.developer);
 
   Future loadingThis(Future<void> Function() call, Function(Object e, StackTrace s)? onError) async {
     // if (loading.isTrue) return; // bahaya jika kelupaan awalnya udah true saat onInit
@@ -43,11 +44,29 @@ abstract class ABasicController extends GetxController {
     context.showToast(msg: 'Data Cleanup SUCCESS');
   }
 
-  void viewDatabase() => Get.toNamed(Routes.developer);
-
   Future<bool> validateAllPermissions() async {
     if (!await DeviceUtil.allPermissionsGranted()) return false;
     // if (!await checkLocationService()) return false;
     return true;
+  }
+}
+
+abstract class AHomeController extends ABasicController {
+  var pageIndex = 0;
+
+  void changePageIndex(int index) {
+    pageIndex = index;
+    update();
+  }
+}
+
+// differ from ATabFormController
+abstract class ATabController extends ABasicController {
+  late TabController tabController;
+
+  @override
+  void onClose() {
+    super.onClose();
+    tabController.dispose();
   }
 }

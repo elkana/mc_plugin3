@@ -5,9 +5,11 @@ import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/util/commons.dart';
+import 'package:mc_plugin3/util/customs.dart';
 import 'package:mc_plugin3/util/ldv_util.dart';
 
 import '../../controller/aformbuilder_controller.dart';
+import '../../controller/async_controller.dart';
 import '../../model/trn_ldv_hdr.dart';
 import '../../routes/app_routes.dart';
 
@@ -37,7 +39,7 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     tabController = TabController(length: 3, initialIndex: 1, vsync: this);
     if (kDebugMode && contractPk == null) {
       // for development purpose, retrieve first data
-      contractPk = LdvDetailPk().findAll()[0];
+      contractPk = LdvDetailPk().findAll[0];
     }
     if (contractPk == null) throw Exception('A Valid Contract Required.');
     // load form data
@@ -59,7 +61,7 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     var saved = await TrnRVCollComment().saveOne(merge != null ? TrnRVCollComment.fromMap(merge) : formData);
 
     // 4. finally, upload data
-    log('upload assignment $saved');
+    clientLogic?.sync();
     // 5. return back saved data
     await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
   }

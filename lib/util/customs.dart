@@ -14,6 +14,8 @@ abstract class CustomLogic {
   // String getGoogleAPIKey();
 
   Future<ByteData?> get sslCertificatePem;
+
+  Future sync();
   // recommended format yyyyMMdd. return null to turn expiry off.
   // String? getExpiryApp();
 

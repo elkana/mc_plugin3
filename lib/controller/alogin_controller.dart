@@ -6,13 +6,18 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/server_model.dart';
+import '../model/user.dart';
 import '../provider/api.dart';
+import '../provider/baseapi.dart';
 import '../provider/response/response_apk.dart';
+import '../routes/app_routes.dart';
 import '../util/commons.dart';
 import '../util/customs.dart';
 import '../util/device_util.dart';
 import '../util/hive_util.dart';
+import '../util/web_util.dart';
 import 'abasic_controller.dart';
+import 'auth_controller.dart';
 import 'pref_controller.dart';
 
 abstract class ALoginController extends ABasicController {
@@ -35,6 +40,8 @@ abstract class ALoginController extends ABasicController {
   var obscurePwd = true.obs;
   var rememberPwd = false.obs;
 
+  Future onPostLogin();
+
   // Server? getSelectedServer() => selectedServer.value.isEmpty() ? null : selectedServer.value;
   // void setServer(Server? newValue) {
   //   if (servers.isNotEmpty && null != newValue) {
@@ -44,7 +51,9 @@ abstract class ALoginController extends ABasicController {
   // Server? getSelectedServer() => clientLogic?.selectedServer;
   void setServer(Server? newValue) => selectedServer.value = newValue;
   // List<Server> get servers => clientLogic?.servers ?? [];
-
+  Future allowSSLWeb() async =>
+      WebUtil.openNewTab(await BaseApi.getSelectedServer(selectedServer.value), isNewTab: true);
+  void gotoRegister() => Get.toNamed(Routes.signup, arguments: [selectedServer.value]);
   // void setServers(List<Server> list) => servers = list;
   // bool isSingleServer() => servers.length == 1;
 
@@ -69,6 +78,37 @@ abstract class ALoginController extends ABasicController {
     // show message when logout due to expired token
     PrefController.instance.popLastMessage();
   }
+
+  Future<void> actionLogin() async => loading.isTrue
+      ? null
+      : await processThis(() async {
+          // 1. check validation
+          if (!await validatePreLogin()) return;
+          progressMsg('Logging in...');
+          // 2. online authentication
+          var user = await AuthController.instance
+                  .login(selectedServer.value!, ctrlUserId.text, ctrlPwd.text, rememberPwd.value)
+                  .onError((e, s) {
+                if (e.toString().contains('410')) {
+                  throw Exception('Maaf Akun Anda terblokir');
+                }
+                showError(e.toString(), title: 'Login Failed');
+                return null;
+              }) ??
+              await attemptOfflineUser;
+
+          if (user == null) {
+            // punishment for wrong password
+            if (kReleaseMode) await [2, 5].random.delay();
+            return;
+          }
+          await onPostLogin();
+          progressMsg('Masters...');
+          await Api.instance.getMasters(true);
+
+          // 4. finally, validation is PASSED
+          AuthController.instance.user(user);
+        });
 
   Future<bool> validatePreLogin() async {
     // 1. avoid login if downloading apk still in progress
@@ -107,5 +147,16 @@ abstract class ALoginController extends ABasicController {
   void test(String userId, String pwd) {
     ctrlPwd.text = pwd;
     ctrlUserId.text = userId;
+  }
+
+  Future<UserModel?> get attemptOfflineUser async {
+    final userLocal = await PrefController.instance.rememberUser;
+    if (userLocal != null &&
+        userLocal.userId == ctrlUserId.text &&
+        userLocal.userPassword == ctrlPwd.text &&
+        rememberPwd.isTrue) {
+      return userLocal;
+    }
+    return null;
   }
 }
