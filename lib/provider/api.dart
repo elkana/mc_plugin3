@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
+import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:mc_plugin3/provider/entityapi.dart';
 import 'package:mc_plugin3/provider/response/response_mst_classification.dart';
@@ -92,6 +93,8 @@ class Api extends EntityApi {
     await Future.wait([
       // 1. flush transactions
       TrnRVCollComment().saveAll(r.rvColls),
+      ITrnLdvDetail().saveAll(r.idetails),
+      ITrnLdvHeader().saveOne(r.iheader),
       // 2. flush outbounds
       OTrnLdvDetail()
           .saveAll(r.odetails)

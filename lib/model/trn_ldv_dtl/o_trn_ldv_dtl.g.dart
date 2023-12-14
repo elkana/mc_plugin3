@@ -56,7 +56,9 @@ class OTrnLdvDetailAdapter extends TypeAdapter<OTrnLdvDetail> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OTrnLdvDetailAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is OTrnLdvDetailAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class LdvDetailPkAdapter extends TypeAdapter<LdvDetailPk> {
@@ -94,5 +96,7 @@ class LdvDetailPkAdapter extends TypeAdapter<LdvDetailPk> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LdvDetailPkAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is LdvDetailPkAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

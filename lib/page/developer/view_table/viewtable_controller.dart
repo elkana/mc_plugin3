@@ -7,6 +7,7 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../../controller/abasic_controller.dart';
 import '../../../model/masters.dart';
 import '../../../model/mc_trn_rvcollcomment.dart';
+import '../../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../../../util/commons.dart';
 
 class ViewTableController extends ABasicController {
@@ -39,6 +40,8 @@ class ViewTableController extends ABasicController {
         viewOTrnLdvHeader();
       } else if (tableName == OTrnLdvDetail().syncTableName) {
         viewOTrnLdvDetails();
+      } else if (tableName == ITrnLdvDetail().syncTableName) {
+        viewITrnLdvDetails();
       } else if (tableName == TrnRVCollComment().syncTableName) {
         viewTrnRVCollComment();
         // } else if (tableName == TblVehicleInfo.syncTableName) {
@@ -61,8 +64,8 @@ class ViewTableController extends ABasicController {
     for (var e in TrnRVCollComment().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${e.id}')),
-        DataCell(_TextValue('${e.rvCollNo}')),
-        DataCell(_TextValue('${e.contractNo}')),
+        DataCell(_TextValue('${e.pk?.rvCollNo}')),
+        DataCell(_TextValue('${e.pk?.contractNo}')),
         DataCell(_TextValue('${e.collId}')),
         DataCell(_TextValue('${e.whoMet}')),
         DataCell(_TextValue('${e.receivedAmount}')),
@@ -92,6 +95,20 @@ class ViewTableController extends ABasicController {
         DataCell(_TextValue('${e.pk?.ldvNo}')),
         DataCell(_TextValue('${e.pk?.contractNo}')),
         DataCell(_TextValue('${e.custName}')),
+      ]));
+    }
+  }
+
+  void viewITrnLdvDetails() {
+    setColumns(['id', 'ldvNo', 'contractNo', 'custName', 'workStatus']);
+// build rows
+    for (var e in ITrnLdvDetail().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${e.id}')),
+        DataCell(_TextValue('${e.pk?.ldvNo}')),
+        DataCell(_TextValue('${e.pk?.contractNo}')),
+        DataCell(_TextValue('${e.custName}')),
+        DataCell(_TextValue('${e.workStatus}')),
       ]));
     }
   }

@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
-import 'package:mc_plugin3/model/user.dart';
 import '../model/server_model.dart';
 import '../model/setup_mobile.dart';
+import '../model/user.dart';
 import '../util/commons.dart';
 
 // for GetStorage, pls dont use DateTime
@@ -18,6 +18,10 @@ extension SetupExtension on String {
   MobileSetup? get setupKey => PrefController.instance.getSetup(this);
   int setupKeyValue1AsInt(String defaultVal) => int.parse(setupKey?.value1 ?? defaultVal);
 }
+
+void sessionStop() => PrefController.instance.stopListening();
+
+void sessionStart() => PrefController.instance.startListening();
 
 class PrefController extends GetxController {
   static PrefController instance = Get.find();

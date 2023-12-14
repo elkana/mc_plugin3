@@ -53,7 +53,7 @@ class AuthController extends GetxService {
     return userModel;
   }
 
-  logout() async {
+  Future<bool> logout() async {
     try {
       if (!PrefController.instance.hasRememberMe || PrefController.instance.rememberMe != true) {
         await PrefController.instance.cleanLoggedUserData();
@@ -61,6 +61,8 @@ class AuthController extends GetxService {
       user.value = null;
     } catch (e, s) {
       showError(e, stacktrace: s);
+      return false;
     }
+    return true;
   }
 }

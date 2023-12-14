@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
@@ -49,16 +50,17 @@ class LdvCardSimple extends StatelessWidget {
 }
 
 class OTrnLdvDetailList extends StatelessWidget {
+  final bool removeVisited;
   final Widget Function(OTrnLdvDetail) onRender;
-  const OTrnLdvDetailList({super.key, required this.onRender});
+  const OTrnLdvDetailList({super.key, this.removeVisited = false, required this.onRender});
 
   @override
   Widget build(context) => ValueListenableBuilder<Box<OTrnLdvDetail>>(
       valueListenable: OTrnLdvDetail().listenTable,
       builder: (context, obox, widget) {
         var buffer = obox.values
-            // hanya tampilkan yg belum submit
-            // .where((e) => e.submitDate == null && e.expiredDate != null)
+            // hanya tampilkan yg belum submit, caranya jika ada di inbound brarti sdh diinput
+            .where((e) => removeVisited && ITrnLdvDetail().findByPk(e.pk!.ldvNo!, e.pk!.contractNo!) == null)
             .toList();
         if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
@@ -67,7 +69,7 @@ class OTrnLdvDetailList extends StatelessWidget {
 }
 
 class ITrnLdvDetailList extends StatelessWidget {
-  final Widget Function(ITrnLdvDetail) onRender;
+  final Widget Function(ITrnLdvDetail contract, TrnRVCollComment? visitForm) onRender;
   const ITrnLdvDetailList({super.key, required this.onRender});
 
   @override
@@ -80,6 +82,12 @@ class ITrnLdvDetailList extends StatelessWidget {
             .toList();
         if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
-        return buffer.mapIndexed((p, idx) => onRender(p)).toList().column();
+        return buffer
+            .mapIndexed((p, idx) {
+              var r = TrnRVCollComment().findByContractNo(p.pk!.contractNo);
+              return onRender(p, r);
+            })
+            .toList()
+            .column();
       });
 }

@@ -22,102 +22,104 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
   // reserved by local. forbid to sync
   @HiveField(2)
   bool? modified;
+  // @HiveField(3)
+  // String? rvCollNo;
   @HiveField(3)
-  String? rvCollNo;
-  @HiveField(4)
   int? seqNo;
+  @HiveField(4)
+  RvCollPk? pk;
+
+  // @HiveField(5)
+  // String? contractNo;
   @HiveField(5)
-  String? contractNo;
+  String? ldvNo;
   @HiveField(6)
-  String? lkpNo;
-  @HiveField(7)
   String? collId;
-  @HiveField(8)
+  @HiveField(7)
   String? rvbNo;
-  @HiveField(9)
+  @HiveField(8)
   int? instNo;
-  @HiveField(10)
+  @HiveField(9)
   double? receivedAmount;
-  @HiveField(11)
+  @HiveField(10)
   double? penalty;
-  @HiveField(12)
+  @HiveField(11)
   double? collFeeAc;
-  @HiveField(13)
+  @HiveField(12)
   String? lkpFlag;
-  @HiveField(14)
+  @HiveField(13)
   String? delqCode;
-  @HiveField(15)
+  @HiveField(14)
   String? classCode;
-  @HiveField(16)
+  @HiveField(15)
   String? actionPlan;
-  @HiveField(17)
+  @HiveField(16)
   int? potensi;
-  @HiveField(18)
+  @HiveField(17)
   double? planPayAmount;
-  @HiveField(19)
+  @HiveField(18)
   String? mobPhone1;
-  @HiveField(20)
+  @HiveField(19)
   String? whoMet;
-  @HiveField(21)
+  @HiveField(20)
   String? notes;
-  @HiveField(22)
+  @HiveField(21)
   int? promiseDate;
-  @HiveField(23)
+  @HiveField(22)
   String? officeCode;
   // jika ada nomor SPJB (Surat Perjanjian Janji Bayar) krn blm bisa bayar, bikin suratnya biasanya di lokasi
-  @HiveField(24)
+  @HiveField(23)
   String? spjbNo;
-  @HiveField(25)
+  @HiveField(24)
   String? strukNo;
-  @HiveField(26)
+  @HiveField(25)
   int? strukCounter;
-  @HiveField(27)
+  @HiveField(26)
   String? rating;
-  @HiveField(28)
+  @HiveField(27)
   String? periode;
-  @HiveField(29)
+  @HiveField(28)
   double? ambc;
-  @HiveField(30)
+  @HiveField(29)
   String? latitude;
-  @HiveField(31)
+  @HiveField(30)
   String? longitude;
-  @HiveField(32)
+  @HiveField(31)
   String? lastUpdateBy;
-  @HiveField(33)
+  @HiveField(32)
   int? lastUpdateDate;
-  @HiveField(34)
+  @HiveField(33)
   int? createdDate;
-  @HiveField(35)
+  @HiveField(34)
   String? createdBy;
-  @HiveField(36)
+  @HiveField(35)
   int? lkpDate;
   // disediakan jika mau ada splitting
-  @HiveField(37)
+  @HiveField(36)
   double? monthInst;
-  @HiveField(38)
+  @HiveField(37)
   double? deposit;
 
-  @HiveField(39)
+  @HiveField(38)
   String? cancelledBy;
-  @HiveField(40)
+  @HiveField(39)
   String? cancelledComments;
-  @HiveField(41)
+  @HiveField(40)
   String? cancelledApprove;
-  @HiveField(42)
+  @HiveField(41)
   String? cancelRequest;
 
-  @HiveField(43)
+  @HiveField(42)
   int? revisitDate;
 
   TrnRVCollComment({
     this.id,
     this.lastSyncMillis,
     this.modified,
-    this.rvCollNo,
+    this.pk,
     this.seqNo,
-    this.contractNo,
     this.collId,
-    this.lkpNo,
+    this.ldvNo,
     this.rvbNo,
     this.instNo,
     this.receivedAmount,
@@ -157,7 +159,7 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
   }) : super('trn_rvcoll_comment');
 
   @override
-  bool comparePk(a, b) => a.rvCollNo == b.rvCollNo && a.contractNo == b.contractNo;
+  bool comparePk(a, b) => a.pk?.rvCollNo == b.pk?.rvCollNo && a.pk?.contractNo == b.pk?.contractNo;
 
   // factory TrnRVCollComment.fromJson(Map<String, dynamic> data) => _$TrnRVCollCommentFromJson(data);
 
@@ -213,7 +215,7 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
 
   //   List<TrnRVCollComment> list = box.values.toList().cast<TrnRVCollComment>();
 
-  //   return list.where((e) => e.lkpNo == ldvNo).toList();
+  //   return list.where((e) => e.ldvNo == ldvNo).toList();
   // }
 
   // static List<TrnRVCollComment> findByCollId(String collId) {
@@ -327,10 +329,9 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
       'id': id,
       'lastSyncMillis': lastSyncMillis,
       'modified': modified,
-      'rvCollNo': rvCollNo,
       'seqNo': seqNo,
-      'contractNo': contractNo,
-      'lkpNo': lkpNo,
+      'pk': pk?.toMap(),
+      'ldvNo': ldvNo,
       'collId': collId,
       'rvbNo': rvbNo,
       'instNo': instNo,
@@ -376,10 +377,9 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
       id: map['id']?.toInt(),
       lastSyncMillis: map['lastSyncMillis']?.toInt(),
       modified: map['modified'],
-      rvCollNo: map['rvCollNo'],
       seqNo: map['seqNo']?.toInt(),
-      contractNo: map['contractNo'],
-      lkpNo: map['lkpNo'],
+      pk: map['pk'] != null ? RvCollPk.fromMap(map['pk']) : null,
+      ldvNo: map['ldvNo'],
       collId: map['collId'],
       rvbNo: map['rvbNo'],
       instNo: map['instNo']?.toInt(),
@@ -424,103 +424,57 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
 
   @override
   String toString() {
-    return 'TrnRVCollComment(id: $id, lastSyncMillis: $lastSyncMillis, modified: $modified, rvCollNo: $rvCollNo, seqNo: $seqNo, contractNo: $contractNo, lkpNo: $lkpNo, collId: $collId, rvbNo: $rvbNo, instNo: $instNo, receivedAmount: $receivedAmount, penalty: $penalty, collFeeAc: $collFeeAc, lkpFlag: $lkpFlag, delqCode: $delqCode, classCode: $classCode, actionPlan: $actionPlan, potensi: $potensi, planPayAmount: $planPayAmount, mobPhone1: $mobPhone1, whoMet: $whoMet, notes: $notes, promiseDate: $promiseDate, officeCode: $officeCode, spjbNo: $spjbNo, strukNo: $strukNo, strukCounter: $strukCounter, rating: $rating, periode: $periode, ambc: $ambc, latitude: $latitude, longitude: $longitude, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdDate: $createdDate, createdBy: $createdBy, lkpDate: $lkpDate, monthInst: $monthInst, deposit: $deposit, cancelledBy: $cancelledBy, cancelledComments: $cancelledComments, cancelledApprove: $cancelledApprove, cancelRequest: $cancelRequest, revisitDate: $revisitDate)';
+    return 'TrnRVCollComment(id: $id, lastSyncMillis: $lastSyncMillis, modified: $modified, seqNo: $seqNo, pk: $pk, ldvNo: $ldvNo, collId: $collId, rvbNo: $rvbNo, instNo: $instNo, receivedAmount: $receivedAmount, penalty: $penalty, collFeeAc: $collFeeAc, lkpFlag: $lkpFlag, delqCode: $delqCode, classCode: $classCode, actionPlan: $actionPlan, potensi: $potensi, planPayAmount: $planPayAmount, mobPhone1: $mobPhone1, whoMet: $whoMet, notes: $notes, promiseDate: $promiseDate, officeCode: $officeCode, spjbNo: $spjbNo, strukNo: $strukNo, strukCounter: $strukCounter, rating: $rating, periode: $periode, ambc: $ambc, latitude: $latitude, longitude: $longitude, lastUpdateBy: $lastUpdateBy, lastUpdateDate: $lastUpdateDate, createdDate: $createdDate, createdBy: $createdBy, lkpDate: $lkpDate, monthInst: $monthInst, deposit: $deposit, cancelledBy: $cancelledBy, cancelledComments: $cancelledComments, cancelledApprove: $cancelledApprove, cancelRequest: $cancelRequest, revisitDate: $revisitDate)';
   }
 
   TrnRVCollComment? findByContractNo(String? contractNo) =>
-      contractNo == null ? null : findAll.firstWhereOrNull((p0) => p0.contractNo == contractNo);
+      contractNo == null ? null : findAll.firstWhereOrNull((p0) => p0.pk?.contractNo == contractNo);
 
-  TrnRVCollComment copyWith({
-    ValueGetter<int?>? id,
-    ValueGetter<int?>? lastSyncMillis,
-    ValueGetter<bool?>? modified,
-    ValueGetter<String?>? rvCollNo,
-    ValueGetter<int?>? seqNo,
-    ValueGetter<String?>? contractNo,
-    ValueGetter<String?>? lkpNo,
-    ValueGetter<String?>? collId,
-    ValueGetter<String?>? rvbNo,
-    ValueGetter<int?>? instNo,
-    ValueGetter<double?>? receivedAmount,
-    ValueGetter<double?>? penalty,
-    ValueGetter<double?>? collFeeAc,
-    ValueGetter<String?>? lkpFlag,
-    ValueGetter<String?>? delqCode,
-    ValueGetter<String?>? classCode,
-    ValueGetter<String?>? actionPlan,
-    ValueGetter<int?>? potensi,
-    ValueGetter<double?>? planPayAmount,
-    ValueGetter<String?>? mobPhone1,
-    ValueGetter<String?>? whoMet,
-    ValueGetter<String?>? notes,
-    ValueGetter<int?>? promiseDate,
-    ValueGetter<String?>? officeCode,
-    ValueGetter<String?>? spjbNo,
-    ValueGetter<String?>? strukNo,
-    ValueGetter<int?>? strukCounter,
-    ValueGetter<String?>? rating,
-    ValueGetter<String?>? periode,
-    ValueGetter<double?>? ambc,
-    ValueGetter<String?>? latitude,
-    ValueGetter<String?>? longitude,
-    ValueGetter<String?>? lastUpdateBy,
-    ValueGetter<int?>? lastUpdateDate,
-    ValueGetter<int?>? createdDate,
-    ValueGetter<String?>? createdBy,
-    ValueGetter<int?>? lkpDate,
-    ValueGetter<double?>? monthInst,
-    ValueGetter<double?>? deposit,
-    ValueGetter<String?>? cancelledBy,
-    ValueGetter<String?>? cancelledComments,
-    ValueGetter<String?>? cancelledApprove,
-    ValueGetter<String?>? cancelRequest,
-    ValueGetter<int?>? revisitDate,
-  }) {
-    return TrnRVCollComment(
-      id: id?.call() ?? this.id,
-      lastSyncMillis: lastSyncMillis?.call() ?? this.lastSyncMillis,
-      modified: modified?.call() ?? this.modified,
-      rvCollNo: rvCollNo?.call() ?? this.rvCollNo,
-      seqNo: seqNo?.call() ?? this.seqNo,
-      contractNo: contractNo?.call() ?? this.contractNo,
-      lkpNo: lkpNo?.call() ?? this.lkpNo,
-      collId: collId?.call() ?? this.collId,
-      rvbNo: rvbNo?.call() ?? this.rvbNo,
-      instNo: instNo?.call() ?? this.instNo,
-      receivedAmount: receivedAmount?.call() ?? this.receivedAmount,
-      penalty: penalty?.call() ?? this.penalty,
-      collFeeAc: collFeeAc?.call() ?? this.collFeeAc,
-      lkpFlag: lkpFlag?.call() ?? this.lkpFlag,
-      delqCode: delqCode?.call() ?? this.delqCode,
-      classCode: classCode?.call() ?? this.classCode,
-      actionPlan: actionPlan?.call() ?? this.actionPlan,
-      potensi: potensi?.call() ?? this.potensi,
-      planPayAmount: planPayAmount?.call() ?? this.planPayAmount,
-      mobPhone1: mobPhone1?.call() ?? this.mobPhone1,
-      whoMet: whoMet?.call() ?? this.whoMet,
-      notes: notes?.call() ?? this.notes,
-      promiseDate: promiseDate?.call() ?? this.promiseDate,
-      officeCode: officeCode?.call() ?? this.officeCode,
-      spjbNo: spjbNo?.call() ?? this.spjbNo,
-      strukNo: strukNo?.call() ?? this.strukNo,
-      strukCounter: strukCounter?.call() ?? this.strukCounter,
-      rating: rating?.call() ?? this.rating,
-      periode: periode?.call() ?? this.periode,
-      ambc: ambc?.call() ?? this.ambc,
-      latitude: latitude?.call() ?? this.latitude,
-      longitude: longitude?.call() ?? this.longitude,
-      lastUpdateBy: lastUpdateBy?.call() ?? this.lastUpdateBy,
-      lastUpdateDate: lastUpdateDate?.call() ?? this.lastUpdateDate,
-      createdDate: createdDate?.call() ?? this.createdDate,
-      createdBy: createdBy?.call() ?? this.createdBy,
-      lkpDate: lkpDate?.call() ?? this.lkpDate,
-      monthInst: monthInst?.call() ?? this.monthInst,
-      deposit: deposit?.call() ?? this.deposit,
-      cancelledBy: cancelledBy?.call() ?? this.cancelledBy,
-      cancelledComments: cancelledComments?.call() ?? this.cancelledComments,
-      cancelledApprove: cancelledApprove?.call() ?? this.cancelledApprove,
-      cancelRequest: cancelRequest?.call() ?? this.cancelRequest,
-      revisitDate: revisitDate?.call() ?? this.revisitDate,
+  @override
+  String toJson() => json.encode(toMap());
+}
+
+// must be a table, if not hive will error
+// Toast => HiveError: Cannot write, unknown type: RvCollPk. Did you forget to register an adapter?
+@HiveType(typeId: HiveUtil.typeIdTrnRVCollCommentPK)
+class RvCollPk extends LocalTable<RvCollPk> {
+  @HiveField(0)
+  int? id;
+  @HiveField(1)
+  String? rvCollNo;
+  @HiveField(2)
+  String? contractNo;
+  RvCollPk({
+    this.id,
+    this.rvCollNo,
+    this.contractNo,
+  }) : super('trn_rvcollcomment_pk');
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'rvCollNo': rvCollNo,
+      'contractNo': contractNo,
+    };
+  }
+
+  factory RvCollPk.fromMap(Map<String, dynamic> map) {
+    return RvCollPk(
+      id: map['id']?.toInt(),
+      rvCollNo: map['rvCollNo'],
+      contractNo: map['contractNo'],
     );
   }
+
+  @override
+  String toJson() => json.encode(toMap());
+
+  factory RvCollPk.fromJson(String source) => RvCollPk.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'RvCollPk(id: $id, rvCollNo: $rvCollNo, contractNo: $contractNo)';
+
+  @override
+  bool comparePk(a, b) => a.rvCollNo == b.rvCollNo && a.contractNo == b.contractNo;
 }

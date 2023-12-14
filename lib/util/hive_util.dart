@@ -39,17 +39,18 @@ class HiveUtil {
   static const typeIdTrnLdvDetailOutbound = 103;
   static const typeIdTrnLdvDetailInbound = 104;
   static const typeIdTrnRVCollComment = 105;
-  static const typeIdTrnAddress = 106;
-  static const typeIdTrnRvb = 107;
-  static const typeIdTrnDeposit = 108;
-  static const typeIdTrnPhoto = 109;
-  static const typeIdTrnRepo = 110;
-  static const typeIdTrnBastbj = 111;
-  static const typeIdTrnContractBucket = 112;
-  static const typeIdTrnChangeAddr = 113;
-  static const typeIdTrnVehicleInfo = 114;
-  static const typeIdTrnHistInstallment = 115;
-  static const typeIdLdvHistory = 116;
+  static const typeIdTrnRVCollCommentPK = 106;
+  static const typeIdTrnAddress = 107;
+  static const typeIdTrnRvb = 108;
+  static const typeIdTrnDeposit = 109;
+  static const typeIdTrnPhoto = 110;
+  static const typeIdTrnRepo = 111;
+  static const typeIdTrnBastbj = 112;
+  static const typeIdTrnContractBucket = 113;
+  static const typeIdTrnChangeAddr = 114;
+  static const typeIdTrnVehicleInfo = 115;
+  static const typeIdTrnHistInstallment = 116;
+  static const typeIdLdvHistory = 117;
 
   static const typeIdDocCopyContract = 200;
   static const typeIdDocSP = 201;
@@ -111,6 +112,7 @@ class HiveUtil {
     Hive.registerAdapter(ITrnLdvDetailAdapter());
     Hive.registerAdapter(LdvDetailPkAdapter());
     Hive.registerAdapter(TrnRVCollCommentAdapter());
+    Hive.registerAdapter(RvCollPkAdapter());
     // Hive.registerAdapter(TrnAddressAdapter());
     // Hive.registerAdapter(TrnRVBAdapter());
     // Hive.registerAdapter(TrnDepositAdapter());
@@ -154,6 +156,7 @@ class HiveUtil {
     await Hive.openBox<ITrnLdvDetail>(ITrnLdvDetail().syncTableName);
     await Hive.openBox<LdvDetailPk>(LdvDetailPk().syncTableName);
     await Hive.openBox<TrnRVCollComment>(TrnRVCollComment().syncTableName);
+    await Hive.openBox<RvCollPk>(RvCollPk().syncTableName);
     // await Hive.openBox<TrnAddress>(TrnAddress.syncTableName);
     // await Hive.openBox<TrnRVB>(TrnRVB.syncTableName);
     // await Hive.openBox<TrnDeposit>(TrnDeposit.syncTableName);
@@ -215,6 +218,7 @@ class HiveUtil {
         ITrnLdvDetail().cleanAll,
         // Pk.cleanAll(),
         TrnRVCollComment().cleanAll,
+        RvCollPk().cleanAll,
         // TrnAddress.cleanAll(),
         // TrnRVB.cleanAll(),
         // TrnDeposit.cleanAll(),
@@ -345,7 +349,8 @@ abstract class LocalTable<T> extends HiveObject {
   }
 
 // WARNING !! column id must provided/available
-  Future<T> saveOne(T origin) async {
+  Future<T?> saveOne(T? origin) async {
+    if (origin == null) return null;
     final box = Hive.box<T>(syncTableName);
     final Map<dynamic, T> map = box.toMap();
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/util/hive_util.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../exception/exception.dart';
 import '../routes/app_routes.dart';
 import '../util/commons.dart';
 import '../util/device_util.dart';
+import '../util/hive_util.dart';
 import 'auth_controller.dart';
 
 /// dont use this on login / other than authenticated screen
@@ -17,7 +17,7 @@ abstract class ABasicController extends GetxController {
   var errorCounter = 0;
   final maxError = 5;
 
-  Future<void> logout() => AuthController.instance.logout();
+  Future<bool> logout() => AuthController.instance.logout();
   void viewDatabase() => Get.toNamed(Routes.developer);
 
   Future loadingThis(Future<void> Function() call, Function(Object e, StackTrace s)? onError) async {
@@ -51,17 +51,32 @@ abstract class ABasicController extends GetxController {
   }
 }
 
-abstract class AHomeController extends ABasicController {
+abstract class AViewController extends ABasicController {
+  Future refreshData();
+
+  @override
+  void onReady() {
+    super.onReady();
+    refreshData();
+  }
+}
+
+abstract class AHomeController extends AViewController {
   var pageIndex = 0;
 
   void changePageIndex(int index) {
     pageIndex = index;
     update();
   }
+
+  @override
+  Future refreshData() async {
+    //
+  }
 }
 
 // differ from ATabFormController
-abstract class ATabController extends ABasicController {
+abstract class ATabController extends AViewController {
   late TabController tabController;
 
   @override

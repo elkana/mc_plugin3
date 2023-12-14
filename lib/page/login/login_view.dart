@@ -88,10 +88,10 @@ class ToggleRememberMe extends StatelessWidget {
   Widget build(context) => TextButton.icon(
         label: invert
             ? Switch(value: value, onChanged: (val) => onToggle(val))
-            : LocaleKeys.buttons_rememberme.tr.text.make(),
+            : LocaleKeys.buttons_rememberme.tr.text.sm.make(),
         onPressed: () => onToggle(!value),
         icon: invert
-            ? LocaleKeys.buttons_rememberme.tr.text.make()
+            ? LocaleKeys.buttons_rememberme.tr.text.sm.make()
             : Switch(value: value, onChanged: (val) => onToggle(val)),
       );
 }

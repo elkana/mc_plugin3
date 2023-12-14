@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
+import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/util/commons.dart';
 import 'package:mc_plugin3/util/customs.dart';
 import 'package:mc_plugin3/util/ldv_util.dart';
 
 import '../../controller/aformbuilder_controller.dart';
-import '../../controller/async_controller.dart';
+import '../../controller/pref_controller.dart';
 import '../../model/trn_ldv_hdr.dart';
 import '../../routes/app_routes.dart';
 
@@ -23,13 +24,15 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
   var initialValue = Rxn<TrnRVCollComment>();
 
   static show(OTrnLdvDetail data) async {
+    sessionStop();
     // jika ada transaksi di rvcollcomment, skip poa
     var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
     if (visited == null) {
       var poaData = await Get.toNamed(Routes.poa, arguments: [data]);
       if (poaData == null) return;
     }
-    Get.toNamed(Routes.visit);
+    await Get.toNamed(Routes.visit);
+    sessionStart();
   }
 
   @override
@@ -48,21 +51,36 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
 
   @override
   Future onSubmit() async {
+    var oContracts = OTrnLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
+
     // 1. convert from form data back to trnrvcollcomment
-    var formData = TrnRVCollComment.fromMap(formKey.currentState!.value)
+    RvCollPk pk = RvCollPk()
       ..rvCollNo ??= LdvUtil.generateRVCollNo(
           OTrnLdvHeader().findByPk(contractPk!.ldvNo!)!.ldvDate!.isoToLocalDate(), AuthController.instance.loggedUserId)
-      ..lkpNo = contractPk?.ldvNo
       ..contractNo = contractPk?.contractNo;
-    // 2. merge with existing data
-    var merge = initialValue.value?.toMap()
-      ?..addAll(formData.toMap()); // merge will be null if initialValue is also null no matter what
-    // 3. commit
-    var saved = await TrnRVCollComment().saveOne(merge != null ? TrnRVCollComment.fromMap(merge) : formData);
 
-    // 4. finally, upload data
+    var formData = TrnRVCollComment.fromMap(formKey.currentState!.value)
+      ..pk = pk
+      ..ldvNo = contractPk?.ldvNo;
+
+    // 1. save new pk of rvcoll
+    await RvCollPk().saveOne(pk);
+    // merge rvcoll
+    var mergeRvColl = initialValue.value?.toMap()
+      ?..addAll(formData.toMap()); // merge will be null if initialValue is also null no matter what
+    // 2. save rvcoll
+    var newData =
+        await TrnRVCollComment().saveOne(mergeRvColl != null ? TrnRVCollComment.fromMap(mergeRvColl) : formData);
+
+    // 3. save as inbound
+    await ITrnLdvDetail().saveOne(ITrnLdvDetail()
+      ..pk = contractPk
+      ..workStatus = 'V'
+      ..custName = oContracts?.custName
+      ..createdBy = AuthController.instance.loggedUserId);
+
     clientLogic?.sync();
-    // 5. return back saved data
-    await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
+    // return with back saved data
+    await 1.delay().then((_) => Navigator.pop(Get.context!, [newData]));
   }
 }
