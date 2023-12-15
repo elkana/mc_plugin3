@@ -21,6 +21,7 @@ import '../model/user.dart';
 import '../util/commons.dart';
 import '../util/device_util.dart';
 import '../util/gps_util.dart';
+import 'request_batch.dart';
 import 'response/response_assignment.dart';
 
 class Api extends EntityApi {
@@ -84,26 +85,6 @@ class Api extends EntityApi {
   //   return ResponseApk.fromMap(d);
   // }
 
-  Future get assignments async {
-    var _ = await get('/mc-api/ldv/v1-assignment', q: {
-      'collId': AuthController.instance.loggedUserId,
-      'ldvDate': null,
-    });
-    var r = ResponseAssignment.fromMap(_);
-    await Future.wait([
-      // 1. flush transactions
-      TrnRVCollComment().saveAll(r.rvColls),
-      ITrnLdvDetail().saveAll(r.idetails),
-      ITrnLdvHeader().saveOne(r.iheader),
-      // 2. flush outbounds
-      OTrnLdvDetail()
-          .saveAll(r.odetails)
-          // need to flush primary keys in separate table
-          .then((value) => LdvDetailPk().saveAll(value.map((e) => e.pk!).toList())),
-      OTrnLdvHeader().saveOne(r.oheader!),
-    ]);
-  }
-
   Future<void> getMasters(bool useCache) async {
     if (!HiveUtil.isMasterEmpty()) return;
     return Future.wait([
@@ -117,5 +98,40 @@ class Api extends EntityApi {
       MstLdvClassification().saveAll(ResponseMstClassification.fromMap(value[2]).embedded?.data);
       MstLdvNextAction().saveAll(ResponseMstNextAction.fromMap(value[3]).embedded?.data);
     });
+  }
+
+// from cloud to mobile. see setBatch
+  Future get assignments async {
+    var _ = await get('/mc-api/ldv/v1-assignment', q: {
+      'collId': AuthController.instance.loggedUserId,
+      'ldvDate': null,
+    });
+    var r = ResponseAssignment.fromMap(_);
+    await Future.wait([
+      // 1. flush transactions & inbounds
+      TrnRVCollComment()
+          .saveAll(r.rvColls, replace: false)
+          // need to flush primary keys in separate table
+          .then((value) => RvCollPk().saveAll(value.map((e) => e.pk!).toList())),
+      ITrnLdvDetail().saveAll(r.idetails, replace: false),
+      ITrnLdvHeader().saveOne(r.iheader, replace: false),
+      // 2. flush outbounds
+      OTrnLdvDetail()
+          .saveAll(r.odetails)
+          // need to flush primary keys in separate table
+          .then((value) => LdvDetailPk().saveAll(value.map((e) => e.pk!).toList())),
+      OTrnLdvHeader().saveOne(r.oheader!),
+    ]);
+  }
+
+// from mobile to cloud. see assignments
+  Future<RequestBatch> setBatch() async {
+    var data = RequestBatch()
+      ..header = ITrnLdvHeader().findAll.firstWhereOrNull((p0) => true)
+      ..contracts = ITrnLdvDetail().findAll
+      ..rvColls = TrnRVCollComment().findAll;
+    var _ = await post('/mc-api/ldv/v1-batch', data: data.toMap());
+    log('setBatch return $_');
+    return RequestBatch.fromMap(_);
   }
 }

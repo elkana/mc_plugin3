@@ -34,12 +34,12 @@ class EntityApi extends MediaApi {
   //   log('setTrnLdvHdrInbound = $_');
   // }
 
-  Future<RequestBatch> setBatch() async {
-    var data = RequestBatch()
-      ..header = ITrnLdvHeader().findAll.firstWhereOrNull((p0) => true)
-      ..contracts = ITrnLdvDetail().findAll
-      ..rvColls = TrnRVCollComment().findAll;
-    var _ = await post('/mc-api/ldv/v1-batch', data: data.toMap());
-    return RequestBatch.fromMap(_);
-  }
+  // Future<RequestBatch> setBatch() async {
+  //   var data = RequestBatch()
+  //     ..header = ITrnLdvHeader().findAll.firstWhereOrNull((p0) => true)
+  //     ..contracts = ITrnLdvDetail().findAll
+  //     ..rvColls = TrnRVCollComment().findAll;
+  //   var _ = await post('/mc-api/ldv/v1-batch', data: data.toMap());
+  //   return RequestBatch.fromMap(_);
+  // }
 }

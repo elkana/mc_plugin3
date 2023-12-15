@@ -338,18 +338,18 @@ abstract class LocalTable<T> extends HiveObject {
   //   }
   // }
 
-  Future<List<T>> saveAll(List<T>? origin) async {
+  Future<List<T>> saveAll(List<T>? origin, {bool replace = true}) async {
     if (null == origin || origin.isEmpty) return [];
     var list = origin.where((e) => true).toList();
     // log('RECEIVE ${list.length} $syncTableName');
     for (var e in list) {
-      await saveOne(e);
+      await saveOne(e, replace: replace);
     }
     return list;
   }
 
 // WARNING !! column id must provided/available
-  Future<T?> saveOne(T? origin) async {
+  Future<T?> saveOne(T? origin, {bool replace = true}) async {
     if (origin == null) return null;
     final box = Hive.box<T>(syncTableName);
     final Map<dynamic, T> map = box.toMap();
@@ -360,6 +360,8 @@ abstract class LocalTable<T> extends HiveObject {
         desiredKey = key;
       }
     });
+    // avoid update if not replace
+    if (desiredKey != null && !replace) return origin;
     debugPrint('$syncTableName ${desiredKey == null ? 'INSERT' : 'UPDATE(id=$desiredKey)'} $origin');
     desiredKey ??= await box.add(origin);
     // need to reuse id for sync purpose

@@ -15,6 +15,7 @@ abstract class AFormBuilderController extends ABasicController {
   var title = ''.obs;
   // use submitting to hold in progress while saving to avoid double submit
   var submitting = false.obs;
+  var formEnabled = false;
 
   dynamic get formChanges => formKey.currentState?.value ?? {};
   void reset() => formKey.currentState?.reset();

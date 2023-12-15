@@ -18,12 +18,13 @@ class VisitView extends GetView<VisitController> {
           title: 'Visit'.text.make(),
           actions: [
             IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
-            // IconButton(onPressed: controller.resetData, icon: const Icon(Icons.restore_page)),
+            IconButton(onPressed: controller.logout, icon: const Icon(Icons.logout)),
           ],
         ),
         body: FormBuilder(
           key: controller.formKey,
           initialValue: controller.initialValue.value?.toMap() ?? {},
+          enabled: controller.formEnabled,
           child: TabsTop(
               titles: const [
                 'Detil Kontrak',
@@ -64,55 +65,33 @@ class KronologiView extends StatelessWidget {
   const KronologiView({super.key});
 
   @override
-  Widget build(context) => GetX<VisitController>(
-      builder: (cont) => [
-            FormBuilderDropdown<MstLdvPersonal>(
-                name: 'whoMet',
-                decoration: InputDecoration(label: 'Bertemu Dengan'.text.make()),
-                initialValue: MstLdvPersonal().findByPk(cont.initialValue.value?.whoMet),
-                onChanged: (val) => cont.dataChanged(true),
-                valueTransformer: (val) => val?.code,
-                items: MstLdvPersonal()
-                    .findAll
-                    .map((option) => DropdownMenuItem(value: option, child: Text(option.description ?? '')))
-                    .toList()),
-            FormBuilderDropdown<MstLdvDelqReason>(
-                name: 'delqCode',
-                decoration: InputDecoration(label: 'Alasan'.text.make()),
-                initialValue: MstLdvDelqReason().findByPk(cont.initialValue.value?.delqCode),
-                onChanged: (val) => cont.dataChanged(true),
-                valueTransformer: (val) => val?.code,
-                items: MstLdvDelqReason()
-                    .findAll
-                    .map((option) => DropdownMenuItem(value: option, child: Text(option.description ?? '')))
-                    .toList()),
-            FormBuilderDropdown<MstLdvClassification>(
-                name: 'classCode',
-                decoration: InputDecoration(label: 'Klasifikasi'.text.make()),
-                initialValue: MstLdvClassification().findByPk(cont.initialValue.value?.classCode),
-                onChanged: (val) => cont.dataChanged(true),
-                valueTransformer: (val) => val?.code,
-                items: MstLdvClassification()
-                    .findAll
-                    .map((option) => DropdownMenuItem(value: option, child: Text(option.label ?? '')))
-                    .toList()),
-            FormBuilderDropdown<MstLdvNextAction>(
-                name: 'actionPlan',
-                decoration: InputDecoration(label: 'Tindakan Selanjutnya'.text.make()),
-                initialValue: MstLdvNextAction().findByPk(cont.initialValue.value?.actionPlan),
-                onChanged: (val) => cont.dataChanged(true),
-                valueTransformer: (val) => val?.code,
-                items: MstLdvNextAction()
-                    .findAll
-                    .map((option) => DropdownMenuItem(value: option, child: Text(option.label ?? '')))
-                    .toList()),
-            FormBuilderTextField(
-                name: 'notes', maxLines: 6, decoration: InputDecoration(label: 'Keterangan'.text.make())),
-            // 'Komentar'.remarks.make(),
-            // 'Mobile Phone'.phoneNumber.make(),
-            FormBuilderTextField(
-                name: 'mobPhone1', maxLines: 1, decoration: InputDecoration(label: 'Mobile Phone'.text.make())),
-          ].column());
+  Widget build(context) => [
+        MyFormBuilderDropDown<String>('whoMet', 'Bertemu Dengan',
+            items: MstLdvPersonal()
+                .findAll
+                .map((o) => DropdownMenuItem(value: o.code, child: '${o.description}'.text.make()))
+                .toList(growable: false)),
+        MyFormBuilderDropDown<String>('delqCode', 'Alasan',
+            items: MstLdvDelqReason()
+                .findAll
+                .map((o) => DropdownMenuItem(value: o.code, child: '${o.description}'.text.make()))
+                .toList(growable: false)),
+        MyFormBuilderDropDown<String>('classCode', 'Klasifikasi',
+            items: MstLdvClassification()
+                .findAll
+                .map((o) => DropdownMenuItem(value: o.code, child: '${o.label}'.text.make()))
+                .toList(growable: false)),
+        MyFormBuilderDropDown<String>('actionPlan', 'Tindakan Selanjutnya',
+            items: MstLdvNextAction()
+                .findAll
+                .map((o) => DropdownMenuItem(value: o.code, child: '${o.label}'.text.make()))
+                .toList(growable: false)),
+        FormBuilderTextField(name: 'notes', maxLines: 6, decoration: InputDecoration(label: 'Keterangan'.text.make())),
+        // 'Komentar'.remarks.make(),
+        // 'Mobile Phone'.phoneNumber.make(),
+        FormBuilderTextField(
+            name: 'mobPhone1', maxLines: 1, decoration: InputDecoration(label: 'Mobile Phone'.text.make())),
+      ].column();
 }
 
 class PenerimaanView extends StatelessWidget {

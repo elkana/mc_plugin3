@@ -105,7 +105,7 @@ abstract class CustomLogic {
 
 abstract class CustomTheme {
   Color get colorMain;
-  Widget get extraPaddingBottomAppBar;
+  // Widget get extraPaddingBottomAppBar; useless
   Widget getIconForFAB(BuildContext context);
   // AppBar getAppBar(BuildContext context, String title, {PreferredSizeWidget bottom, List<Widget> actions});
   // Text getGreetings(BuildContext context, String text);

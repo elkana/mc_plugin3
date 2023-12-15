@@ -22,6 +22,7 @@ class VisitBinding extends Bindings {
 class VisitController extends ATabFormController with GetSingleTickerProviderStateMixin {
   LdvDetailPk? contractPk;
   var initialValue = Rxn<TrnRVCollComment>();
+  TrnRVCollComment get formObject => TrnRVCollComment.fromMap(formKey.currentState!.value);
 
   static show(OTrnLdvDetail data) async {
     sessionStop();
@@ -32,6 +33,7 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
       if (poaData == null) return;
     }
     await Get.toNamed(Routes.visit);
+    if (kReleaseMode) clientLogic?.sync;
     sessionStart();
   }
 
@@ -46,12 +48,14 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     }
     if (contractPk == null) throw Exception('A Valid Contract Required.');
     // load form data
-    initialValue(TrnRVCollComment().findByContractNo(contractPk!.contractNo!));
+    var existingTrnRVColl = TrnRVCollComment().findByContractNo(contractPk!.contractNo!);
+    initialValue(existingTrnRVColl);
+    formEnabled = existingTrnRVColl == null;
   }
 
   @override
   Future onSubmit() async {
-    var oContracts = OTrnLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
+    var oContract = OTrnLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
 
     // 1. convert from form data back to trnrvcollcomment
     RvCollPk pk = RvCollPk()
@@ -59,28 +63,26 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
           OTrnLdvHeader().findByPk(contractPk!.ldvNo!)!.ldvDate!.isoToLocalDate(), AuthController.instance.loggedUserId)
       ..contractNo = contractPk?.contractNo;
 
-    var formData = TrnRVCollComment.fromMap(formKey.currentState!.value)
+    var formData = formObject
       ..pk = pk
       ..ldvNo = contractPk?.ldvNo;
 
-    // 1. save new pk of rvcoll
+    // 1.a. save new pk of rvcoll
     await RvCollPk().saveOne(pk);
-    // merge rvcoll
-    var mergeRvColl = initialValue.value?.toMap()
-      ?..addAll(formData.toMap()); // merge will be null if initialValue is also null no matter what
-    // 2. save rvcoll
-    var newData =
-        await TrnRVCollComment().saveOne(mergeRvColl != null ? TrnRVCollComment.fromMap(mergeRvColl) : formData);
+    // merge rvcoll using map trick
+    // var mergeMap = initialValue.value?.toMap()?..addAll(formData.toMap()); not useful
+    // 1.b. save rvcoll
+    // var record = await TrnRVCollComment().saveOne(TrnRVCollComment.fromMap(mergeMap!));
+    var record = await TrnRVCollComment().saveOne(formData);
 
-    // 3. save as inbound
+    // 2. save as inbound
     await ITrnLdvDetail().saveOne(ITrnLdvDetail()
       ..pk = contractPk
       ..workStatus = 'V'
-      ..custName = oContracts?.custName
+      ..custName = oContract?.custName
       ..createdBy = AuthController.instance.loggedUserId);
 
-    clientLogic?.sync();
     // return with back saved data
-    await 1.delay().then((_) => Navigator.pop(Get.context!, [newData]));
+    await 1.delay().then((_) => Navigator.pop(Get.context!, [record]));
   }
 }

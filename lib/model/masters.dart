@@ -197,8 +197,7 @@ class MstLdvDelqReason extends LocalTable<MstLdvDelqReason> {
   factory MstLdvDelqReason.fromJson(String source) => MstLdvDelqReason.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'MstLdvDelqReason(id: $id, seqNo: $seqNo, code: $code, label: $label, description: $description, visible: $visible)';
+  String toString() => '$code';
 
   @override
   bool comparePk(a, b) => a.code == b.code;
@@ -247,7 +246,7 @@ class MstLdvClassification extends LocalTable<MstLdvClassification> {
   factory MstLdvClassification.fromJson(String source) => MstLdvClassification.fromMap(json.decode(source));
 
   @override
-  String toString() => 'MstLdvClassification(id: $id, seqNo: $seqNo, code: $code, label: $label, visible: $visible)';
+  String toString() => '$code';
 
   @override
   bool comparePk(a, b) => a.code == b.code;
@@ -296,7 +295,7 @@ class MstLdvNextAction extends LocalTable<MstLdvNextAction> {
   factory MstLdvNextAction.fromJson(String source) => MstLdvNextAction.fromMap(json.decode(source));
 
   @override
-  String toString() => 'MstLdvNextAction(id: $id, seqNo: $seqNo, key: $key, label: $label, notes: $notes)';
+  String toString() => '$code';
 
   @override
   bool comparePk(a, b) => a.code == b.code;
