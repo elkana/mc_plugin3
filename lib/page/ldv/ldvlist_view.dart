@@ -26,7 +26,7 @@ class LdvListView extends GetView<LdvListController> {
           onRefresh: controller.refreshData,
           child: controller.loading.isTrue
               ? const CircularProgressIndicator()
-              : const LdvList(onTapItem: VisitController.show).scrollVertical(
+              : LdvList(onTapItem: (val) => VisitController.show(val.pk!.ldvNo!, val.pk!.contractNo!)!).scrollVertical(
                   controller: controller.scrollAktif,
                   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())))));
 }

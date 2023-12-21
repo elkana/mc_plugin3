@@ -12,6 +12,8 @@ class PoaBinding extends Bindings {
   void dependencies() => Get.lazyPut<PoaController>(() => PoaController());
 }
 
+// argument 0 = ldvNo
+// argument 1 = contractNo
 class PoaController extends ABasicController {
   late OTrnLdvDetail contract;
   final msgMain = 'Ambil foto saat Anda telah tiba di lokasi';
@@ -19,7 +21,7 @@ class PoaController extends ABasicController {
   @override
   void onInit() {
     super.onInit();
-    contract = Get.arguments[0];
+    contract = OTrnLdvDetail().findByPk(Get.arguments[0], Get.arguments[1])!;
     ever<bool>(loading, (callback) => progressMsg(callback ? 'Tunggu sebentar...' : msgMain));
   }
 

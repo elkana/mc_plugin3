@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+
 import 'package:mc_plugin3/util/commons.dart';
 
 import '../util/hive_util.dart';
@@ -38,7 +39,7 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
   @HiveField(8)
   int? instNo;
   @HiveField(9)
-  double? receivedAmount;
+  num? receivedAmount;
   @HiveField(10)
   double? penalty;
   @HiveField(11)
@@ -381,7 +382,7 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
       collId: map['collId'],
       rvbNo: map['rvbNo'],
       instNo: map['instNo']?.toInt(),
-      receivedAmount: map['receivedAmount']?.toDouble(),
+      receivedAmount: map['receivedAmount'],
       penalty: map['penalty']?.toDouble(),
       collFeeAc: map['collFeeAc']?.toDouble(),
       lkpFlag: map['lkpFlag'],

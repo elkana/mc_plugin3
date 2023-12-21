@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 // import 'package:
@@ -14,14 +15,14 @@ class VisitView extends GetView<VisitController> {
 
   @override
   Widget build(context) => Scaffold(
-        appBar: AppBar(
-          title: 'Visit'.text.make(),
-          actions: [
-            IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
-            IconButton(onPressed: controller.logout, icon: const Icon(Icons.logout)),
-          ],
-        ),
-        body: FormBuilder(
+      appBar: AppBar(
+        title: 'Visit'.text.make(),
+        actions: [
+          IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
+          IconButton(onPressed: controller.logout, icon: const Icon(Icons.logout)),
+        ],
+      ),
+      body: FormBuilder(
           key: controller.formKey,
           initialValue: controller.initialValue.value?.toMap() ?? {},
           enabled: controller.formEnabled,
@@ -35,11 +36,9 @@ class VisitView extends GetView<VisitController> {
               children: [
                 ContractView(controller.contractPk!),
                 const KronologiView(),
-                const PenerimaanView(),
-              ]),
-        ),
-        floatingActionButton: FloatingActionButton(onPressed: controller.submit),
-      );
+                PenerimaanView(enabled: controller.formEnabled),
+              ])),
+      floatingActionButton: FloatingActionButton(onPressed: controller.submit));
 }
 
 class ContractView extends StatelessWidget {
@@ -51,8 +50,7 @@ class ContractView extends StatelessWidget {
         KeyVal('No. Dokumen', '${pk.ldvNo}'),
         KeyVal('No. Contract', '${pk.contractNo}'),
         GetBuilder<VisitController>(
-            builder: (cont) =>
-                '${OTrnLdvDetail().findByPk(cont.contractPk!.ldvNo!, cont.contractPk!.contractNo!)}'.text.make())
+            builder: (c) => '${OTrnLdvDetail().findByPk(c.contractPk!.ldvNo!, c.contractPk!.contractNo!)}'.text.make())
         // ValueListenableBuilder<Box<OTrnLdvDetail>>(
         //     valueListenable: OTrnLdvDetail().listenTable,
         //     builder: (context, obox, widget) {
@@ -94,17 +92,33 @@ class KronologiView extends StatelessWidget {
       ].column();
 }
 
-class PenerimaanView extends StatelessWidget {
-  const PenerimaanView({super.key});
+class PenerimaanView extends StatefulWidget {
+  final bool enabled;
+  const PenerimaanView({super.key, this.enabled = true});
 
   @override
-  Widget build(context) => [
-        FormBuilderTextField(
-            name: 'receivedAmount',
-            valueTransformer: (value) => value == null ? 0 : double.parse(value),
-            maxLines: 1,
-            decoration: InputDecoration(label: 'Penerimaan'.text.make())),
-        FormBuilderTextField(
-            name: 'strukNo', maxLines: 1, decoration: InputDecoration(label: 'Kode Struk'.text.make())),
-      ].column();
+  State<PenerimaanView> createState() => _PenerimaanViewState();
+}
+
+class _PenerimaanViewState extends State<PenerimaanView> with AutomaticKeepAliveClientMixin<PenerimaanView> {
+  @override
+  Widget build(context) {
+    super.build(context);
+    return [
+      FormBuilderField<num>(
+          name: 'receivedAmount',
+          builder: (f) => MyTextFormField('Jumlah',
+              initialValue: f.value?.toString(),
+              onSaved: (newValue) => f.didChange(newValue == null ? null : double.tryParse(newValue)))),
+      FormBuilderTextField(
+        name: 'strukNo',
+        maxLines: 1,
+        decoration: InputDecoration(label: 'Kode Struk'.text.make()),
+      ),
+    ].column();
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

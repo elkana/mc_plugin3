@@ -24,18 +24,31 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
   var initialValue = Rxn<TrnRVCollComment>();
   TrnRVCollComment get formObject => TrnRVCollComment.fromMap(formKey.currentState!.value);
 
-  static show(OTrnLdvDetail data) async {
+  // need both param because this method can be called by outbound/inbound
+  static show(String ldvNo, String contractNo) async {
     sessionStop();
     // jika ada transaksi di rvcollcomment, skip poa
-    var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
+    var visited = TrnRVCollComment().findByContractNo(contractNo);
     if (visited == null) {
-      var poaData = await Get.toNamed(Routes.poa, arguments: [data]);
+      var poaData = await Get.toNamed(Routes.poa, arguments: [ldvNo, contractNo]);
       if (poaData == null) return;
     }
     await Get.toNamed(Routes.visit);
     if (kReleaseMode) clientLogic?.sync;
     sessionStart();
   }
+  // static show(OTrnLdvDetail data) async {
+  //   sessionStop();
+  //   // jika ada transaksi di rvcollcomment, skip poa
+  //   var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
+  //   if (visited == null) {
+  //     var poaData = await Get.toNamed(Routes.poa, arguments: [data]);
+  //     if (poaData == null) return;
+  //   }
+  //   await Get.toNamed(Routes.visit);
+  //   if (kReleaseMode) clientLogic?.sync;
+  //   sessionStart();
+  // }
 
   @override
   void onInit() {
