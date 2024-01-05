@@ -37,18 +37,6 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     if (kReleaseMode) clientLogic?.sync;
     sessionStart();
   }
-  // static show(OTrnLdvDetail data) async {
-  //   sessionStop();
-  //   // jika ada transaksi di rvcollcomment, skip poa
-  //   var visited = TrnRVCollComment().findByContractNo(data.pk?.contractNo);
-  //   if (visited == null) {
-  //     var poaData = await Get.toNamed(Routes.poa, arguments: [data]);
-  //     if (poaData == null) return;
-  //   }
-  //   await Get.toNamed(Routes.visit);
-  //   if (kReleaseMode) clientLogic?.sync;
-  //   sessionStart();
-  // }
 
   @override
   void onInit() {

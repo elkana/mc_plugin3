@@ -24,7 +24,7 @@ class DeveloperView extends GetView<DeveloperController> {
                 //   fit: BoxFit.cover,
                 // ),
                 ),
-            actions: [IconButton(onPressed: () => controller.refreshList(), icon: const Icon(Icons.refresh))]),
+            actions: [IconButton(onPressed: controller.refreshData, icon: const Icon(Icons.refresh))]),
         SliverList(
             delegate: SliverChildListDelegate([
           Obx(() => controller.loading.isTrue

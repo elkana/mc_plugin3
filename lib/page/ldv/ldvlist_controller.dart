@@ -9,15 +9,10 @@ class LdvListBinding extends Bindings {
   void dependencies() => Get.lazyPut<LdvListController>(() => LdvListController());
 }
 
-class LdvListController extends ABasicController {
+class LdvListController extends AViewController {
   final scrollAktif = ScrollController();
 
   @override
-  void onReady() {
-    super.onReady();
-    refreshData();
-  }
-
   Future refreshData() => processThis(() => Api.instance.assignments);
 
   Future resetData() async {

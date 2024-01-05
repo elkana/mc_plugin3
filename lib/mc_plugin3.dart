@@ -26,7 +26,6 @@ Future<void> registerBeforeRunApp(CustomTheme? theme, CustomLogic logic) async {
   await initializeService();
   // must on the top of GetX chains
   await Get.put(PrefController()).initStorage();
-  // await PrefController.instance.setServers(servers);
   if (!kIsWeb && !Platform.isWindows) {
     // var sn = await DeviceUtil.snDevice;
     // if (sn.toLowerCase() == 'unknown') sn = '';
@@ -39,9 +38,7 @@ Future<void> registerBeforeRunApp(CustomTheme? theme, CustomLogic logic) async {
 }
 
 class McPlugin3 {
-  Future<String?> getPlatformVersion() {
-    return McPlugin3Platform.instance.getPlatformVersion();
-  }
+  Future<String?> getPlatformVersion() => McPlugin3Platform.instance.getPlatformVersion();
 }
 
 Future<void> initializeService() async {

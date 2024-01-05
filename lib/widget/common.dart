@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:mc_plugin3/util/validate_util.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 // extension ShimmerExtension on Widget {
 //   Widget shimmerList(bool loading, double? itemHeight, int count) =>
 //       ShimmerList(loading: loading, itemHeight: itemHeight, count: count, child: this);
 // }
+
+extension FormExtension<T> on String {
+  // you may do this:
+  // 'Bertemu Dengan:'.dropDown(...)
+  MyFormBuilderDropDown dropDown(
+          String field, List<T> list, String Function(T) rowLabel, String Function(T) rowValue) =>
+      MyFormBuilderDropDown(
+        field,
+        this,
+        items: list
+            .map((o) => DropdownMenuItem(
+                  value: rowValue(o),
+                  child: rowLabel(o).text.make(),
+                ))
+            .toList(),
+        validator: ValidateUtil.notEmpty,
+      );
+  // 'Keterangan:'.dropDown(...)
+  FormBuilderTextField textField(String field, {int maxLines = 1}) => FormBuilderTextField(
+      name: field,
+      maxLines: maxLines,
+      decoration: InputDecoration(label: text.make()),
+      validator: ValidateUtil.notEmpty);
+}
 
 class TopRoundEdge extends StatelessWidget {
   final Color? backColor;
@@ -117,6 +142,7 @@ class MyButton extends StatelessWidget {
           child: Text(label, style: const TextStyle(color: Colors.white))));
 }
 
+// DropDown Form
 class MyFormBuilderDropDown<T> extends StatelessWidget {
   final String name;
   final String label;
@@ -238,7 +264,7 @@ class MyTextFormField extends StatelessWidget {
       validator: validator,
       onSaved: onSaved,
       onChanged: onChanged,
-      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+      // style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.blueGrey.shade50,

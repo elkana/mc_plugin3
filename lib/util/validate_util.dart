@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 class ValidateUtil {
+  static String? notEmpty(dynamic value) => value == null ? 'Field Required' : null;
+
   static String? userId(String? value) {
     if (null == value) return null;
     if (GetUtils.isLengthLessThan(value, 4)) return 'User ID too short';

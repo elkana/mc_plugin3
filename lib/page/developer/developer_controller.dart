@@ -9,14 +9,8 @@ import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import '../../routes/app_routes.dart';
 
-class DeveloperController extends ABasicController {
+class DeveloperController extends AViewController {
   var rows = <DataRow>[].obs;
-
-  @override
-  void onReady() {
-    super.onReady();
-    refreshList();
-  }
 
   DataRow tableInfo(String tableName, int rowCount) => DataRow(cells: [
         DataCell(tableName.text.blue900.underline.isIntrinsic
@@ -25,7 +19,8 @@ class DeveloperController extends ABasicController {
         DataCell('$rowCount'.text.isIntrinsic.make()),
       ]);
 
-  Future refreshList() => processThis(() async {
+  @override
+  Future refreshData() => processThis(() async {
         rows.clear();
         // rows.add(const DataRow(cells: [
         //   DataCell(Text('Files in Cache')),

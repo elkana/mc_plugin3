@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
-// import 'package:
-import '../../model/masters.dart';
+
 import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import '../../widget/common.dart';
 import '../../widget/tabs/tabs.dart';
+import 'kronologi/kronologi_view.dart';
+import 'penerimaan/penerimaan_view.dart';
 import 'visit_controller.dart';
 
 class VisitView extends GetView<VisitController> {
@@ -57,68 +57,4 @@ class ContractView extends StatelessWidget {
         //       return '${obox.values.first}'.text.make();
         //     })
       ].column();
-}
-
-class KronologiView extends StatelessWidget {
-  const KronologiView({super.key});
-
-  @override
-  Widget build(context) => [
-        MyFormBuilderDropDown<String>('whoMet', 'Bertemu Dengan',
-            items: MstLdvPersonal()
-                .findAll
-                .map((o) => DropdownMenuItem(value: o.code, child: '${o.description}'.text.make()))
-                .toList(growable: false)),
-        MyFormBuilderDropDown<String>('delqCode', 'Alasan',
-            items: MstLdvDelqReason()
-                .findAll
-                .map((o) => DropdownMenuItem(value: o.code, child: '${o.description}'.text.make()))
-                .toList(growable: false)),
-        MyFormBuilderDropDown<String>('classCode', 'Klasifikasi',
-            items: MstLdvClassification()
-                .findAll
-                .map((o) => DropdownMenuItem(value: o.code, child: '${o.label}'.text.make()))
-                .toList(growable: false)),
-        MyFormBuilderDropDown<String>('actionPlan', 'Tindakan Selanjutnya',
-            items: MstLdvNextAction()
-                .findAll
-                .map((o) => DropdownMenuItem(value: o.code, child: '${o.label}'.text.make()))
-                .toList(growable: false)),
-        FormBuilderTextField(name: 'notes', maxLines: 6, decoration: InputDecoration(label: 'Keterangan'.text.make())),
-        // 'Komentar'.remarks.make(),
-        // 'Mobile Phone'.phoneNumber.make(),
-        FormBuilderTextField(
-            name: 'mobPhone1', maxLines: 1, decoration: InputDecoration(label: 'Mobile Phone'.text.make())),
-      ].column();
-}
-
-class PenerimaanView extends StatefulWidget {
-  final bool enabled;
-  const PenerimaanView({super.key, this.enabled = true});
-
-  @override
-  State<PenerimaanView> createState() => _PenerimaanViewState();
-}
-
-class _PenerimaanViewState extends State<PenerimaanView> with AutomaticKeepAliveClientMixin<PenerimaanView> {
-  @override
-  Widget build(context) {
-    super.build(context);
-    return [
-      FormBuilderField<num>(
-          name: 'receivedAmount',
-          builder: (f) => MyTextFormField('Jumlah',
-              initialValue: f.value?.toString(),
-              onSaved: (newValue) => f.didChange(newValue == null ? null : double.tryParse(newValue)))),
-      FormBuilderTextField(
-        name: 'strukNo',
-        maxLines: 1,
-        decoration: InputDecoration(label: 'Kode Struk'.text.make()),
-      ),
-    ].column();
-  }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
