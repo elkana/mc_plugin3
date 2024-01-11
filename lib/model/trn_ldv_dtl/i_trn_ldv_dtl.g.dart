@@ -6,17 +6,17 @@ part of 'i_trn_ldv_dtl.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ITrnLdvDetailAdapter extends TypeAdapter<ITrnLdvDetail> {
+class InboundLdvDetailAdapter extends TypeAdapter<InboundLdvDetail> {
   @override
   final int typeId = 104;
 
   @override
-  ITrnLdvDetail read(BinaryReader reader) {
+  InboundLdvDetail read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ITrnLdvDetail(
+    return InboundLdvDetail(
       id: fields[0] as int?,
       pk: fields[1] as LdvDetailPk?,
       lastUpdateBy: fields[2] as String?,
@@ -34,7 +34,7 @@ class ITrnLdvDetailAdapter extends TypeAdapter<ITrnLdvDetail> {
   }
 
   @override
-  void write(BinaryWriter writer, ITrnLdvDetail obj) {
+  void write(BinaryWriter writer, InboundLdvDetail obj) {
     writer
       ..writeByte(13)
       ..writeByte(0)
@@ -71,7 +71,7 @@ class ITrnLdvDetailAdapter extends TypeAdapter<ITrnLdvDetail> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ITrnLdvDetailAdapter &&
+      other is InboundLdvDetailAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

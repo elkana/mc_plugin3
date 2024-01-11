@@ -49,41 +49,43 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     }
     if (contractPk == null) throw Exception('A Valid Contract Required.');
     // load form data
-    var existingTrnRVColl = TrnRVCollComment().findByContractNo(contractPk!.contractNo!);
-    initialValue(existingTrnRVColl);
-    formEnabled = existingTrnRVColl == null;
+    var existing = TrnRVCollComment().findByContractNo(contractPk!.contractNo!);
+    initialValue(existing);
+    formEnabled = existing == null;
   }
 
   @override
   Future onSubmit() async {
-    var oContract = OTrnLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
+    var oContract = OutboundLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
 
-    // 1. convert from form data back to trnrvcollcomment
-    RvCollPk pk = RvCollPk()
+    // 1. prepare Pk
+    var pk = RvCollPk()
       ..rvCollNo ??= LdvUtil.generateRVCollNo(
-          OTrnLdvHeader().findByPk(contractPk!.ldvNo!)!.ldvDate!.isoToLocalDate(), AuthController.instance.loggedUserId)
+          OutboundLdvHeader().findByPk(contractPk!.ldvNo!)!.ldvDate!.isoToLocalDate(),
+          AuthController.instance.loggedUserId)
       ..contractNo = contractPk?.contractNo;
 
+    // 2. convert from form data back to trnrvcollcomment
     var formData = formObject
       ..pk = pk
       ..ldvNo = contractPk?.ldvNo;
 
-    // 1.a. save new pk of rvcoll
+    // 2.a. save new pk of rvcoll
     await RvCollPk().saveOne(pk);
     // merge rvcoll using map trick
     // var mergeMap = initialValue.value?.toMap()?..addAll(formData.toMap()); not useful
-    // 1.b. save rvcoll
+    // 2.b. save rvcoll
     // var record = await TrnRVCollComment().saveOne(TrnRVCollComment.fromMap(mergeMap!));
     var record = await TrnRVCollComment().saveOne(formData);
 
-    // 2. save as inbound
-    await ITrnLdvDetail().saveOne(ITrnLdvDetail()
+    // 3. save as inbound
+    await InboundLdvDetail().saveOne(InboundLdvDetail()
       ..pk = contractPk
       ..workStatus = 'V'
       ..custName = oContract?.custName
       ..createdBy = AuthController.instance.loggedUserId);
 
-    // return with back saved data
+    // 4. return with new record
     await 1.delay().then((_) => Navigator.pop(Get.context!, [record]));
   }
 }

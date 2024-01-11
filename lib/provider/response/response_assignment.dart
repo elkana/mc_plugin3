@@ -7,10 +7,10 @@ import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 
 class ResponseAssignment {
-  OTrnLdvHeader? oheader;
-  ITrnLdvHeader? iheader;
-  List<ITrnLdvDetail>? idetails;
-  List<OTrnLdvDetail>? odetails;
+  OutboundLdvHeader? oheader;
+  InboundLdvHeader? iheader;
+  List<InboundLdvDetail>? idetails;
+  List<OutboundLdvDetail>? odetails;
   List<TrnRVCollComment>? rvColls;
   ResponseAssignment({
     this.oheader,
@@ -32,13 +32,13 @@ class ResponseAssignment {
 
   factory ResponseAssignment.fromMap(Map<String, dynamic> map) {
     return ResponseAssignment(
-      oheader: map['oheader'] != null ? OTrnLdvHeader.fromMap(map['oheader']) : null,
-      iheader: map['iheader'] != null ? ITrnLdvHeader.fromMap(map['iheader']) : null,
+      oheader: map['oheader'] != null ? OutboundLdvHeader.fromMap(map['oheader']) : null,
+      iheader: map['iheader'] != null ? InboundLdvHeader.fromMap(map['iheader']) : null,
       idetails: map['idetails'] != null
-          ? List<ITrnLdvDetail>.from(map['idetails']?.map((x) => ITrnLdvDetail.fromMap(x)))
+          ? List<InboundLdvDetail>.from(map['idetails']?.map((x) => InboundLdvDetail.fromMap(x)))
           : null,
       odetails: map['odetails'] != null
-          ? List<OTrnLdvDetail>.from(map['odetails']?.map((x) => OTrnLdvDetail.fromMap(x)))
+          ? List<OutboundLdvDetail>.from(map['odetails']?.map((x) => OutboundLdvDetail.fromMap(x)))
           : null,
       rvColls: map['rvColls'] != null
           ? List<TrnRVCollComment>.from(map['rvColls']?.map((x) => TrnRVCollComment.fromMap(x)))

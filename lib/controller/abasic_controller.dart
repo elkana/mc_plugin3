@@ -21,8 +21,8 @@ abstract class ABasicController extends GetxController {
   void viewDatabase() => Get.toNamed(Routes.developer);
 
   Future loadingThis(Future<void> Function() call, Function(Object e, StackTrace s)? onError) async {
-    // if (loading.isTrue) return; // bahaya jika kelupaan awalnya udah true saat onInit
     loading(true);
+    update();
     try {
       await call();
     } catch (e, s) {
@@ -30,6 +30,7 @@ abstract class ABasicController extends GetxController {
     } finally {
       loading(false);
       progressMsg('');
+      update();
     }
   }
 

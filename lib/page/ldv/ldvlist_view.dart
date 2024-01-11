@@ -16,10 +16,13 @@ class LdvListView extends GetView<LdvListController> {
       appBar: AppBar(
         title: 'Ldv List'.text.make(),
         actions: [
-          TextButton(onPressed: clientLogic?.sync, child: 'Sync DB'.text.white.make()),
+          TextButton(onPressed: clientLogic?.sync, child: 'Sync DB'.text.make()),
           IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
           IconButton(onPressed: controller.resetData, icon: const Icon(Icons.restore_page)),
           IconButton(onPressed: AuthController.instance.logout, icon: const Icon(Icons.logout)),
+          controller.loading.isTrue
+              ? const CircularProgressIndicator()
+              : IconButton(onPressed: controller.closeBatch, icon: 'CB'.text.bold.make()),
         ],
       ),
       body: Obx(() => RefreshIndicator(

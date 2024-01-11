@@ -19,8 +19,8 @@ class LdvDetilBinding extends Bindings {
 class LdvDetilController extends AFormBuilderController with GetSingleTickerProviderStateMixin {
   static LdvDetilController instance = Get.find();
   late LdvDetailPk pk;
-  late OTrnLdvDetail outbound;
-  ITrnLdvDetail? inbound;
+  late OutboundLdvDetail outbound;
+  InboundLdvDetail? inbound;
   // berisi foto yg belum disync aja ?
   // intinya supaya ga perlu write ke table kalau belum final, shg ga perlu cleanup
   // var photoList = <TblPhoto>[].obs;
@@ -41,8 +41,8 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
     try {
       pk = Get.arguments[0];
 
-      outbound = OTrnLdvDetail().findByPk(pk.ldvNo!, pk.contractNo!)!;
-      inbound = ITrnLdvDetail().findByPk(pk.ldvNo!, pk.contractNo!);
+      outbound = OutboundLdvDetail().findByPk(pk.ldvNo!, pk.contractNo!)!;
+      inbound = InboundLdvDetail().findByPk(pk.ldvNo!, pk.contractNo!);
       // visitId = Get.parameters['visitId'] ?? PhotoUtil.generateVisitId();
     } catch (e, s) {
       log(e.toString(), stacktrace: s);
@@ -57,14 +57,14 @@ class LdvDetilController extends AFormBuilderController with GetSingleTickerProv
   @override
   Future onSubmit() async {
     log('Form-> ${formKey.currentState?.value}');
-    var offlineData = ITrnLdvDetail()
+    var offlineData = InboundLdvDetail()
       ..pk = pk
       ..custName = outbound.custName
       ..workStatus = formKey.currentState!.value['workStatus']
       ..createdBy = AuthController.instance.loggedUserId
       ..createdDate = TimeUtil.nowIso();
 
-    var saved = await ITrnLdvDetail().saveOne(offlineData);
+    var saved = await InboundLdvDetail().saveOne(offlineData);
 
     await 1.delay().then((_) => Navigator.pop(Get.context!, [saved]));
   }

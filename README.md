@@ -2,5 +2,9 @@
 
 the number 3 means flutter version used, Flutter 3 in this matter.
 
-The Server must apply HateOAS implementation for data communication
+The Server & Cient must apply HateOAS implementation for data communication
+
+Contracts registered at Swagger documentation.
+
+
 

@@ -106,10 +106,10 @@ class HiveUtil {
     // Hive.registerAdapter(MstPaymentPointAdapter());
 
     // Hive.registerAdapter(UserDataAdapter());
-    Hive.registerAdapter(OTrnLdvHeaderAdapter());
-    Hive.registerAdapter(ITrnLdvHeaderAdapter());
-    Hive.registerAdapter(OTrnLdvDetailAdapter());
-    Hive.registerAdapter(ITrnLdvDetailAdapter());
+    Hive.registerAdapter(OutboundLdvHeaderAdapter());
+    Hive.registerAdapter(InboundLdvHeaderAdapter());
+    Hive.registerAdapter(OutboundLdvDetailAdapter());
+    Hive.registerAdapter(InboundLdvDetailAdapter());
     Hive.registerAdapter(LdvDetailPkAdapter());
     Hive.registerAdapter(TrnRVCollCommentAdapter());
     Hive.registerAdapter(RvCollPkAdapter());
@@ -150,10 +150,10 @@ class HiveUtil {
     // await Hive.openBox<MstPaymentPoint>(MstPaymentPoint.syncTableName);
     // await Hive.openBox<UserData>(UserData.syncTableName);
 
-    await Hive.openBox<OTrnLdvHeader>(OTrnLdvHeader().syncTableName);
-    await Hive.openBox<ITrnLdvHeader>(ITrnLdvHeader().syncTableName);
-    await Hive.openBox<OTrnLdvDetail>(OTrnLdvDetail().syncTableName);
-    await Hive.openBox<ITrnLdvDetail>(ITrnLdvDetail().syncTableName);
+    await Hive.openBox<OutboundLdvHeader>(OutboundLdvHeader().syncTableName);
+    await Hive.openBox<InboundLdvHeader>(InboundLdvHeader().syncTableName);
+    await Hive.openBox<OutboundLdvDetail>(OutboundLdvDetail().syncTableName);
+    await Hive.openBox<InboundLdvDetail>(InboundLdvDetail().syncTableName);
     await Hive.openBox<LdvDetailPk>(LdvDetailPk().syncTableName);
     await Hive.openBox<TrnRVCollComment>(TrnRVCollComment().syncTableName);
     await Hive.openBox<RvCollPk>(RvCollPk().syncTableName);
@@ -211,11 +211,11 @@ class HiveUtil {
 
   static Future cleanTransactionsOnly() => Future.wait([
         // SyncTrnTable.cleanAll(),
-        OTrnLdvHeader().cleanAll,
-        ITrnLdvHeader().cleanAll,
+        OutboundLdvHeader().cleanAll,
+        InboundLdvHeader().cleanAll,
         LdvDetailPk().cleanAll,
-        OTrnLdvDetail().cleanAll,
-        ITrnLdvDetail().cleanAll,
+        OutboundLdvDetail().cleanAll,
+        InboundLdvDetail().cleanAll,
         // Pk.cleanAll(),
         TrnRVCollComment().cleanAll,
         RvCollPk().cleanAll,
@@ -362,7 +362,10 @@ abstract class LocalTable<T> extends HiveObject {
     });
     // avoid update if not replace
     if (desiredKey != null && !replace) return origin;
-    debugPrint('$syncTableName ${desiredKey == null ? 'INSERT' : 'UPDATE(id=$desiredKey)'} $origin');
+    //only tell if updates
+    if (desiredKey != null) {
+      debugPrint('$syncTableName ${desiredKey == null ? 'INSERT' : 'UPDATE(id=$desiredKey)'} $origin');
+    }
     desiredKey ??= await box.add(origin);
     // need to reuse id for sync purpose
     (origin as dynamic).id = desiredKey!;

@@ -15,13 +15,13 @@ class PoaBinding extends Bindings {
 // argument 0 = ldvNo
 // argument 1 = contractNo
 class PoaController extends ABasicController {
-  late OTrnLdvDetail contract;
+  late OutboundLdvDetail contract;
   final msgMain = 'Ambil foto saat Anda telah tiba di lokasi';
 
   @override
   void onInit() {
     super.onInit();
-    contract = OTrnLdvDetail().findByPk(Get.arguments[0], Get.arguments[1])!;
+    contract = OutboundLdvDetail().findByPk(Get.arguments[0], Get.arguments[1])!;
     ever<bool>(loading, (callback) => progressMsg(callback ? 'Tunggu sebentar...' : msgMain));
   }
 

@@ -6,7 +6,7 @@ import '../../util/hive_util.dart';
 part 'o_trn_ldv_dtl.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvDetailOutbound)
-class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
+class OutboundLdvDetail extends LocalTable<OutboundLdvDetail> {
   // static const syncTableName = 'outbound_trn_ldv_detail';
 
   @HiveField(0)
@@ -25,7 +25,7 @@ class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
   String? custName;
   @HiveField(7)
   String? alamatTagih;
-  OTrnLdvDetail({
+  OutboundLdvDetail({
     this.id,
     this.pk,
     this.lastUpdateBy,
@@ -142,7 +142,7 @@ class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
         'alamatTagih': alamatTagih,
       };
 
-  factory OTrnLdvDetail.fromMap(Map<String, dynamic> map) => OTrnLdvDetail(
+  factory OutboundLdvDetail.fromMap(Map<String, dynamic> map) => OutboundLdvDetail(
         id: map['id']?.toInt(),
         pk: map['pk'] != null ? LdvDetailPk.fromMap(map['pk']) : null,
         lastUpdateBy: map['lastUpdateBy'],
@@ -153,7 +153,7 @@ class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
         alamatTagih: map['alamatTagih'],
       );
 
-  factory OTrnLdvDetail.fromJson(String source) => OTrnLdvDetail.fromMap(json.decode(source));
+  factory OutboundLdvDetail.fromJson(String source) => OutboundLdvDetail.fromMap(json.decode(source));
 
   // static List<OTrnLdvDetail> findByLdvNo(String ldvNo) {
   //   final list = findAll();
@@ -197,7 +197,7 @@ class OTrnLdvDetail extends LocalTable<OTrnLdvDetail> {
   @override
   bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
-  OTrnLdvDetail? findByPk(String ldvNo, String contractNo) =>
+  OutboundLdvDetail? findByPk(String ldvNo, String contractNo) =>
       findAll.firstWhere((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }
 

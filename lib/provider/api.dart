@@ -101,7 +101,7 @@ class Api extends EntityApi {
   }
 
 // from cloud to mobile. see setBatch
-  Future get assignments async {
+  Future<void> get assignments async {
     var _ = await get('/mc-api/ldv/v1-assignment', q: {
       'collId': AuthController.instance.loggedUserId,
       'ldvDate': null,
@@ -113,25 +113,33 @@ class Api extends EntityApi {
           .saveAll(r.rvColls, replace: false)
           // need to flush primary keys in separate table
           .then((value) => RvCollPk().saveAll(value.map((e) => e.pk!).toList())),
-      ITrnLdvDetail().saveAll(r.idetails, replace: false),
-      ITrnLdvHeader().saveOne(r.iheader, replace: false),
+      InboundLdvDetail().saveAll(r.idetails, replace: false),
+      InboundLdvHeader().saveOne(r.iheader, replace: false),
       // 2. flush outbounds
-      OTrnLdvDetail()
+      OutboundLdvDetail()
           .saveAll(r.odetails)
           // need to flush primary keys in separate table
           .then((value) => LdvDetailPk().saveAll(value.map((e) => e.pk!).toList())),
-      OTrnLdvHeader().saveOne(r.oheader!),
+      OutboundLdvHeader().saveOne(r.oheader!),
     ]);
   }
 
 // from mobile to cloud. see assignments
+// bisa dipakai utk closebatch juga
   Future<RequestBatch> setBatch() async {
     var data = RequestBatch()
-      ..header = ITrnLdvHeader().findAll.firstWhereOrNull((p0) => true)
-      ..contracts = ITrnLdvDetail().findAll
+      ..header =
+          InboundLdvHeader().findAll.firstWhereOrNull((hdr) => hdr.collId == AuthController.instance.loggedUserId)
+      ..contracts = InboundLdvDetail().findAll
       ..rvColls = TrnRVCollComment().findAll;
     var _ = await post('/mc-api/ldv/v1-batch', data: data.toMap());
     log('setBatch return $_');
     return RequestBatch.fromMap(_);
   }
+
+  // Future closeBatch() async {
+  //   var _ = await post('/mc-api/ldv/v1-close-batch', data: data.toMap());
+  //   log('setBatch return $_');
+  //   //
+  // }
 }

@@ -1,21 +1,42 @@
 // import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-// import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:mc_plugin3/util/time_util.dart';
 
 import '../model/server_model.dart';
+import '../model/trn_ldv_hdr.dart';
+import '../provider/api.dart';
 
 abstract class CustomLogic {
   final List<Server> servers;
-  // Server? selectedServer;
   CustomLogic({required this.servers});
-  // CustomLogic({required this.servers, this.selectedServer});
-
   // String getGoogleAPIKey();
 
   Future<ByteData?> get sslCertificatePem;
 
-  Future sync();
+  Future<void> sync() async {
+    // await Api.instance.setBatch();
+    if (kDebugMode) await 5.delay();
+  }
+
+  Future<void> closeBatch() async {
+    // 1. mark inbound header as closeBatch
+    var record = InboundLdvHeader().findAll.isNotEmpty ? InboundLdvHeader().findAll.first : InboundLdvHeader();
+    var outbound = OutboundLdvHeader().findAll.first;
+    await InboundLdvHeader().saveOne(record
+      ..collId = outbound.collId
+      ..collName = outbound.collName
+      ..ldvNo = outbound.ldvNo
+      ..ldvDate = outbound.ldvDate
+      ..officeCode = outbound.officeCode
+      ..officeName = outbound.officeName
+      ..closeBatch = 'Y'
+      ..closeBatchDate = TimeUtil.nowIso());
+    // 2. sync
+    await sync();
+  }
   // recommended format yyyyMMdd. return null to turn expiry off.
   // String? getExpiryApp();
 

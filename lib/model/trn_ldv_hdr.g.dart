@@ -6,17 +6,17 @@ part of 'trn_ldv_hdr.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class OTrnLdvHeaderAdapter extends TypeAdapter<OTrnLdvHeader> {
+class OutboundLdvHeaderAdapter extends TypeAdapter<OutboundLdvHeader> {
   @override
   final int typeId = 100;
 
   @override
-  OTrnLdvHeader read(BinaryReader reader) {
+  OutboundLdvHeader read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return OTrnLdvHeader(
+    return OutboundLdvHeader(
       id: fields[0] as int?,
       ldvNo: fields[1] as String?,
       ldvDate: fields[2] as String?,
@@ -28,7 +28,7 @@ class OTrnLdvHeaderAdapter extends TypeAdapter<OTrnLdvHeader> {
   }
 
   @override
-  void write(BinaryWriter writer, OTrnLdvHeader obj) {
+  void write(BinaryWriter writer, OutboundLdvHeader obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)
@@ -53,22 +53,22 @@ class OTrnLdvHeaderAdapter extends TypeAdapter<OTrnLdvHeader> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OTrnLdvHeaderAdapter &&
+      other is OutboundLdvHeaderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class ITrnLdvHeaderAdapter extends TypeAdapter<ITrnLdvHeader> {
+class InboundLdvHeaderAdapter extends TypeAdapter<InboundLdvHeader> {
   @override
   final int typeId = 101;
 
   @override
-  ITrnLdvHeader read(BinaryReader reader) {
+  InboundLdvHeader read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ITrnLdvHeader(
+    return InboundLdvHeader(
       id: fields[0] as int?,
       ldvNo: fields[1] as String?,
       ldvDate: fields[2] as String?,
@@ -82,7 +82,7 @@ class ITrnLdvHeaderAdapter extends TypeAdapter<ITrnLdvHeader> {
   }
 
   @override
-  void write(BinaryWriter writer, ITrnLdvHeader obj) {
+  void write(BinaryWriter writer, InboundLdvHeader obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
@@ -111,7 +111,7 @@ class ITrnLdvHeaderAdapter extends TypeAdapter<ITrnLdvHeader> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ITrnLdvHeaderAdapter &&
+      other is InboundLdvHeaderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

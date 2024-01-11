@@ -26,11 +26,11 @@ class DeveloperController extends AViewController {
         //   DataCell(Text('Files in Cache')),
         //   DataCell(Text('1000')),
         // ]));
-        rows.add(tableInfo(OTrnLdvHeader().syncTableName, OTrnLdvHeader().findAll.length));
-        rows.add(tableInfo(ITrnLdvHeader().syncTableName, ITrnLdvHeader().findAll.length));
+        rows.add(tableInfo(OutboundLdvHeader().syncTableName, OutboundLdvHeader().findAll.length));
+        rows.add(tableInfo(InboundLdvHeader().syncTableName, InboundLdvHeader().findAll.length));
 
-        rows.add(tableInfo(OTrnLdvDetail().syncTableName, OTrnLdvDetail().findAll.length));
-        rows.add(tableInfo(ITrnLdvDetail().syncTableName, ITrnLdvDetail().findAll.length));
+        rows.add(tableInfo(OutboundLdvDetail().syncTableName, OutboundLdvDetail().findAll.length));
+        rows.add(tableInfo(InboundLdvDetail().syncTableName, InboundLdvDetail().findAll.length));
         rows.add(tableInfo(TrnRVCollComment().syncTableName, TrnRVCollComment().findAll.length));
 
         rows.add(tableInfo(MstLdvClassification().syncTableName, MstLdvClassification().findAll.length));

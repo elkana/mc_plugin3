@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../model/server_model.dart';
 import '../model/user.dart';
 import '../provider/api.dart';
 import '../provider/baseapi.dart';
-import '../provider/response/response_apk.dart';
 import '../routes/app_routes.dart';
 import '../util/commons.dart';
 import '../util/customs.dart';
@@ -42,20 +40,10 @@ abstract class ALoginController extends ABasicController {
 
   Future onPostLogin();
 
-  // Server? getSelectedServer() => selectedServer.value.isEmpty() ? null : selectedServer.value;
-  // void setServer(Server? newValue) {
-  //   if (servers.isNotEmpty && null != newValue) {
-  //     selectedServer(servers.firstWhere((e) => e.name == newValue.name));
-  //   }
-  // }
-  // Server? getSelectedServer() => clientLogic?.selectedServer;
   void setServer(Server? newValue) => selectedServer.value = newValue;
-  // List<Server> get servers => clientLogic?.servers ?? [];
   Future allowSSLWeb() async =>
       WebUtil.openNewTab(await BaseApi.getSelectedServer(selectedServer.value), isNewTab: true);
   void gotoRegister() => Get.toNamed(Routes.signup, arguments: [selectedServer.value]);
-  // void setServers(List<Server> list) => servers = list;
-  // bool isSingleServer() => servers.length == 1;
 
   @override
   void onInit() {

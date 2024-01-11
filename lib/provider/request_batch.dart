@@ -5,8 +5,8 @@ import '../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../model/trn_ldv_hdr.dart';
 
 class RequestBatch {
-  ITrnLdvHeader? header;
-  List<ITrnLdvDetail>? contracts;
+  InboundLdvHeader? header;
+  List<InboundLdvDetail>? contracts;
   List<TrnRVCollComment>? rvColls;
   RequestBatch({
     this.header,
@@ -24,9 +24,9 @@ class RequestBatch {
 
   factory RequestBatch.fromMap(Map<String, dynamic> map) {
     return RequestBatch(
-      header: map['header'] != null ? ITrnLdvHeader.fromMap(map['header']) : null,
+      header: map['header'] != null ? InboundLdvHeader.fromMap(map['header']) : null,
       contracts: map['contracts'] != null
-          ? List<ITrnLdvDetail>.from(map['contracts']?.map((x) => ITrnLdvDetail.fromMap(x)))
+          ? List<InboundLdvDetail>.from(map['contracts']?.map((x) => InboundLdvDetail.fromMap(x)))
           : null,
       rvColls: map['rvColls'] != null
           ? List<TrnRVCollComment>.from(map['rvColls']?.map((x) => TrnRVCollComment.fromMap(x)))

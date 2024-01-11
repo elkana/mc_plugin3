@@ -50,7 +50,8 @@ class ContractView extends StatelessWidget {
         KeyVal('No. Dokumen', '${pk.ldvNo}'),
         KeyVal('No. Contract', '${pk.contractNo}'),
         GetBuilder<VisitController>(
-            builder: (c) => '${OTrnLdvDetail().findByPk(c.contractPk!.ldvNo!, c.contractPk!.contractNo!)}'.text.make())
+            builder: (c) =>
+                '${OutboundLdvDetail().findByPk(c.contractPk!.ldvNo!, c.contractPk!.contractNo!)}'.text.make())
         // ValueListenableBuilder<Box<OTrnLdvDetail>>(
         //     valueListenable: OTrnLdvDetail().listenTable,
         //     builder: (context, obox, widget) {

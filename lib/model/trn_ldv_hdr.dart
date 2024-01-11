@@ -6,7 +6,7 @@ import 'package:mc_plugin3/util/hive_util.dart';
 part 'trn_ldv_hdr.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvHeaderOutbound)
-class OTrnLdvHeader extends LocalTable<OTrnLdvHeader> {
+class OutboundLdvHeader extends LocalTable<OutboundLdvHeader> {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -22,7 +22,7 @@ class OTrnLdvHeader extends LocalTable<OTrnLdvHeader> {
   @HiveField(6)
   String? officeName;
 
-  OTrnLdvHeader({
+  OutboundLdvHeader({
     this.id,
     this.ldvNo,
     this.ldvDate,
@@ -46,7 +46,7 @@ class OTrnLdvHeader extends LocalTable<OTrnLdvHeader> {
         'officeName': officeName,
       };
 
-  factory OTrnLdvHeader.fromMap(Map<String, dynamic> map) => OTrnLdvHeader(
+  factory OutboundLdvHeader.fromMap(Map<String, dynamic> map) => OutboundLdvHeader(
         id: map['id']?.toInt(),
         ldvNo: map['ldvNo'],
         ldvDate: map['ldvDate'],
@@ -56,17 +56,17 @@ class OTrnLdvHeader extends LocalTable<OTrnLdvHeader> {
         officeName: map['officeName'],
       );
 
-  factory OTrnLdvHeader.fromJson(String source) => OTrnLdvHeader.fromMap(json.decode(source));
+  factory OutboundLdvHeader.fromJson(String source) => OutboundLdvHeader.fromMap(json.decode(source));
 
   @override
   String toString() =>
       'OTrnLdvHeader(id: $id, ldvNo: $ldvNo, ldvDate: $ldvDate, collId: $collId, collName: $collName, officeCode: $officeCode, officeName: $officeName)';
 
-  OTrnLdvHeader? findByPk(String ldvNo) => findAll.firstWhere((element) => element.ldvNo == ldvNo);
+  OutboundLdvHeader? findByPk(String ldvNo) => findAll.firstWhere((element) => element.ldvNo == ldvNo);
 }
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvHeaderInbound)
-class ITrnLdvHeader extends LocalTable<ITrnLdvHeader> {
+class InboundLdvHeader extends LocalTable<InboundLdvHeader> {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -86,7 +86,7 @@ class ITrnLdvHeader extends LocalTable<ITrnLdvHeader> {
   @HiveField(8)
   String? officeName;
 
-  ITrnLdvHeader({
+  InboundLdvHeader({
     this.id,
     this.ldvNo,
     this.ldvDate,
@@ -111,7 +111,7 @@ class ITrnLdvHeader extends LocalTable<ITrnLdvHeader> {
         'officeName': officeName,
       };
 
-  factory ITrnLdvHeader.fromMap(Map<String, dynamic> map) => ITrnLdvHeader(
+  factory InboundLdvHeader.fromMap(Map<String, dynamic> map) => InboundLdvHeader(
         id: map['id']?.toInt(),
         ldvNo: map['ldvNo'],
         ldvDate: map['ldvDate'],
@@ -123,7 +123,7 @@ class ITrnLdvHeader extends LocalTable<ITrnLdvHeader> {
         officeName: map['officeName'],
       );
 
-  factory ITrnLdvHeader.fromJson(String source) => ITrnLdvHeader.fromMap(json.decode(source));
+  factory InboundLdvHeader.fromJson(String source) => InboundLdvHeader.fromMap(json.decode(source));
 
   @override
   String toString() =>

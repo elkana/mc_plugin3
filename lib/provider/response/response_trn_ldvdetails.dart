@@ -35,7 +35,7 @@ class ResponseOLdvDetails {
 }
 
 class Embedded {
-  List<OTrnLdvDetail>? data;
+  List<OutboundLdvDetail>? data;
 
   Embedded({this.data});
 
@@ -44,7 +44,7 @@ class Embedded {
 
   factory Embedded.fromMap(Map<String, dynamic> data) => Embedded(
         data: (data['ldv-details-outbound'] as List<dynamic>?)
-            ?.map((e) => OTrnLdvDetail.fromMap(e as Map<String, dynamic>))
+            ?.map((e) => OutboundLdvDetail.fromMap(e as Map<String, dynamic>))
             .toList(),
       );
 

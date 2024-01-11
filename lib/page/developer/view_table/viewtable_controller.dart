@@ -36,11 +36,11 @@ class ViewTableController extends ABasicController {
         viewMstDelqReason();
       } else if (tableName == MstLdvNextAction().syncTableName) {
         viewMstNextAction();
-      } else if (tableName == OTrnLdvHeader().syncTableName) {
+      } else if (tableName == OutboundLdvHeader().syncTableName) {
         viewOTrnLdvHeader();
-      } else if (tableName == OTrnLdvDetail().syncTableName) {
+      } else if (tableName == OutboundLdvDetail().syncTableName) {
         viewOTrnLdvDetails();
-      } else if (tableName == ITrnLdvDetail().syncTableName) {
+      } else if (tableName == InboundLdvDetail().syncTableName) {
         viewITrnLdvDetails();
       } else if (tableName == TrnRVCollComment().syncTableName) {
         viewTrnRVCollComment();
@@ -76,7 +76,7 @@ class ViewTableController extends ABasicController {
   void viewOTrnLdvHeader() {
     setColumns(['id', 'ldvNo', 'ldvDate', 'seqNo']);
 // build rows
-    for (var e in OTrnLdvHeader().findAll) {
+    for (var e in OutboundLdvHeader().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${e.id}')),
         DataCell(_TextValue('${e.ldvNo}')),
@@ -89,7 +89,7 @@ class ViewTableController extends ABasicController {
   void viewOTrnLdvDetails() {
     setColumns(['id', 'ldvNo', 'contractNo', 'custName']);
 // build rows
-    for (var e in OTrnLdvDetail().findAll) {
+    for (var e in OutboundLdvDetail().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${e.id}')),
         DataCell(_TextValue('${e.pk?.ldvNo}')),
@@ -102,7 +102,7 @@ class ViewTableController extends ABasicController {
   void viewITrnLdvDetails() {
     setColumns(['id', 'ldvNo', 'contractNo', 'custName', 'workStatus']);
 // build rows
-    for (var e in ITrnLdvDetail().findAll) {
+    for (var e in InboundLdvDetail().findAll) {
       rows.add(DataRow(cells: [
         DataCell(_TextValue('${e.id}')),
         DataCell(_TextValue('${e.pk?.ldvNo}')),

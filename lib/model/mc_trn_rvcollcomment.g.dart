@@ -26,7 +26,7 @@ class TrnRVCollCommentAdapter extends TypeAdapter<TrnRVCollComment> {
       ldvNo: fields[5] as String?,
       rvbNo: fields[7] as String?,
       instNo: fields[8] as int?,
-      receivedAmount: fields[9] as double?,
+      receivedAmount: fields[9] as num?,
       penalty: fields[10] as double?,
       collFeeAc: fields[11] as double?,
       lkpFlag: fields[12] as String?,
@@ -161,7 +161,9 @@ class TrnRVCollCommentAdapter extends TypeAdapter<TrnRVCollComment> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TrnRVCollCommentAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is TrnRVCollCommentAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class RvCollPkAdapter extends TypeAdapter<RvCollPk> {
@@ -198,5 +200,8 @@ class RvCollPkAdapter extends TypeAdapter<RvCollPk> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is RvCollPkAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is RvCollPkAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

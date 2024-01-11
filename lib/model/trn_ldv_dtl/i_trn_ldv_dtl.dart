@@ -10,7 +10,7 @@ import 'o_trn_ldv_dtl.dart';
 part 'i_trn_ldv_dtl.g.dart';
 
 @HiveType(typeId: HiveUtil.typeIdTrnLdvDetailInbound)
-class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
+class InboundLdvDetail extends LocalTable<InboundLdvDetail> {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -38,7 +38,7 @@ class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
   @HiveField(12)
   DateTime? promiseDate;
 
-  ITrnLdvDetail({
+  InboundLdvDetail({
     this.id,
     this.pk,
     this.lastUpdateBy,
@@ -116,8 +116,8 @@ class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
     };
   }
 
-  factory ITrnLdvDetail.fromMap(Map<String, dynamic> map) {
-    return ITrnLdvDetail(
+  factory InboundLdvDetail.fromMap(Map<String, dynamic> map) {
+    return InboundLdvDetail(
       id: map['id']?.toInt(),
       pk: map['pk'] != null ? LdvDetailPk.fromMap(map['pk']) : null,
       lastUpdateBy: map['lastUpdateBy'],
@@ -134,7 +134,7 @@ class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
     );
   }
 
-  factory ITrnLdvDetail.fromJson(String source) => ITrnLdvDetail.fromMap(json.decode(source));
+  factory InboundLdvDetail.fromJson(String source) => InboundLdvDetail.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -144,6 +144,6 @@ class ITrnLdvDetail extends LocalTable<ITrnLdvDetail> {
   @override
   bool comparePk(a, b) => a.pk?.ldvNo == b.pk?.ldvNo && a.pk?.contractNo == b.pk?.contractNo;
 
-  ITrnLdvDetail? findByPk(String ldvNo, String contractNo) =>
+  InboundLdvDetail? findByPk(String ldvNo, String contractNo) =>
       findAll.firstWhereOrNull((element) => element.pk?.ldvNo == ldvNo && element.pk?.contractNo == contractNo);
 }
