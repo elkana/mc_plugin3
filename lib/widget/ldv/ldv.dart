@@ -5,6 +5,28 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
+import '../../model/trn_ldv_hdr.dart';
+
+class LdvHeader extends StatelessWidget {
+  final Widget Function(OutboundLdvHeader, InboundLdvHeader?) onRender;
+  const LdvHeader({super.key, required this.onRender});
+
+  @override
+  Widget build(context) => ValueListenableBuilder<Box<OutboundLdvHeader>>(
+      valueListenable: OutboundLdvHeader().listenTable,
+      builder: (context, obox, widget) {
+        var obuffer = obox.values.toList();
+        if (obuffer.isEmpty) return 'Tidak ada outbound LKP'.text.make();
+
+        return ValueListenableBuilder<Box<InboundLdvHeader>>(
+            valueListenable: InboundLdvHeader().listenTable,
+            builder: (context, ibox, widget) {
+              var ibuffer = ibox.values.toList();
+              if (ibuffer.isEmpty) return onRender(obuffer.first, null);
+              return ibox.values.mapIndexed((p, idx) => onRender(obuffer.first, p)).toList().column();
+            });
+      });
+}
 
 class LdvList extends StatelessWidget {
   final Function(OutboundLdvDetail) onTapItem;

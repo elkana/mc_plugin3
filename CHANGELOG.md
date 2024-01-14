@@ -6,3 +6,5 @@ flutter create --org com.ppu --template=plugin --platforms=android,ios,web -a ja
 ```
 
 git push https://elkana@github.com/elkana/mc_plugin3.git
+
+
