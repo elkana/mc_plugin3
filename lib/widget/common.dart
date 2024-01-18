@@ -8,6 +8,16 @@ import 'package:velocity_x/velocity_x.dart';
 //       ShimmerList(loading: loading, itemHeight: itemHeight, count: count, child: this);
 // }
 
+extension MyScrollExtension on Widget {
+  Widget scrollV({Key? key, ScrollController? controller, EdgeInsetsGeometry? padding}) => SingleChildScrollView(
+      key: key,
+      scrollDirection: Axis.vertical,
+      controller: controller,
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      padding: padding,
+      child: this);
+}
+
 extension FormExtension<T> on String {
   // you may do this:
   // 'Bertemu Dengan:'.dropDown(...)
@@ -43,7 +53,7 @@ class TopRoundEdge extends StatelessWidget {
         Container(
             decoration: const BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(50)))),
-      ].stack().h(30);
+      ].stack().h(20);
 }
 
 class KeyValVertical extends StatelessWidget {
@@ -66,7 +76,7 @@ class KeyVal extends StatelessWidget {
   const KeyVal(this.ky, this.val, {Key? key, this.white = false}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         Flexible(child: ky.text.sm.color(white ? Colors.white : Colors.black).make().opacity50()),
         val.selectableText.sm.color(white ? Colors.white : Colors.black).end.make().expand(),
       ].row(axisSize: MainAxisSize.max, alignment: MainAxisAlignment.spaceBetween);
@@ -79,7 +89,7 @@ class KeyValNormalSize extends StatelessWidget {
   const KeyValNormalSize(this.ky, this.val, {Key? key, this.white = false}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         Flexible(child: ky.text.color(white ? Colors.white : Colors.black).make()),
         val.selectableText.color(white ? Colors.white : Colors.black).end.make().expand(),
       ].row(axisSize: MainAxisSize.max, alignment: MainAxisAlignment.spaceBetween);
@@ -92,7 +102,7 @@ class KeyValChip extends StatelessWidget {
   const KeyValChip(this.ky, this.val, {Key? key, this.white = false}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         ky.text.sm.color(white ? Colors.white : Colors.black).make().expand(),
         Chip(label: val.text.xl.bold.color(white ? Colors.white : Colors.black).end.make().p8()),
       ].row(axisSize: MainAxisSize.max, alignment: MainAxisAlignment.spaceBetween);
@@ -110,7 +120,7 @@ class TextIcon extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         Icon(icon, color: white ? Colors.white : Colors.indigo, size: iconSize).w(18),
         8.widthBox,
         // text.text.size(textSize).maxLines(1).ellipsis.color(white ? Colors.white : Colors.black).make().expand(),
@@ -131,7 +141,7 @@ class MyButton extends StatelessWidget {
   const MyButton(this.label, {Key? key, required this.onTap, this.height = 56.0}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Material(
+  Widget build(context) => Material(
       borderRadius: BorderRadius.circular(10.0),
       elevation: 5.0,
       color: Colors.purple,
@@ -155,7 +165,7 @@ class MyFormBuilderDropDown<T> extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) => FormBuilderDropdown<T>(
+  Widget build(context) => FormBuilderDropdown<T>(
       name: name,
       decoration: InputDecoration(
           labelText: label,
@@ -199,7 +209,7 @@ class MyFormBuilderTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => FormBuilderField<String>(
+  Widget build(context) => FormBuilderField<String>(
         name: name,
         builder: (field) => MyTextFormField(
           label,
@@ -253,7 +263,7 @@ class MyTextFormField extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) => TextFormField(
+  Widget build(context) => TextFormField(
       autovalidateMode: autovalidateMode,
       maxLength: maxLength,
       maxLines: maxLines,
@@ -301,7 +311,7 @@ class MyAppBarTitleWithIcon extends StatelessWidget {
   const MyAppBarTitleWithIcon(this.title, {Key? key, required this.icon}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         Icon(icon, color: Colors.white),
         10.widthBox,
         Text(title, overflow: TextOverflow.fade).expand()
@@ -322,7 +332,7 @@ class MyScaffold extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(context) => Scaffold(
           body: [
         //appbar
         [

@@ -17,21 +17,21 @@ abstract class CustomLogic {
   Future<ByteData?> get sslCertificatePem;
 
   Future<void> sync() async {
-    // await Api.instance.setBatch();
+    // await Api.instance.sendBatch();
     if (kDebugMode) await 5.delay();
   }
 
   Future<void> closeBatch() async {
     // 1. mark inbound header as closeBatch
     var record = InboundLdvHeader().findAll.isNotEmpty ? InboundLdvHeader().findAll.first : InboundLdvHeader();
-    var outbound = OutboundLdvHeader().findAll.first;
+    var outb = OutboundLdvHeader().findAll.first;
     await InboundLdvHeader().saveOne(record
-      ..collId = outbound.collId
-      ..collName = outbound.collName
-      ..ldvNo = outbound.ldvNo
-      ..ldvDate = outbound.ldvDate
-      ..officeCode = outbound.officeCode
-      ..officeName = outbound.officeName
+      ..collId = outb.collId
+      ..collName = outb.collName
+      ..ldvNo = outb.ldvNo
+      ..ldvDate = outb.ldvDate
+      ..officeCode = outb.officeCode
+      ..officeName = outb.officeName
       ..closeBatch = 'Y'
       ..closeBatchDate = TimeUtil.nowIso());
     // 2. sync

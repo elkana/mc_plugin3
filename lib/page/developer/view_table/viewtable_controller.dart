@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/model/mc_photo.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -44,6 +45,8 @@ class ViewTableController extends ABasicController {
         viewITrnLdvDetails();
       } else if (tableName == TrnRVCollComment().syncTableName) {
         viewTrnRVCollComment();
+      } else if (tableName == TrnPhoto().syncTableName) {
+        viewTrnPhoto();
         // } else if (tableName == TblVehicleInfo.syncTableName) {
         //   viewTblVehicleInfo();
         // } else if (tableName == TblSearchLog.syncTableName) {
@@ -165,37 +168,25 @@ class ViewTableController extends ABasicController {
     }
   }
 
-//   void viewTrnPhoto() {
-//     // build columns
-//     columns.add(const DataColumn(label: Text('id')));
-//     columns.add(const DataColumn(label: Text('createdDate')));
-//     columns.add(const DataColumn(label: Text('sourceId')));
-//     columns.add(const DataColumn(label: Text('photoId')));
-//     columns.add(const DataColumn(label: Text('blobPath')));
-//     columns.add(const DataColumn(label: Text('fileName')));
-//     columns.add(const DataColumn(label: Text('label')));
-//     columns.add(const DataColumn(label: Text('mimeType')));
-//     columns.add(const DataColumn(label: Text('latitude')));
-//     columns.add(const DataColumn(label: Text('longitude')));
-//     columns.add(const DataColumn(label: Text('userId')));
-
-// // build rows
-//     for (var i in TblPhoto.findAll()) {
-//       rows.add(DataRow(cells: [
-//         DataCell(_TextValue('${i.id}')),
-//         DataCell(_TextValue('${i.createdDate}')),
-//         DataCell(_TextValue(i.sourceId)),
-//         DataCell(_TextValue(i.photoId)),
-//         DataCell(_TextValue('${i.blobPath}')),
-//         DataCell(_TextValue(i.fileName)),
-//         DataCell(_TextValue('${i.label}')),
-//         DataCell(_TextValue('${i.mimeType}')),
-//         DataCell(_TextValue('${i.latitude}')),
-//         DataCell(_TextValue('${i.longitude}')),
-//         DataCell(_TextValue('${i.userId}')),
-//       ]));
-//     }
-//   }
+  void viewTrnPhoto() {
+    setColumns(
+        ['id', 'createdDate', 'sourceId', 'photoId', 'blobPath', 'fileName', 'label', 'mimeType', 'latlong', 'userId']);
+// build rows
+    for (var i in TrnPhoto().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${i.id}')),
+        DataCell(_TextValue('${i.createdDate}')),
+        DataCell(_TextValue('${i.sourceId}')),
+        DataCell(_TextValue('${i.photoId}')),
+        DataCell(_TextValue('${i.blobPath}')),
+        DataCell(_TextValue('${i.fileName}')),
+        DataCell(_TextValue('${i.label}')),
+        DataCell(_TextValue('${i.mimeType}')),
+        DataCell(_TextValue('${i.latitude},${i.longitude}')),
+        DataCell(_TextValue('${i.userId}')),
+      ]));
+    }
+  }
 
 //   void viewTblVehicleInfo() {
 //     // build columns

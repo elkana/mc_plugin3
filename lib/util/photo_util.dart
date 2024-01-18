@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 
+import '../controller/auth_controller.dart';
+import '../model/mc_photo.dart';
+import '../provider/baseapi.dart';
+import 'commons.dart';
 import 'gps_util.dart';
 import 'time_util.dart';
 
@@ -291,51 +295,49 @@ class PhotoUtil {
   //   }
   // }
 
-  // static String? getCollateralLink(String? sktNo, String? collateralNo, String? photoKey, String userId,
-  //     {String? orElseUseBlobPath}) {
-  //   if (sktNo == null || collateralNo == null || photoKey == null) return null;
-  //   try {
-  //     var local = TblPhoto.findCollateralBy(sktNo, collateralNo, photoKey, AuthController.instance.loggedUserId);
-  //     if (local != null) {
-  //       if (!Utility.isEmpty(local.blobPath)) {
-  //         return local.blobPath;
-  //       } else {
-  //         var url = '${BaseApi.imageUri}skt/${local.id}.jpg'; // uploaded
-  //         log('collink ($collateralNo, $photoKey) using web -> $url');
-  //         return url;
-  //       }
-  //       // if (_local.fileName.contains('/')) return _local.fileName; // if android
-  //     } else if (orElseUseBlobPath != null) {
-  //       // udah pasti ada di local
-  //       return orElseUseBlobPath;
-  //     }
-  //     // bisa juga retrieve by skt no
-  //     var url = '${BaseApi.imageUri}skt_by/$userId/$photoKey.jpg?source_id=${sktNo}_$collateralNo';
-  //     log('collink using web $url');
-  //     return url;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
+  static String? getLink(String imageUri, String? ldvNo, String? photoKey, {String? orElseUseBlobPath}) {
+    if (ldvNo == null || photoKey == null) return null;
+    try {
+      var local = TrnPhoto().findBy(ldvNo, photoKey, AuthController.instance.loggedUserId);
+      if (local != null) {
+        if (!Utility.isEmpty(local.blobPath)) {
+          return local.blobPath;
+        } else {
+          var url = '$imageUri/contract/${local.id}.jpg'; // uploaded
+          log('collink ($photoKey) using web -> $url');
+          return url;
+        }
+        // if (_local.fileName.contains('/')) return _local.fileName; // if android
+      } else if (orElseUseBlobPath != null) {
+        // udah pasti ada di local
+        return orElseUseBlobPath;
+      }
+      // bisa juga retrieve by ldv no
+      var url = '$imageUri/ldv_by/${AuthController.instance.loggedUserId}/$photoKey.jpg?source_id=$ldvNo';
+      log('collink using web $url');
+      return url;
+    } catch (e) {
+      return null;
+    }
+  }
 
   /// not a real table, just return variable to store more information
-  // static Future<TblPhoto> xFileToPhoto(XFile file, PhotoType pt, String sktNo, String contractNo) async {
-  // static Future<TblPhoto> xFileToPhoto(XFile file, PhotoType pt, String sourceId, String contractNo) async {
-  //   var gps = await GpsUtil.getCurrentLocationInForeground();
-  //   var loggedUser = AuthController.instance.loggedUser!;
-  //   var tblPhoto = TblPhoto(sourceId: sourceId, photoId: pt.fileKey!, fileName: file.name)
-  //     ..blobPath = file.path
-  //     ..label = pt.photoLabel
-  //     // ..label = PhotoType.repoPoA.photoLabel
-  //     ..userId = loggedUser.userId
-  //     ..officeId = loggedUser.branchId
-  //     ..contractNo = contractNo
-  //     ..mimeType = lookupMimeType(file.name)
-  //     ..latitude = gps.latitude.toString()
-  //     ..longitude = gps.longitude.toString();
+  static Future<TrnPhoto> xFileToPhoto(XFile file, PhotoType pt, String sourceId, String contractNo) async {
+    var gps = await GpsUtil.currentLocationInForeground;
+    var loggedUser = AuthController.instance.loggedUser!;
+    var tblPhoto = TrnPhoto(sourceId: sourceId, photoId: pt.fileKey!, fileName: file.name)
+      ..blobPath = file.path
+      ..label = pt.photoLabel
+      // ..label = PhotoType.repoPoA.photoLabel
+      ..userId = loggedUser.userId
+      ..officeId = loggedUser.branchId
+      ..contractNo = contractNo
+      ..mimeType = lookupMimeType(file.name)
+      ..latitude = gps.latitude.toString()
+      ..longitude = gps.longitude.toString();
 
-  //   return tblPhoto;
-  // }
+    return tblPhoto;
+  }
 
   // static Future<TblPhoto?> saveAsPoA(XFile file, String sktNo, String contractNo) async {
   //   var gps = await GpsUtil.getCurrentLocationInForeground();

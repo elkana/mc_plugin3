@@ -9,8 +9,7 @@ class LoginBasicBinding extends Bindings {
 
 class LoginBasicController extends ALoginController {
   @override
-  Future onPostLogin() {
-    // TODO: implement onPostLogin
-    throw UnimplementedError();
+  Future onPostLogin() async {
+    await 1.delay();
   }
 }

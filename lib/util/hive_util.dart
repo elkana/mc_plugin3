@@ -7,6 +7,7 @@ import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../model/masters.dart';
+import '../model/mc_photo.dart';
 import '../model/mc_trn_rvcollcomment.dart';
 import '../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
@@ -116,7 +117,7 @@ class HiveUtil {
     // Hive.registerAdapter(TrnAddressAdapter());
     // Hive.registerAdapter(TrnRVBAdapter());
     // Hive.registerAdapter(TrnDepositAdapter());
-    // Hive.registerAdapter(TrnPhotoAdapter());
+    Hive.registerAdapter(TrnPhotoAdapter());
     // Hive.registerAdapter(TrnRepoAdapter());
     // Hive.registerAdapter(TrnBastbjAdapter());
     // Hive.registerAdapter(TrnContractBucketAdapter());
@@ -160,7 +161,7 @@ class HiveUtil {
     // await Hive.openBox<TrnAddress>(TrnAddress.syncTableName);
     // await Hive.openBox<TrnRVB>(TrnRVB.syncTableName);
     // await Hive.openBox<TrnDeposit>(TrnDeposit.syncTableName);
-    // await Hive.openBox<TrnPhoto>(TrnPhoto.syncTableName);
+    await Hive.openBox<TrnPhoto>(TrnPhoto().syncTableName);
     // await Hive.openBox<TrnRepo>(TrnRepo.syncTableName);
     // await Hive.openBox<TrnBastbj>(TrnBastbj.syncTableName);
     // await Hive.openBox<TrnContractBucket>(TrnContractBucket.syncTableName);
@@ -222,7 +223,7 @@ class HiveUtil {
         // TrnAddress.cleanAll(),
         // TrnRVB.cleanAll(),
         // TrnDeposit.cleanAll(),
-        // TrnPhoto.cleanAll(),
+        TrnPhoto().cleanAll,
         // TrnRepo.cleanAll(),
         // TrnBastbj.cleanAll(),
         // TrnContractBucket.cleanAll(),

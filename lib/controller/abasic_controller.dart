@@ -63,7 +63,7 @@ abstract class AViewController extends ABasicController {
 }
 
 abstract class AHomeController extends AViewController {
-  var pageIndex = 0;
+  var pageIndex = 1;
 
   void changePageIndex(int index) {
     pageIndex = index;

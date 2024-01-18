@@ -5,12 +5,15 @@ import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
+import 'package:mc_plugin3/provider/baseapi.dart';
 import 'package:mc_plugin3/util/commons.dart';
 import 'package:mc_plugin3/util/customs.dart';
 import 'package:mc_plugin3/util/ldv_util.dart';
+import 'package:mc_plugin3/util/photo_util.dart';
 
 import '../../controller/aformbuilder_controller.dart';
 import '../../controller/pref_controller.dart';
+import '../../model/mc_photo.dart';
 import '../../model/trn_ldv_hdr.dart';
 import '../../routes/app_routes.dart';
 
@@ -23,17 +26,19 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
   LdvDetailPk? contractPk;
   var initialValue = Rxn<TrnRVCollComment>();
   TrnRVCollComment get formObject => TrnRVCollComment.fromMap(formKey.currentState!.value);
+  final List<TrnPhoto> fotoList = [];
+  String? imageUri;
 
   // need both param because this method can be called by outbound/inbound
   static show(String ldvNo, String contractNo) async {
     sessionStop();
     // jika ada transaksi di rvcollcomment, skip poa
-    var visited = TrnRVCollComment().findByContractNo(contractNo);
-    if (visited == null) {
-      var poaData = await Get.toNamed(Routes.poa, arguments: [ldvNo, contractNo]);
-      if (poaData == null) return;
+    if (TrnRVCollComment().findByContractNo(contractNo) == null) {
+      // if nothing return from PoA, abort
+      if (await Get.toNamed(Routes.poa, arguments: [ldvNo, contractNo]) == null) return;
     }
     await Get.toNamed(Routes.visit);
+    // sync whenever possible
     if (kReleaseMode) clientLogic?.sync;
     sessionStart();
   }
@@ -52,12 +57,14 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     var existing = TrnRVCollComment().findByContractNo(contractPk!.contractNo!);
     initialValue(existing);
     formEnabled = existing == null;
+    BaseApi.imageUri.then((value) {
+      imageUri = value;
+      update();
+    });
   }
 
   @override
   Future onSubmit() async {
-    var oContract = OutboundLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!);
-
     // 1. prepare Pk
     var pk = RvCollPk()
       ..rvCollNo ??= LdvUtil.generateRVCollNo(
@@ -65,24 +72,18 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
           AuthController.instance.loggedUserId)
       ..contractNo = contractPk?.contractNo;
 
-    // 2. convert from form data back to trnrvcollcomment
-    var formData = formObject
-      ..pk = pk
-      ..ldvNo = contractPk?.ldvNo;
-
     // 2.a. save new pk of rvcoll
     await RvCollPk().saveOne(pk);
-    // merge rvcoll using map trick
-    // var mergeMap = initialValue.value?.toMap()?..addAll(formData.toMap()); not useful
     // 2.b. save rvcoll
-    // var record = await TrnRVCollComment().saveOne(TrnRVCollComment.fromMap(mergeMap!));
-    var record = await TrnRVCollComment().saveOne(formData);
+    var record = await TrnRVCollComment().saveOne(formObject
+      ..pk = pk
+      ..ldvNo = contractPk?.ldvNo);
 
     // 3. save as inbound
     await InboundLdvDetail().saveOne(InboundLdvDetail()
       ..pk = contractPk
       ..workStatus = 'V'
-      ..custName = oContract?.custName
+      ..custName = OutboundLdvDetail().findByPk(contractPk!.ldvNo!, contractPk!.contractNo!)?.custName
       ..createdBy = AuthController.instance.loggedUserId);
 
     // 4. return with new record

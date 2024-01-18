@@ -51,7 +51,7 @@ class Api extends EntityApi {
 
   Future<String?> signUpUsingNIK(Server server, String nik) async {
     if (kReleaseMode) await 1.delay();
-    var d = await post('/matel/auth/v1/signup_nik?devicesn=EMULATOR30X1X2X2',
+    var d = await post('/mc-api/auth/v1/signup_nik?devicesn=EMULATOR30X1X2X2',
         server: server,
         data: <String, dynamic>{
           'nik': nik,
@@ -63,11 +63,10 @@ class Api extends EntityApi {
 
   Future<String?> changePwd(Server server, String? userId, String oldPassword, String newPassword) async {
     if (kReleaseMode) await [1, 2].random.delay();
-    var loggedUser = AuthController.instance.loggedUser;
-    var d = await post('/matel/auth/v1/change_pwd?devicesn=EMULATOR30X1X2X2',
+    var d = await post('/mc-api/auth/v1/change_pwd?devicesn=EMULATOR30X1X2X2',
         server: server,
         data: <String, dynamic>{
-          'username': userId ?? loggedUser?.userId,
+          'username': userId ?? AuthController.instance.loggedUser?.userId,
           'oldPwd': oldPassword,
           'newPwd': newPassword,
         },
@@ -126,14 +125,15 @@ class Api extends EntityApi {
 
 // from mobile to cloud. see assignments
 // bisa dipakai utk closebatch juga
-  Future<RequestBatch> setBatch() async {
+  Future<RequestBatch> sendBatch() async {
+    // send inbounds & rvcolls & documents as many as possible to avoid new API
     var data = RequestBatch()
       ..header =
           InboundLdvHeader().findAll.firstWhereOrNull((hdr) => hdr.collId == AuthController.instance.loggedUserId)
       ..contracts = InboundLdvDetail().findAll
       ..rvColls = TrnRVCollComment().findAll;
     var _ = await post('/mc-api/ldv/v1-batch', data: data.toMap());
-    log('setBatch return $_');
+    log('sendBatch return $_');
     return RequestBatch.fromMap(_);
   }
 

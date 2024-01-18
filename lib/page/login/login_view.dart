@@ -16,6 +16,12 @@ class LoginView extends GetView<LoginBasicController> {
   const LoginView({Key? key}) : super(key: key);
   @override
   Widget build(context) => Scaffold(
+      appBar: AppBar(actions: [
+        IconButton(onPressed: controller.viewDatabase, icon: const Icon(Icons.storage_rounded)),
+        FilledButton(onPressed: controller.allowSSLWeb, child: 'AllowSSL'.text.white.make()),
+        TextButton(child: 'User 2'.text.white.make(), onPressed: () => controller.test('elkana911', 'elkana911')),
+        TextButton(child: 'Clear DB'.text.white.make(), onPressed: () => controller.cleanDatabase(context)),
+      ]),
       body: Obx(() => [
             Form(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -42,7 +48,7 @@ class LoginView extends GetView<LoginBasicController> {
                 .padding(const EdgeInsets.fromLTRB(24, 24, 24, 8))
                 .makeCentered(),
             'Sign Up Here'.text.make().onTap(controller.gotoRegister),
-          ].column().scrollVertical().expand()).safeArea());
+          ].column().scrollVertical()).safeArea());
 }
 
 // reusable

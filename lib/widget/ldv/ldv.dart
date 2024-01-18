@@ -15,15 +15,15 @@ class LdvHeader extends StatelessWidget {
   Widget build(context) => ValueListenableBuilder<Box<OutboundLdvHeader>>(
       valueListenable: OutboundLdvHeader().listenTable,
       builder: (context, obox, widget) {
-        var obuffer = obox.values.toList();
-        if (obuffer.isEmpty) return 'Tidak ada outbound LKP'.text.make();
+        var o = obox.values.toList();
+        if (o.isEmpty) return 'Tidak ada outbound LKP'.text.make();
 
         return ValueListenableBuilder<Box<InboundLdvHeader>>(
             valueListenable: InboundLdvHeader().listenTable,
             builder: (context, ibox, widget) {
-              var ibuffer = ibox.values.toList();
-              if (ibuffer.isEmpty) return onRender(obuffer.first, null);
-              return ibox.values.mapIndexed((p, idx) => onRender(obuffer.first, p)).toList().column();
+              var i = ibox.values.toList();
+              if (i.isEmpty) return onRender(o.first, null);
+              return ibox.values.mapIndexed((p, idx) => onRender(o.first, p)).toList().column();
             });
       });
 }
@@ -38,16 +38,16 @@ class LdvList extends StatelessWidget {
         ValueListenableBuilder<Box<OutboundLdvDetail>>(
             valueListenable: OutboundLdvDetail().listenTable,
             builder: (context, obox, widget) {
-              var obuffer = obox.values
+              var o = obox.values
                   // hanya tampilkan yg belum submit
                   // .where((e) => e.submitDate == null && e.expiredDate != null)
                   .toList();
-              if (obuffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
+              if (o.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
               return ValueListenableBuilder<Box<InboundLdvDetail>>(
                   valueListenable: InboundLdvDetail().listenTable,
-                  builder: (context, ibox, widget) => obuffer
-                      .mapIndexed((p, idx) => LdvCardSimple(p, rowId: idx, onTapNext: onTapItem))
+                  builder: (context, ibox, widget) => o
+                      .mapIndexed((p, idx) => LdvCardSimple(p, rowId: idx, onTapNext: onTapItem).p8())
                       .toList()
                       .column());
             }),
@@ -80,13 +80,13 @@ class OTrnLdvDetailList extends StatelessWidget {
   Widget build(context) => ValueListenableBuilder<Box<OutboundLdvDetail>>(
       valueListenable: OutboundLdvDetail().listenTable,
       builder: (context, obox, widget) {
-        var buffer = obox.values
+        var o = obox.values
             // hanya tampilkan yg belum submit, caranya jika ada di inbound brarti sdh diinput
             .where((e) => removeVisited && InboundLdvDetail().findByPk(e.pk!.ldvNo!, e.pk!.contractNo!) == null)
             .toList();
-        if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
+        if (o.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
-        return buffer.mapIndexed((p, idx) => onRender(p)).toList().column();
+        return o.mapIndexed((p, idx) => onRender(p)).toList().column();
       });
 }
 
@@ -98,13 +98,10 @@ class ITrnLdvDetailList extends StatelessWidget {
   Widget build(context) => ValueListenableBuilder<Box<InboundLdvDetail>>(
       valueListenable: InboundLdvDetail().listenTable,
       builder: (context, obox, widget) {
-        var buffer = obox.values
-            // hanya tampilkan yg belum submit
-            // .where((e) => e.submitDate == null && e.expiredDate != null)
-            .toList();
-        if (buffer.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
+        var i = obox.values.toList();
+        if (i.isEmpty) return 'Empty Data'.text.make().objectCenter().pLTRB(8, 68, 8, 28);
 
-        return buffer
+        return i
             .mapIndexed((p, idx) {
               var r = TrnRVCollComment().findByContractNo(p.pk!.contractNo);
               return onRender(p, r);
@@ -112,4 +109,14 @@ class ITrnLdvDetailList extends StatelessWidget {
             .toList()
             .column();
       });
+}
+
+class PleaseCloseBatch extends StatelessWidget {
+  const PleaseCloseBatch({super.key});
+
+  @override
+  Widget build(context) => ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.red, elevation: 2),
+      child: 'Please Close Batch !'.text.make());
 }

@@ -14,25 +14,21 @@ class RequestBatch {
     this.rvColls,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'header': header?.toMap(),
-      'contracts': contracts?.map((x) => x.toMap()).toList(),
-      'rvColls': rvColls?.map((x) => x.toMap()).toList(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+        'header': header?.toMap(),
+        'contracts': contracts?.map((x) => x.toMap()).toList(),
+        'rvColls': rvColls?.map((x) => x.toMap()).toList(),
+      };
 
-  factory RequestBatch.fromMap(Map<String, dynamic> map) {
-    return RequestBatch(
-      header: map['header'] != null ? InboundLdvHeader.fromMap(map['header']) : null,
-      contracts: map['contracts'] != null
-          ? List<InboundLdvDetail>.from(map['contracts']?.map((x) => InboundLdvDetail.fromMap(x)))
-          : null,
-      rvColls: map['rvColls'] != null
-          ? List<TrnRVCollComment>.from(map['rvColls']?.map((x) => TrnRVCollComment.fromMap(x)))
-          : null,
-    );
-  }
+  factory RequestBatch.fromMap(Map<String, dynamic> map) => RequestBatch(
+        header: map['header'] != null ? InboundLdvHeader.fromMap(map['header']) : null,
+        contracts: map['contracts'] != null
+            ? List<InboundLdvDetail>.from(map['contracts']?.map((x) => InboundLdvDetail.fromMap(x)))
+            : null,
+        rvColls: map['rvColls'] != null
+            ? List<TrnRVCollComment>.from(map['rvColls']?.map((x) => TrnRVCollComment.fromMap(x)))
+            : null,
+      );
 
   String toJson() => json.encode(toMap());
 

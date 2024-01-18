@@ -428,9 +428,6 @@ class TrnRVCollComment extends LocalTable<TrnRVCollComment> {
 
   TrnRVCollComment? findByContractNo(String? contractNo) =>
       contractNo == null ? null : findAll.firstWhereOrNull((p0) => p0.pk?.contractNo == contractNo);
-
-  @override
-  String toJson() => json.encode(toMap());
 }
 
 // must be a table, if not hive will error
@@ -465,9 +462,6 @@ class RvCollPk extends LocalTable<RvCollPk> {
       contractNo: map['contractNo'],
     );
   }
-
-  @override
-  String toJson() => json.encode(toMap());
 
   factory RvCollPk.fromJson(String source) => RvCollPk.fromMap(json.decode(source));
 

@@ -39,7 +39,7 @@ class BaseApi extends GetxController {
         : 'http${server.https == true ? 's' : ''}://${server.host}';
   }
 
-  // static String get imageUri => '${constructHostPort(clientLogic?.selectedServer)}/matel/media/v1/';
+  static Future<String> get imageUri async => '${await getSelectedServer(null)}/mc-api/media/v1';
 
   /// use Dio to upload/download pictures
   Future<dio_lib.Dio> initDio(Server? server, [String? token]) async {
