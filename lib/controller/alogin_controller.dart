@@ -41,8 +41,7 @@ abstract class ALoginController extends ABasicController {
   Future onPostLogin();
 
   void setServer(Server? newValue) => selectedServer.value = newValue;
-  Future allowSSLWeb() async =>
-      WebUtil.openNewTab(await BaseApi.getSelectedServer(selectedServer.value), isNewTab: true);
+  Future allowSSLWeb() async => WebUtil.openNewTab(selectedServer.value!.toAddress(), isNewTab: true);
   void gotoRegister() => Get.toNamed(Routes.signup, arguments: [selectedServer.value]);
 
   @override

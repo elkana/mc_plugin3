@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/model/mc_photo.dart';
 import 'package:mc_plugin3/util/time_util.dart';
 
 import '../model/server_model.dart';
 import '../model/trn_ldv_hdr.dart';
 import '../provider/api.dart';
+import 'commons.dart';
 
 abstract class CustomLogic {
   final List<Server> servers;
@@ -17,6 +19,15 @@ abstract class CustomLogic {
   Future<ByteData?> get sslCertificatePem;
 
   Future<void> sync() async {
+    // 0. upload foto first
+    var uploadPhotoSuccess =
+        await Api.instance.uploadPhotos(TrnPhoto().findAll.where((p) => p.createdDate == null).toList());
+    if (!uploadPhotoSuccess) {
+      showError('Gagal upload foto. Silakan coba kembali.');
+      // errorCounter += 1;
+      // if (errorCounter < maxError) return false;
+    }
+
     // await Api.instance.sendBatch();
     if (kDebugMode) await 5.delay();
   }

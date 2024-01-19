@@ -63,11 +63,11 @@ class LdvCardSimple extends StatelessWidget {
 
   @override
   Widget build(context) {
-    var inb = InboundLdvDetail().findByPk(data.pk!.ldvNo!, data.pk!.contractNo!);
+    var i = InboundLdvDetail().findByPk(data.pk!.ldvNo!, data.pk!.contractNo!);
     // TODO look for inbound data
-    return inb == null
+    return i == null
         ? '$data'.text.make().onInkTap(() => onTapNext(data))
-        : 'inbound exist for $data\n$inb'.text.make().onInkTap(() => onTapNext(data));
+        : 'inbound exist for $data\n$i'.text.red500.make().onInkTap(() => onTapNext(data));
   }
 }
 

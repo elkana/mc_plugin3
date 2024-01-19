@@ -292,7 +292,7 @@ abstract class LocalTable<T> extends HiveObject {
 
   LocalTable(this.syncTableName);
 
-  // T? findByPk(bool Function(T) test);
+  // Primary Keys is differ from id. dont use id to compare Pk.
   bool comparePk(T a, T b);
   Map<String, dynamic> toMap();
 
@@ -349,7 +349,7 @@ abstract class LocalTable<T> extends HiveObject {
     return list;
   }
 
-// WARNING !! column id must provided/available
+// WARNING !! column/field id must provided/available
   Future<T?> saveOne(T? origin, {bool replace = true}) async {
     if (origin == null) return null;
     final box = Hive.box<T>(syncTableName);

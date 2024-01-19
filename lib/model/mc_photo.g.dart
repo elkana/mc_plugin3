@@ -17,14 +17,14 @@ class TrnPhotoAdapter extends TypeAdapter<TrnPhoto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TrnPhoto(
-      id: fields[0] as String?,
+      id: fields[0] as int?,
+      sourceId: fields[3] as String?,
+      photoId: fields[5] as String?,
+      fileName: fields[7] as String?,
       officeId: fields[1] as String?,
       userId: fields[2] as String?,
-      sourceId: fields[3] as String,
       contractNo: fields[4] as String?,
-      photoId: fields[5] as String,
       blobPath: fields[6] as String?,
-      fileName: fields[7] as String,
       mimeType: fields[8] as String?,
       rev1: fields[9] as String?,
       rev2: fields[10] as String?,
@@ -85,5 +85,8 @@ class TrnPhotoAdapter extends TypeAdapter<TrnPhoto> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is TrnPhotoAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is TrnPhotoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

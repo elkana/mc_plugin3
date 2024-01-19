@@ -32,10 +32,11 @@ class Server {
   }
 
   @override
-  String toString() {
-    return 'Server(name: $name, host: $host, port: $port, sslPinning: $sslPinning, proxyIp: $proxyIp, proxyPort: $proxyPort, https: $https)';
-  }
+  String toString() =>
+      'Server(name: $name, host: $host, port: $port, sslPinning: $sslPinning, proxyIp: $proxyIp, proxyPort: $proxyPort, https: $https)';
 
+  String toAddress() =>
+      port != null ? 'http${https == true ? 's' : ''}://$host:$port' : 'http${https == true ? 's' : ''}://$host';
   // bool isEmpty() => name == null || name!.isEmpty;
 
   @override

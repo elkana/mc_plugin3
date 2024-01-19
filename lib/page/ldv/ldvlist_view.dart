@@ -35,7 +35,8 @@ class LdvListView extends GetView<LdvListController> {
                         '${i ?? 'inbound header is not found'}'.text.make(),
                       ].column()).card.make(),
               LdvList(onTapItem: (val) => VisitController.show(val.pk!.ldvNo!, val.pk!.contractNo!)!)
-                  .scrollV(controller: controller.scrollAktif),
+                  .scrollV(controller: controller.scrollAktif)
+                  .expand(),
             ].column()),
       );
 }

@@ -1,28 +1,40 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart' as dio_lib;
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
-import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
-import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
-import 'package:mc_plugin3/provider/entityapi.dart';
-import 'package:mc_plugin3/provider/response/response_mst_classification.dart';
-import 'package:mc_plugin3/provider/response/response_mst_nextaction.dart';
-import 'package:mc_plugin3/provider/response/response_mst_personal.dart';
-import 'package:mc_plugin3/provider/response/response_mst_reason.dart';
-import 'package:mc_plugin3/util/hive_util.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
+// import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
+// import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
+// import 'package:mc_plugin3/provider/entityapi.dart';
+// import 'package:mc_plugin3/provider/response/response_mst_classification.dart';
+// import 'package:mc_plugin3/provider/response/response_mst_nextaction.dart';
+// import 'package:mc_plugin3/provider/response/response_mst_personal.dart';
+// import 'package:mc_plugin3/provider/response/response_mst_reason.dart';
+// import 'package:mc_plugin3/util/hive_util.dart';
 
 import '../controller/auth_controller.dart';
 import '../controller/pref_controller.dart';
 import '../model/masters.dart';
+import '../model/mc_photo.dart';
+import '../model/mc_trn_rvcollcomment.dart';
 import '../model/server_model.dart';
+import '../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
+import '../model/trn_ldv_hdr.dart';
 import '../model/user.dart';
 import '../util/commons.dart';
 import '../util/device_util.dart';
 import '../util/gps_util.dart';
+import '../util/hive_util.dart';
+import 'entityapi.dart';
 import 'request_batch.dart';
 import 'response/response_assignment.dart';
+import 'response/response_mst_classification.dart';
+import 'response/response_mst_nextaction.dart';
+import 'response/response_mst_personal.dart';
+import 'response/response_mst_reason.dart';
 
 class Api extends EntityApi {
   static Api instance = Get.find();

@@ -11,6 +11,7 @@ import '../controller/pref_controller.dart';
 import '../exception/exception.dart';
 import '../model/server_model.dart';
 import '../util/commons.dart';
+import '../util/constants.dart';
 import '../util/customs.dart';
 import 'response/response_refreshtoken.dart';
 
@@ -32,17 +33,14 @@ class BaseApi extends GetxController {
   final keyApiKey = 'ApiKey';
   final timeoutSeconds = 60;
 
-  static Future<String> getSelectedServer(Server? server) async {
-    server ??= await PrefController.instance.lastSelectedServer;
-    return server!.port != null
-        ? 'http${server.https == true ? 's' : ''}://${server.host}:${server.port}'
-        : 'http${server.https == true ? 's' : ''}://${server.host}';
+  static Future<Uri> getSelectedUri(String path) async {
+    var server = await PrefController.instance.lastSelectedServer;
+    return Uri.parse('${server!.toAddress()}$path');
   }
 
-  static Future<String> get imageUri async => '${await getSelectedServer(null)}/mc-api/media/v1';
-
   /// use Dio to upload/download pictures
-  Future<dio_lib.Dio> initDio(Server? server, [String? token]) async {
+  Future<dio_lib.Dio> initDio({Server? server, String? token}) async {
+    server ??= await PrefController.instance.lastSelectedServer;
     var dio = dio_lib.Dio()
       ..options.connectTimeout = Duration(seconds: timeoutSeconds)
       ..options.receiveTimeout = const Duration(seconds: 15)
@@ -50,8 +48,8 @@ class BaseApi extends GetxController {
       ..options.headers[keyApiKey] = apiKey;
 
     var clientPEM = await clientLogic?.sslCertificatePem;
-    bool useSSLPinning = server?.sslPinning ?? false;
     if (dio.httpClientAdapter is IOHttpClientAdapter) {
+      bool useSSLPinning = server!.sslPinning ?? false;
       (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (client) {
         if (useSSLPinning && clientPEM != null) {
           final sc = SecurityContext();
@@ -59,9 +57,9 @@ class BaseApi extends GetxController {
           return HttpClient(context: sc);
         } else {
           client.badCertificateCallback = (cert, host, port) => true;
-          if (server != null && server.proxyIp != null) {
+          if (server!.proxyIp != null) {
             client.findProxy = (uri) =>
-                'PROXY ${server.proxyIp}:${server.proxyPort}'; // berhasil intercept by burp suite. selain itu mereka paka nexus. kalau HttpToolKit blm pernah dengar.
+                'PROXY ${server!.proxyIp}:${server.proxyPort}'; // berhasil intercept by burp suite. selain itu mereka paka nexus. kalau HttpToolKit blm pernah dengar.
           }
           return null;
         }
@@ -144,21 +142,21 @@ class BaseApi extends GetxController {
 
   // 2 days built
   // sudah pasti menggunakan selectedServerByUser
-  handleInterceptor4Jwt(Server? server, dio_lib.DioException e, dio_lib.ErrorInterceptorHandler handler) async {
+  handleInterceptor4Jwt(dio_lib.DioException e, dio_lib.ErrorInterceptorHandler handler, [Server? server]) async {
     log('******************* Intercept statusCode = ${e.response?.statusCode} ${e.response == null ? ', Offline ?' : ''}');
     // coba request lagi utk refresh token dgn menggunakan token kedua(refreshToken yg didpt waktu login)
     // refreshToken umurnya lebih lama dan hanya dipakai di kondisi seperti ini
     //https://stackoverflow.com/questions/56740793/using-interceptor-in-dio-for-flutter-to-refresh-token#63219269
     // kalau masih return 403 ya brarti bener2 expired
     if (e.response?.statusCode != 403) return handler.reject(e);
-    var dio = await initDio(server, await PrefController.instance.refreshToken);
-    var loggedUser = AuthController.instance.loggedUser;
-    await dio.get('${await getSelectedServer(server)}/matel/auth/v1/refresh_token', queryParameters: {
-      'user': loggedUser!.userId,
-    }).then((value) async {
-      if (value.statusCode == 200) {
+    server ??= await PrefController.instance.lastSelectedServer;
+    var dio = await initDio(server: server, token: await PrefController.instance.refreshToken);
+    await dio.get('${server!.toAddress()}${Constants.uriTokenRefresh}', queryParameters: {
+      'user': AuthController.instance.loggedUser!.userId,
+    }).then((v) async {
+      if (v.statusCode == 200) {
         //get new tokens ...
-        var obj = ResponseRefreshToken.fromMap(value.data);
+        var obj = ResponseRefreshToken.fromMap(v.data);
         log("access token $obj");
         await PrefController.instance.setAccessToken(obj.accessToken);
         await PrefController.instance.setRefreshToken(obj.refreshToken);
@@ -189,22 +187,24 @@ class BaseApi extends GetxController {
   }
 
   Future get(String uri, {Map<String, dynamic>? q, Server? server}) async {
-    var path = '${await getSelectedServer(server)}$uri';
+    server ??= await PrefController.instance.lastSelectedServer;
+    var path = '${server!.toAddress()}$uri';
     log('Getting to $path');
-    var dio = await initDio(server);
+    var dio = await initDio(server: server);
     dio.interceptors
-        .add(dio_lib.InterceptorsWrapper(onError: (e, handler) => handleInterceptor4Jwt(server, e, handler)));
+        .add(dio_lib.InterceptorsWrapper(onError: (e, handler) => handleInterceptor4Jwt(e, handler, server)));
     var resp = await dio.get(path, queryParameters: q).catchError((e) => handleError(e, path));
     PrefController.instance.setLastServerCheck();
     return resp.data;
   }
 
   Future post(String uri, {data, Map<String, dynamic>? q, Server? server}) async {
-    var path = '${await getSelectedServer(server)}$uri';
+    server ??= await PrefController.instance.lastSelectedServer;
+    var path = '${server!.toAddress()}$uri';
     log('Posting to $path');
-    var dio = await initDio(server);
+    var dio = await initDio(server: server);
     dio.interceptors
-        .add(dio_lib.InterceptorsWrapper(onError: (e, handler) => handleInterceptor4Jwt(server, e, handler)));
+        .add(dio_lib.InterceptorsWrapper(onError: (e, handler) => handleInterceptor4Jwt(e, handler, server)));
     var resp = await dio.post(path, data: data, queryParameters: q).catchError((e) => handleError(e, path));
     PrefController.instance.setLastServerCheck();
     return resp.data;

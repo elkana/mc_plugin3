@@ -1,7 +1,9 @@
 class Constants {
   Constants._();
 
-  // static const uriUploadFoto = '/matel/media/v1/upload_foto';
+  static const uriTokenRefresh = '/mc-api/auth/v1/refresh_token';
+  static const uriMedia = '/mc-api/media/v1';
+  static const uriUploadFoto = '/mc-api/media/v1/upload_foto';
   // static const uriUploadFotoCollateral = '/matel/media/v1/upload_foto_collateral';
   // static const uriUploadAvatar = '/matel/media/v1/upload_avatar';
 

@@ -18,7 +18,6 @@ class PhotoFrame extends StatefulWidget {
   final Future Function(XFile)? onPickPhoto;
   final Widget? emptyThumbnail;
   final bool disable;
-  final bool ignore;
   final bool showCheck;
   const PhotoFrame({
     Key? key,
@@ -27,7 +26,6 @@ class PhotoFrame extends StatefulWidget {
     this.onPickPhoto,
     this.disable = false,
     this.emptyThumbnail,
-    this.ignore = false,
     this.showCheck = false,
   }) : super(key: key);
 
@@ -135,12 +133,12 @@ class _PhotoFrameState extends State<PhotoFrame> {
                   }
                 },
                 color: Colors.indigo,
-                child: 'change..'.text.xs.white.make())
+                child: '+'.text.xl.bold.white.make())
             .wFull(context)
             .hide(isVisible: !widget.disable)
       ].column().onTap(() async {
-        if (widget.disable || widget.ignore || widget.urlOrFile == null || widget.urlOrFile!.isEmpty) {
-          log('ignoring tap (disable=${widget.disable}, ignore=${widget.ignore}, urlOrFile=${widget.urlOrFile})');
+        if (widget.disable || widget.urlOrFile == null || widget.urlOrFile!.isEmpty) {
+          log('ignoring tap (disable=${widget.disable}, urlOrFile=${widget.urlOrFile})');
           return;
         }
         Navigator.push(

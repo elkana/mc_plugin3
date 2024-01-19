@@ -20,9 +20,8 @@ extension MyScrollExtension on Widget {
 
 extension FormExtension<T> on String {
   // you may do this:
-  // 'Bertemu Dengan:'.dropDown(...)
-  MyFormBuilderDropDown dropDown(
-          String field, List<T> list, String Function(T) rowLabel, String Function(T) rowValue) =>
+  // 'Bertemu Dengan:'.dd(...)
+  MyFormBuilderDropDown dd(String field, List<T> list, String Function(T) rowLabel, String Function(T) rowValue) =>
       MyFormBuilderDropDown(
         field,
         this,
@@ -35,7 +34,7 @@ extension FormExtension<T> on String {
         validator: ValidateUtil.notEmpty,
       );
   // 'Keterangan:'.dropDown(...)
-  FormBuilderTextField textField(String field, {int maxLines = 1}) => FormBuilderTextField(
+  FormBuilderTextField tf(String field, {int maxLines = 1}) => FormBuilderTextField(
       name: field,
       maxLines: maxLines,
       decoration: InputDecoration(label: text.make()),

@@ -25,7 +25,7 @@ class VisitView extends GetView<VisitController> {
       body: FormBuilder(
           key: controller.formKey,
           initialValue: controller.initialValue.value?.toMap() ?? {},
-          enabled: controller.formEnabled,
+          enabled: controller.initialValue.value == null,
           child: TabsTop(
               titles: const [
                 'Detil Kontrak',
@@ -36,7 +36,7 @@ class VisitView extends GetView<VisitController> {
               children: [
                 ContractView(controller.contractPk!),
                 const KronologiView(),
-                PenerimaanView(enabled: controller.formEnabled),
+                PenerimaanView(enabled: controller.initialValue.value == null),
               ])),
       floatingActionButton: FloatingActionButton(onPressed: controller.submit));
 }

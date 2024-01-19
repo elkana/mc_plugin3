@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mc_plugin3/controller/auth_controller.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import 'package:mc_plugin3/model/trn_ldv_dtl/o_trn_ldv_dtl.dart';
-import 'package:mc_plugin3/provider/baseapi.dart';
+import 'package:mc_plugin3/provider/mediaapi.dart';
 import 'package:mc_plugin3/util/commons.dart';
 import 'package:mc_plugin3/util/customs.dart';
 import 'package:mc_plugin3/util/ldv_util.dart';
@@ -26,8 +27,11 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
   LdvDetailPk? contractPk;
   var initialValue = Rxn<TrnRVCollComment>();
   TrnRVCollComment get formObject => TrnRVCollComment.fromMap(formKey.currentState!.value);
-  final List<TrnPhoto> fotoList = [];
   String? imageUri;
+  // Q: apakah jmlnya fotoList sama dengan trntable ?
+  // A: tidak, krn widget PhotoFrame akan otomatis cari di server terlebih dulu
+  // jadi fotoList hanya utk menambah foto baru saja
+  final List<TrnPhoto> fotoList = [];
 
   // need both param because this method can be called by outbound/inbound
   static show(String ldvNo, String contractNo) async {
@@ -54,17 +58,18 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     }
     if (contractPk == null) throw Exception('A Valid Contract Required.');
     // load form data
-    var existing = TrnRVCollComment().findByContractNo(contractPk!.contractNo!);
-    initialValue(existing);
-    formEnabled = existing == null;
-    BaseApi.imageUri.then((value) {
-      imageUri = value;
+    initialValue(TrnRVCollComment().findByContractNo(contractPk!.contractNo!)); // formEnabled = existing == null;
+
+    PrefController.instance.lastSelectedServer.then((v) {
+      imageUri = MediaApi.getImageUri(v!);
       update();
     });
   }
 
   @override
   Future onSubmit() async {
+    // commit fotoList to table TrnPhoto
+    await TrnPhoto().saveAll(fotoList);
     // 1. prepare Pk
     var pk = RvCollPk()
       ..rvCollNo ??= LdvUtil.generateRVCollNo(
@@ -89,4 +94,26 @@ class VisitController extends ATabFormController with GetSingleTickerProviderSta
     // 4. return with new record
     await 1.delay().then((_) => Navigator.pop(Get.context!, [record]));
   }
+
+  Future addFoto(XFile file, PhotoType as) async {
+    var foto = await PhotoUtil.xFileToPhoto(file, as, '${contractPk!.ldvNo}', contractPk!.contractNo!);
+    int idx = fotoList.indexWhere((p) => p.sourceId == foto.sourceId && p.photoId == foto.photoId);
+    if (idx < 0) {
+      fotoList.add(foto);
+    } else {
+      fotoList[idx] = foto;
+    }
+    update();
+  }
+
+  // needed by kronologi_view.dart without using future
+  String? getFotoUrl(PhotoType as) => imageUri == null
+      ? null
+      : PhotoUtil.getLink(imageUri!, contractPk!.ldvNo, as.fileKey,
+          orElseUseBlobPath: fotoList
+              .firstWhereOrNull((p) =>
+                  p.photoId == as.fileKey &&
+                  p.userId == AuthController.instance.loggedUserId &&
+                  p.sourceId == contractPk!.ldvNo)
+              ?.blobPath);
 }

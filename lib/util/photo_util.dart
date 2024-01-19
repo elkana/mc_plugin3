@@ -37,6 +37,7 @@ enum PhotoGroup { ldv, copycontract, sp, repoVehicle, others, transfer, unknown 
 
 // pls check with #identifyPhotoGroup
 enum PhotoType {
+  // ldvPoA, ??
   ldvCollAndDebitur,
   // ldvFrontHouse, udah ada PoA
   ldvFrontNeighbour,
@@ -193,7 +194,6 @@ class PhotoUtil {
     } else {
       throw Exception('unhandled group $group');
     }
-
     return list;
   }
 
@@ -242,8 +242,9 @@ class PhotoUtil {
     return xFile;
   }
 
-  static List<PhotoType> get collateralsGroup =>
-      PhotoType.values.where((e) => e.photoId! > 401 && e.photoId! < 500).toList();
+  static List<PhotoType> get groupLdvContract =>
+      PhotoType.values.where((e) => e.photoId! >= 101 && e.photoId! <= 109).toList();
+  // PhotoType.values.where((e) => e.photoId! > 401 && e.photoId! < 500).toList();
 
   // static String? getPoALink(String? sktNo, String userId, {String? orElseUseBlobPath}) {
   //   try {
@@ -298,7 +299,7 @@ class PhotoUtil {
   static String? getLink(String imageUri, String? ldvNo, String? photoKey, {String? orElseUseBlobPath}) {
     if (ldvNo == null || photoKey == null) return null;
     try {
-      var local = TrnPhoto().findBy(ldvNo, photoKey, AuthController.instance.loggedUserId);
+      var local = TrnPhoto().findByPk(ldvNo, photoKey, AuthController.instance.loggedUserId);
       if (local != null) {
         if (!Utility.isEmpty(local.blobPath)) {
           return local.blobPath;
@@ -321,22 +322,20 @@ class PhotoUtil {
     }
   }
 
-  /// not a real table, just return variable to store more information
+  /// not a real table, just return buffer of TrnPhoto
   static Future<TrnPhoto> xFileToPhoto(XFile file, PhotoType pt, String sourceId, String contractNo) async {
     var gps = await GpsUtil.currentLocationInForeground;
     var loggedUser = AuthController.instance.loggedUser!;
-    var tblPhoto = TrnPhoto(sourceId: sourceId, photoId: pt.fileKey!, fileName: file.name)
+    return TrnPhoto(sourceId: sourceId, photoId: pt.fileKey!, fileName: file.name)
       ..blobPath = file.path
       ..label = pt.photoLabel
+      ..contractNo = contractNo
+      ..mimeType = lookupMimeType(file.name)
       // ..label = PhotoType.repoPoA.photoLabel
       ..userId = loggedUser.userId
       ..officeId = loggedUser.branchId
-      ..contractNo = contractNo
-      ..mimeType = lookupMimeType(file.name)
       ..latitude = gps.latitude.toString()
       ..longitude = gps.longitude.toString();
-
-    return tblPhoto;
   }
 
   // static Future<TblPhoto?> saveAsPoA(XFile file, String sktNo, String contractNo) async {
@@ -382,7 +381,7 @@ class PhotoUtil {
   //   return tblPhoto;
   // }
 
-  static String concatVisitIdWithSktNo(String sktNo, String visitId) => '${sktNo}_$visitId';
+  // static String concatVisitIdWithSktNo(String sktNo, String visitId) => '${sktNo}_$visitId';
 
   /// visit20230310183559
   static String generateVisitId() => 'visit${TimeUtil.convertMillis2YYYYMMDDHHMMSS(null)}';
