@@ -13,7 +13,7 @@ class DeveloperView extends GetView<DeveloperController> {
   const DeveloperView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(context) => Scaffold(
           body: CustomScrollView(slivers: [
         SliverAppBar(
             expandedHeight: 160,

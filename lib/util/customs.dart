@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 import 'package:mc_plugin3/model/mc_photo.dart';
 import 'package:mc_plugin3/util/time_util.dart';
 
+import '../model/mc_trn_coll_pos.dart';
 import '../model/server_model.dart';
 import '../model/trn_ldv_hdr.dart';
 import '../provider/api.dart';
 import 'commons.dart';
 
+// customer lock #vendor lock
 abstract class CustomLogic {
   final List<Server> servers;
   CustomLogic({required this.servers});
@@ -19,7 +21,13 @@ abstract class CustomLogic {
   Future<ByteData?> get sslCertificatePem;
 
   Future<void> sync() async {
-    // 0. upload foto first
+    // 0. process pending transactions
+    try {
+      await TrnCollPos.cacheToTable();
+    } catch (e, s) {
+      showError(e, stacktrace: s);
+    }
+    // 1. upload foto first
     var uploadPhotoSuccess =
         await Api.instance.uploadPhotos(TrnPhoto().findAll.where((p) => p.createdDate == null).toList());
     if (!uploadPhotoSuccess) {
@@ -27,6 +35,9 @@ abstract class CustomLogic {
       // errorCounter += 1;
       // if (errorCounter < maxError) return false;
     }
+    // 2. upload positions
+
+    // FINALLY, upload transactions
 
     // await Api.instance.sendBatch();
     if (kDebugMode) await 5.delay();

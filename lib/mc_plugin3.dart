@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:ui';
 
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -8,9 +8,12 @@ import 'mc_plugin3_platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'controller/pref_controller.dart';
+import 'model/mc_trn_coll_pos.dart';
 import 'provider/baseapi.dart';
+import 'util/commons.dart';
 import 'util/customs.dart';
 import 'util/device_util.dart';
 import 'util/hive_util.dart';
@@ -22,11 +25,12 @@ Future<void> registerBeforeRunApp(CustomTheme? theme, CustomLogic logic) async {
   }
 
   BaseApi.apiKey = '${dotenv.env['APIKEY']}';
+
   await HiveUtil.registerAdaptersFirstTime();
   await initializeService();
   // must on the top of GetX chains
   await Get.put(PrefController()).initStorage();
-  if (!kIsWeb && !Platform.isWindows) {
+  if (!kIsWeb && !io.Platform.isWindows) {
     // var sn = await DeviceUtil.snDevice;
     // if (sn.toLowerCase() == 'unknown') sn = '';
     // sayangnya baru cuma bisa baca android
@@ -43,38 +47,18 @@ class McPlugin3 {
 
 Future<void> initializeService() async {
   if (kIsWeb) return;
-  final service = FlutterBackgroundService();
-
-  // const channel = AndroidNotificationChannel(
-  //   notificationChannelId, // id
-  //   'MY FOREGROUND SERVICE', // title
-  //   description: 'This channel is used for important notifications.', // description
-  //   importance: Importance.low, // importance must be at low or higher level
-  // );
-
-  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
-
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<
-  //         AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
-
-  await service.configure(
+  await FlutterBackgroundService().configure(
       androidConfiguration: AndroidConfiguration(
         // this will be executed when app is in foreground or background in separated isolate
         onStart: onStart,
-
         // auto start service
         autoStart: true,
         isForegroundMode: true,
-
-        // notificationChannelId: notificationChannelId, // this must match with notification channel you created above.
-        initialNotificationTitle: 'AWESOME SERVICE',
-        initialNotificationContent: 'Initializing',
-        // foregroundServiceNotificationId: notificationId,
       ),
-      iosConfiguration: IosConfiguration());
+      iosConfiguration: IosConfiguration(
+        autoStart: true,
+        onForeground: onStart,
+      ));
 }
 
 @pragma('')
@@ -93,55 +77,11 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
-    if (service is AndroidServiceInstance) {
-      if (await service.isForegroundService()) {
-        /// OPTIONAL for use custom notification
-        /// the notification id must be equals with AndroidConfiguration when you call configure() method.
-        // flutterLocalNotificationsPlugin.show(
-        //   888,
-        //   'COOL SERVICE',
-        //   'Awesome ${DateTime.now()}',
-        //   const NotificationDetails(
-        //     android: AndroidNotificationDetails(
-        //       'my_foreground',
-        //       'MY FOREGROUND SERVICE',
-        //       icon: 'ic_bg_service_small',
-        //       ongoing: true,
-        //     ),
-        //   ),
-        // );
-
-        // if you don't using custom notification, uncomment this
-        service.setForegroundNotificationInfo(
-          title: 'My App Service',
-          content: 'Updated at ${DateTime.now()}',
-        );
-      }
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
+    try {
+      await TrnCollPos.writeToCache();
+    } catch (err) {
+      print(err);
     }
-
-    /// you can see this log in logcat
-    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-
-    // test using external plugin
-    // final deviceInfo = DeviceInfoPlugin();
-    // String? device;
-    // if (Platform.isAndroid) {
-    //   final androidInfo = await deviceInfo.androidInfo;
-    //   device = androidInfo.model;
-    // }
-
-    // if (Platform.isIOS) {
-    //   final iosInfo = await deviceInfo.iosInfo;
-    //   device = iosInfo.model;
-    // }
-
-    // service.invoke(
-    //   'update',
-    //   {
-    //     "current_date": DateTime.now().toIso8601String(),
-    //     "device": device,
-    //   },
-    // );
   });
 }

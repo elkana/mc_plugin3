@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mc_plugin3/model/mc_trn_coll_pos.dart';
 import 'package:mc_plugin3/model/mc_trn_rvcollcomment.dart';
 import 'package:mc_plugin3/model/trn_ldv_hdr.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -39,6 +40,7 @@ class DeveloperController extends AViewController {
         rows.add(tableInfo(MstLdvNextAction().syncTableName, MstLdvNextAction().findAll.length));
         rows.add(tableInfo(MstLdvPersonal().syncTableName, MstLdvPersonal().findAll.length));
         rows.add(tableInfo(TrnPhoto().syncTableName, TrnPhoto().findAll.length));
+        rows.add(tableInfo(TrnCollPos().syncTableName, TrnCollPos().findAll.length));
         // rows.add(tableInfo(TblSKTCollateral.syncTableName, TblSKTCollateral.findAll().length));
         // rows.add(tableInfo(TblSKTCollateralRemarks.syncTableName, TblSKTCollateralRemarks.findAll().length));
         // rows.add(tableInfo(TblVehicleInfo.syncTableName, TblVehicleInfo.findAll().length));

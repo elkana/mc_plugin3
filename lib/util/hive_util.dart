@@ -52,6 +52,7 @@ class HiveUtil {
   static const typeIdTrnVehicleInfo = 115;
   static const typeIdTrnHistInstallment = 116;
   static const typeIdLdvHistory = 117;
+  static const typeIdTrnCollPos = 118;
 
   static const typeIdDocCopyContract = 200;
   static const typeIdDocSP = 201;

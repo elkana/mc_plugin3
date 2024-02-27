@@ -7,6 +7,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controller/abasic_controller.dart';
 import '../../../model/masters.dart';
+import '../../../model/mc_trn_coll_pos.dart';
 import '../../../model/mc_trn_rvcollcomment.dart';
 import '../../../model/trn_ldv_dtl/i_trn_ldv_dtl.dart';
 import '../../../util/commons.dart';
@@ -47,6 +48,8 @@ class ViewTableController extends ABasicController {
         viewTrnRVCollComment();
       } else if (tableName == TrnPhoto().syncTableName) {
         viewTrnPhoto();
+      } else if (tableName == TrnCollPos().syncTableName) {
+        viewTrnCollPos();
         // } else if (tableName == TblVehicleInfo.syncTableName) {
         //   viewTblVehicleInfo();
         // } else if (tableName == TblSearchLog.syncTableName) {
@@ -59,7 +62,7 @@ class ViewTableController extends ABasicController {
     }
   }
 
-  void setColumns(List<String> params) => params.forEach((value) => columns.add(DataColumn(label: Text(value))));
+  void setColumns(List<String> params) => params.forEach((v) => columns.add(DataColumn(label: Text(v))));
 
   void viewTrnRVCollComment() {
     setColumns(['id', 'rvCollNo', 'contractNo', 'collId', 'whoMet', 'receivedAmount']);
@@ -188,25 +191,21 @@ class ViewTableController extends ABasicController {
     }
   }
 
-//   void viewTblVehicleInfo() {
-//     // build columns
-//     columns.add(const DataColumn(label: Text('contractNo')));
-//     columns.add(const DataColumn(label: Text('platNo')));
-//     columns.add(const DataColumn(label: Text('debiturName')));
-//     columns.add(const DataColumn(label: Text('chassisNo')));
-//     columns.add(const DataColumn(label: Text('engineNo')));
-
-// // build rows
-//     for (var i in TblVehicleInfo.findAll()) {
-//       rows.add(DataRow(cells: [
-//         DataCell(_TextValue('${i.contractNo}')),
-//         DataCell(_TextValue('${i.platNo}')),
-//         DataCell(_TextValue('${i.debiturName}')),
-//         DataCell(_TextValue('${i.chassisNo}')),
-//         DataCell(_TextValue('${i.engineNo}')),
-//       ]));
-//     }
-//   }
+  void viewTrnCollPos() {
+    setColumns(['id', 'createdDate', 'latitude', 'longitude', 'method', 'permission', 'uid']);
+// build rows
+    for (var i in TrnCollPos().findAll) {
+      rows.add(DataRow(cells: [
+        DataCell(_TextValue('${i.id}')),
+        DataCell(_TextValue('${i.lastUpdateDate}')),
+        DataCell(_TextValue('${i.latitude}')),
+        DataCell(_TextValue('${i.longitude}')),
+        DataCell(_TextValue('${i.logMethod}')),
+        DataCell(_TextValue('${i.permissionType}')),
+        DataCell(_TextValue('${i.uid}')),
+      ]));
+    }
+  }
 }
 
 class _TextValue extends StatelessWidget {

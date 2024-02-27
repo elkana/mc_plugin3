@@ -39,6 +39,8 @@ dependencies:
   simple_animations: 5.0.2
   flutter_background_service: 5.0.4
   flutter_background_service_android:
+  uuid: ^4.3.3
+  path: ^1.8.3
   
 dev_dependencies:
   flutter_test:

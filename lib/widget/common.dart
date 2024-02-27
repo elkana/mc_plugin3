@@ -61,7 +61,7 @@ class KeyValVertical extends StatelessWidget {
   const KeyValVertical(this.label, this.value, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => [
+  Widget build(context) => [
         label,
         8.heightBox,
         value,
@@ -419,5 +419,5 @@ class ProgressThis extends StatelessWidget {
   const ProgressThis({Key? key, this.loading = true, required this.child}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => loading ? const CircularProgressIndicator().centered() : child;
+  Widget build(context) => loading ? const CircularProgressIndicator().centered() : child;
 }
